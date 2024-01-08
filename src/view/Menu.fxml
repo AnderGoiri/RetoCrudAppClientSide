@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="29.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MenuController">
+   <children>
+      <MenuBar fx:id="menuBar" prefHeight="29.0" prefWidth="1366.0">
+        <menus>
+          <Menu fx:id="menuActions" mnemonicParsing="false" text="Actions">
+               <items>
+                  <MenuItem fx:id="menuItemReport" mnemonicParsing="false" onAction="#handleImprimirAction" text="Report" />
+                  <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#handleImprimirAction" text="Salir" />
+               </items>
+          </Menu>
+          <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem fx:id="menuItemAbout" mnemonicParsing="false" onAction="#handleHelpAction" text="About" />
+               </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</HBox>
