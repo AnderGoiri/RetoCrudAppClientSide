@@ -1,15 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <TableView layoutX="14.0" layoutY="266.0" prefHeight="493.0" prefWidth="1320.0">
+   <children> 
+      <!-- Include the HBox with the menu -->
+      <fx:include fx:id="hBoxMenu" source="Menu.fxml" />
+      <Label layoutX="23.0" layoutY="35.0" text="EVENTOS">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Label>
+      <DatePicker layoutX="1061.0" layoutY="237.0" />
+      <Pane layoutX="14.0" layoutY="77.0" prefHeight="147.0" prefWidth="1333.0" style="-fx-border-color: grey;">
+         <children>
+            <Label layoutX="35.0" layoutY="27.0" text="NOMBRE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tfNombre" layoutX="135.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label layoutX="415.0" layoutY="27.0" text="JUEGO">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tfNombre1" layoutX="135.0" layoutY="89.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label layoutX="35.0" layoutY="89.0" text="LUGAR">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="795.0" layoutY="27.0" text="AFORO">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="603.0" layoutY="103.0" text="ONG" />
+            <Label layoutX="413.0" layoutY="93.0" text="PREMIO" />
+            <Label layoutX="881.0" layoutY="100.0" text="DONACIÓN" />
+            <TextField fx:id="tfNombre11" layoutX="895.0" layoutY="27.0" prefHeight="25.0" prefWidth="112.0" />
+            <TextField fx:id="tfNombre12" layoutX="662.0" layoutY="95.0" prefHeight="25.0" prefWidth="197.0" />
+            <TextField fx:id="tfNombre121" layoutX="966.0" layoutY="96.0" prefHeight="25.0" prefWidth="86.0" />
+            <TextField fx:id="tfNombre122" layoutX="511.0" layoutY="90.0" prefHeight="25.0" prefWidth="58.0" />
+            <ComboBox layoutX="515.0" layoutY="27.0" prefHeight="25.0" prefWidth="230.0" />
+            <Button layoutX="1206.0" layoutY="94.0" mnemonicParsing="false" text="CREAR" />
+            <Button layoutX="1190.0" layoutY="28.0" mnemonicParsing="false" text="BUSCAR" />
+         </children></Pane>
+      
+            <TableView layoutX="14.0" layoutY="265.0" prefHeight="410.0" prefWidth="1333.0">
         <columns>
           <TableColumn prefWidth="75.0" text="NOMBRE" />
             <TableColumn prefWidth="75.0" text="JUEGO" />
@@ -21,12 +68,7 @@
             <TableColumn prefWidth="75.0" text="DONACIÓN" />
         </columns>
       </TableView>
-      <Label layoutX="14.0" layoutY="14.0" text="EVENTOS">
-         <font>
-            <Font name="System Bold" size="30.0" />
-         </font>
-      </Label>
-      <DatePicker layoutX="1045.0" layoutY="235.0" />
-      <Pane layoutX="14.0" layoutY="77.0" prefHeight="147.0" prefWidth="1320.0" style="-fx-border-color: grey;" />
+      <Button layoutX="1101.0" layoutY="700.0" mnemonicParsing="false" text="ELIMINAR" />
+      <Button layoutX="935.0" layoutY="704.0" mnemonicParsing="false" text="MODIFICAR" />
    </children>
 </Pane>
