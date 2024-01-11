@@ -18,7 +18,7 @@
       <!-- Include the HBox with the menu -->
       <fx:include fx:id="hBoxMenu" source="Menu.fxml" />
       
-      <TableView layoutX="14.0" layoutY="273.0" prefHeight="487.0" prefWidth="1180.0">
+      <TableView layoutX="14.0" layoutY="273.0" prefHeight="468.0" prefWidth="1180.0">
         <columns>
           <TableColumn prefWidth="450.0" text="NOMBRE" />
           <TableColumn prefWidth="278.4000244140625" text="FUNDACIÓN" />
