@@ -19,56 +19,107 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Label>
-      <DatePicker layoutX="1061.0" layoutY="237.0" />
-      <Pane layoutX="14.0" layoutY="77.0" prefHeight="147.0" prefWidth="1333.0" style="-fx-border-color: grey;">
+      <Pane layoutX="14.0" layoutY="77.0" prefHeight="221.0" prefWidth="1333.0" style="-fx-border-color: grey;">
          <children>
-            <Label layoutX="35.0" layoutY="27.0" text="NOMBRE">
+            <Label layoutX="270.0" layoutY="27.0" text="Nombre">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre" layoutX="135.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" />
-            <Label layoutX="415.0" layoutY="27.0" text="JUEGO">
+            <TextField fx:id="tfNombre" layoutX="370.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label layoutX="270.0" layoutY="177.0" text="Lugar">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre1" layoutX="135.0" layoutY="89.0" prefHeight="25.0" prefWidth="240.0" />
-            <Label layoutX="35.0" layoutY="89.0" text="LUGAR">
+            <TextField fx:id="tfNombre1" layoutX="370.0" layoutY="177.0" prefHeight="25.0" prefWidth="460.0" />
+            <Label layoutX="270.0" layoutY="77.0" text="Juego">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="795.0" layoutY="27.0" text="AFORO">
+            <Label layoutX="861.0" layoutY="177.0" text="Aforo">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="603.0" layoutY="103.0" text="ONG" />
-            <Label layoutX="413.0" layoutY="93.0" text="PREMIO" />
-            <Label layoutX="881.0" layoutY="100.0" text="DONACIÓN" />
-            <TextField fx:id="tfNombre11" layoutX="895.0" layoutY="27.0" prefHeight="25.0" prefWidth="112.0" />
-            <TextField fx:id="tfNombre12" layoutX="662.0" layoutY="95.0" prefHeight="25.0" prefWidth="197.0" />
-            <TextField fx:id="tfNombre121" layoutX="966.0" layoutY="96.0" prefHeight="25.0" prefWidth="86.0" />
-            <TextField fx:id="tfNombre122" layoutX="511.0" layoutY="90.0" prefHeight="25.0" prefWidth="58.0" />
-            <ComboBox layoutX="515.0" layoutY="27.0" prefHeight="25.0" prefWidth="230.0" />
-            <Button layoutX="1206.0" layoutY="94.0" mnemonicParsing="false" text="CREAR" />
-            <Button layoutX="1190.0" layoutY="28.0" mnemonicParsing="false" text="BUSCAR" />
+            <Label layoutX="660.0" layoutY="27.0" text="ONG">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="660.0" layoutY="77.0" text="Premio">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="861.0" layoutY="77.0" text="Donación">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tfNombre11" layoutX="972.0" layoutY="177.0" prefHeight="25.0" prefWidth="86.0" />
+            <TextField fx:id="tfNombre12" layoutX="745.0" layoutY="25.0" prefHeight="25.0" prefWidth="315.0" />
+            <TextField fx:id="tfNombre121" layoutX="972.0" layoutY="77.0" prefHeight="25.0" prefWidth="86.0" />
+            <TextField fx:id="tfNombre122" layoutX="745.0" layoutY="77.0" prefHeight="25.0" prefWidth="85.0" />
+            <ComboBox layoutX="370.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" />
+            <Button layoutX="1159.0" layoutY="109.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="CONFIRMAR">
+               <font>
+                  <Font size="15.0" />
+               </font></Button>
+            <DatePicker layoutX="370.0" layoutY="127.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label layoutX="270.0" layoutY="127.0" text="Fecha">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Button layoutX="1159.0" layoutY="165.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="CANCELAR">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <ComboBox layoutX="29.0" layoutY="74.0" prefHeight="25.0" prefWidth="209.0" />
+            <Label layoutX="29.0" layoutY="26.0" text="Búsqueda">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
          </children></Pane>
       
-            <TableView layoutX="14.0" layoutY="265.0" prefHeight="410.0" prefWidth="1333.0">
+            <TableView layoutX="14.0" layoutY="318.0" prefHeight="410.0" prefWidth="1183.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="NOMBRE" />
-            <TableColumn prefWidth="75.0" text="JUEGO" />
-          <TableColumn prefWidth="75.0" text="LUGAR" />
-            <TableColumn prefWidth="75.0" text="FECHA" />
-            <TableColumn prefWidth="75.0" text="AFORO" />
-            <TableColumn prefWidth="75.0" text="ONG" />
-            <TableColumn prefWidth="75.0" text="PREMIO" />
-            <TableColumn prefWidth="75.0" text="DONACIÓN" />
+          <TableColumn prefWidth="225.59997177124023" text="NOMBRE" />
+            <TableColumn prefWidth="125.33332824707031" text="JUEGO" />
+          <TableColumn prefWidth="238.93338012695312" text="LUGAR" />
+            <TableColumn prefWidth="102.6666259765625" text="FECHA" />
+            <TableColumn minWidth="0.0" prefWidth="74.13330078125" text="AFORO" />
+            <TableColumn prefWidth="198.66668701171875" text="ONG" />
+            <TableColumn prefWidth="132.800048828125" text="PREMIO" />
+            <TableColumn prefWidth="86.133544921875" text="DONACIÓN" />
         </columns>
       </TableView>
-      <Button layoutX="1101.0" layoutY="700.0" mnemonicParsing="false" text="ELIMINAR" />
-      <Button layoutX="935.0" layoutY="704.0" mnemonicParsing="false" text="MODIFICAR" />
+      <Button layoutX="1228.0" layoutY="510.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="ELIMINAR">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Button layoutX="1228.0" layoutY="440.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="MODIFICAR">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Button layoutX="1228.0" layoutY="370.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="CREAR">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="1228.0" layoutY="693.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="SALIR">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="1228.0" layoutY="626.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="IMPRIMIR">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </Pane>
