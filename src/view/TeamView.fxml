@@ -7,6 +7,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
@@ -35,45 +37,55 @@
       </Label>
       <Pane layoutX="14.0" layoutY="77.0" prefHeight="180.0" prefWidth="1333.0" style="-fx-border-color: grey;">
          <children>
-            <Label layoutX="377.0" layoutY="29.0" prefHeight="24.0" prefWidth="59.0" text="Nombre">
+            <Label layoutX="377.0" layoutY="30.0" prefHeight="24.0" prefWidth="59.0" text="Nombre">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField layoutX="455.0" layoutY="29.0" prefHeight="25.0" prefWidth="292.0" />
+            <TextField layoutX="454.0" layoutY="30.0" prefHeight="25.0" prefWidth="292.0" />
             <Label layoutX="377.0" layoutY="117.0" prefHeight="24.0" prefWidth="77.0" text="Fundación">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <Label layoutX="787.0" layoutY="30.0" prefHeight="24.0" prefWidth="45.0" text="Coach">
+            <Label layoutX="800.0" layoutY="30.0" prefHeight="24.0" prefWidth="45.0" text="Coach">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField layoutX="864.0" layoutY="29.0" prefHeight="25.0" prefWidth="300.0" />
+            <TextField layoutX="860.0" layoutY="30.0" prefHeight="25.0" prefWidth="300.0" />
             <DatePicker layoutX="455.0" layoutY="116.0" prefHeight="25.0" prefWidth="300.0" />
-            <ComboBox layoutX="864.0" layoutY="116.0" prefHeight="25.0" prefWidth="300.0" />
-            <Label layoutX="787.0" layoutY="117.0" prefHeight="24.0" prefWidth="77.0" text="Jugadores">
-               <font>
-                  <Font size="15.0" />
-               </font></Label>
-            <Button layoutX="1192.0" layoutY="28.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="113.0" text="CONFIRMAR" />
-            <Button layoutX="1192.0" layoutY="117.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="113.0" text="CANCELAR" />
-            <Label layoutX="23.0" layoutY="28.0" prefHeight="24.0" prefWidth="77.0" text="Búsqueda">
+            <Button layoutX="273.0" layoutY="75.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../Desktop/Icono%20lupa.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Label layoutX="23.0" layoutY="53.0" prefHeight="24.0" prefWidth="77.0" text="Búsqueda">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <ComboBox layoutX="102.0" layoutY="27.0" prefHeight="25.0" prefWidth="242.0" />
+            <ComboBox layoutX="23.0" layoutY="77.0" prefHeight="25.0" prefWidth="242.0" />
+            <Button layoutX="313.0" layoutY="75.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../Desktop/Icono%20limpiar.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </Pane>
-      <Button layoutX="1222.0" layoutY="440.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="ELIMINAR" />
-      <Button layoutX="1222.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="MODIFICAR" />
-      <Button layoutX="1222.0" layoutY="500.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="IMPRIMIR" />
-      <Button layoutX="1222.0" layoutY="560.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="SALIR" />
-      <Button layoutX="1222.0" layoutY="320.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CREAR" />
-      <Label layoutX="233.0" layoutY="45.0" prefHeight="24.0" prefWidth="219.0" text="Error de ejemplo" textFill="RED">
+      <Button layoutX="1222.0" layoutY="440.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="MODIFICAR" />
+      <Button layoutX="1222.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CREAR" />
+      <Button layoutX="1222.0" layoutY="689.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="SALIR" />
+      <Button layoutX="1222.0" layoutY="320.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="UNIRSE" />
+      <Label layoutX="233.0" layoutY="48.0" prefHeight="24.0" prefWidth="219.0" text="Error de ejemplo" textFill="RED">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
+      <Button layoutX="1222.0" layoutY="500.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="ELIMINAR" />
    </children>
 </Pane>
