@@ -5,17 +5,25 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="29.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MenuController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="29.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GenericController">
    <children>
       <MenuBar fx:id="menuBar" prefHeight="29.0" prefWidth="1366.0">
         <menus>
-          <Menu fx:id="menuActions" mnemonicParsing="false" text="Actions">
+          <Menu fx:id="menuActions" mnemonicParsing="false" text="Acciones">
                <items>
                   <MenuItem fx:id="menuItemReport" mnemonicParsing="false" onAction="#handleImprimirAction" text="Report" />
                   <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#handleImprimirAction" text="Salir" />
                </items>
           </Menu>
-          <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
+          <Menu fx:id="menuNavigation" mnemonicParsing="false" text="Navegación">
+               <items>
+                  <MenuItem fx:id="menuItemCreate" mnemonicParsing="false" onAction="#handleImprimirAction" text="Crear" />
+                  <MenuItem fx:id="menuItemRead" mnemonicParsing="false" onAction="#handleImprimirAction" text="Buscar" />
+                  <MenuItem fx:id="menuItemUpdate" mnemonicParsing="false" onAction="#handleImprimirAction" text="Actualizar" />
+                  <MenuItem fx:id="menuItemDelete" mnemonicParsing="false" onAction="#handleImprimirAction" text="Borrar" />
+               </items>
+          </Menu>
+          <Menu fx:id="menuHelp" mnemonicParsing="false" text="Ayuda">
                <items>
                   <MenuItem fx:id="menuItemAbout" mnemonicParsing="false" onAction="#handleHelpAction" text="About" />
                </items>
