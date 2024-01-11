@@ -20,10 +20,13 @@
       
       <TableView layoutX="14.0" layoutY="273.0" prefHeight="468.0" prefWidth="1180.0">
         <columns>
-          <TableColumn prefWidth="450.0" text="NOMBRE" />
-          <TableColumn prefWidth="278.4000244140625" text="FUNDACIÓN" />
-          <TableColumn prefWidth="450.0" text="ENTRENADOR" />
+          <TableColumn text="NOMBRE" />
+          <TableColumn maxWidth="250.0" text="FUNDACIÓN" />
+          <TableColumn text="ENTRENADOR" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <Label layoutX="14.0" layoutY="37.0" prefHeight="40.0" prefWidth="131.0" text="EQUIPOS">
          <font>
@@ -52,8 +55,8 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <Button layoutX="1196.0" layoutY="24.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CONFIRMAR" />
-            <Button layoutX="1196.0" layoutY="113.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CANCELAR" />
+            <Button layoutX="1192.0" layoutY="28.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="113.0" text="CONFIRMAR" />
+            <Button layoutX="1192.0" layoutY="117.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="113.0" text="CANCELAR" />
             <Label layoutX="23.0" layoutY="28.0" prefHeight="24.0" prefWidth="77.0" text="Búsqueda">
                <font>
                   <Font size="15.0" />
@@ -67,5 +70,10 @@
       <Button layoutX="1222.0" layoutY="500.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="IMPRIMIR" />
       <Button layoutX="1222.0" layoutY="560.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="SALIR" />
       <Button layoutX="1222.0" layoutY="320.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CREAR" />
+      <Label layoutX="233.0" layoutY="45.0" prefHeight="24.0" prefWidth="219.0" text="Error de ejemplo" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
