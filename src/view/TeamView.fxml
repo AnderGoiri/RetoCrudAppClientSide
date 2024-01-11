@@ -18,11 +18,11 @@
       <!-- Include the HBox with the menu -->
       <fx:include fx:id="hBoxMenu" source="Menu.fxml" />
       
-      <TableView layoutX="14.0" layoutY="265.0" prefHeight="410.0" prefWidth="1333.0">
+      <TableView layoutX="14.0" layoutY="273.0" prefHeight="487.0" prefWidth="1180.0">
         <columns>
-          <TableColumn prefWidth="510.0" text="NOMBRE" />
-          <TableColumn prefWidth="350.0" text="FUNDACIÓN" />
-          <TableColumn prefWidth="510.0" text="ENTRENADOR" />
+          <TableColumn prefWidth="450.0" text="NOMBRE" />
+          <TableColumn prefWidth="278.4000244140625" text="FUNDACIÓN" />
+          <TableColumn prefWidth="450.0" text="ENTRENADOR" />
         </columns>
       </TableView>
       <Label layoutX="23.0" layoutY="37.0" prefHeight="40.0" prefWidth="131.0" text="EQUIPOS">
@@ -30,25 +30,42 @@
             <Font name="Consolas Bold" size="30.0" />
          </font>
       </Label>
-      <Pane layoutX="14.0" layoutY="77.0" prefHeight="147.0" prefWidth="1333.0" style="-fx-border-color: grey;">
+      <Pane layoutX="14.0" layoutY="77.0" prefHeight="180.0" prefWidth="1333.0" style="-fx-border-color: grey;">
          <children>
-            <Label layoutX="14.0" layoutY="27.0" prefHeight="24.0" prefWidth="45.0" text="Nombre" />
-            <TextField layoutX="94.0" layoutY="26.0" prefHeight="25.0" prefWidth="300.0" />
-            <Label layoutX="14.0" layoutY="99.0" prefHeight="24.0" prefWidth="59.0" text="Fundación" />
-            <Label layoutX="600.0" layoutY="27.0" prefHeight="24.0" prefWidth="45.0" text="Coach" />
-            <TextField layoutX="680.0" layoutY="26.0" prefHeight="25.0" prefWidth="300.0" />
-            <DatePicker layoutX="94.0" layoutY="98.0" prefHeight="25.0" prefWidth="300.0" />
-            <ComboBox layoutX="680.0" layoutY="98.0" prefHeight="25.0" prefWidth="300.0" />
-            <Label layoutX="600.0" layoutY="99.0" prefHeight="24.0" prefWidth="59.0" text="Jugadores" />
-            <Button layoutX="1175.0" layoutY="23.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="BUSCAR" />
-            <Button layoutX="1175.0" layoutY="95.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CREAR" />
-            <Button disable="true" layoutX="1175.0" layoutY="23.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CONFIRMAR" visible="false" />
-            <Button disable="true" layoutX="1175.0" layoutY="95.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CANCELAR" visible="false" />
+            <Label layoutX="377.0" layoutY="29.0" prefHeight="24.0" prefWidth="59.0" text="Nombre">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <TextField layoutX="455.0" layoutY="29.0" prefHeight="25.0" prefWidth="292.0" />
+            <Label layoutX="377.0" layoutY="117.0" prefHeight="24.0" prefWidth="77.0" text="Fundación">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label layoutX="787.0" layoutY="30.0" prefHeight="24.0" prefWidth="45.0" text="Coach">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <TextField layoutX="864.0" layoutY="29.0" prefHeight="25.0" prefWidth="300.0" />
+            <DatePicker layoutX="455.0" layoutY="116.0" prefHeight="25.0" prefWidth="300.0" />
+            <ComboBox layoutX="864.0" layoutY="116.0" prefHeight="25.0" prefWidth="300.0" />
+            <Label layoutX="787.0" layoutY="117.0" prefHeight="24.0" prefWidth="77.0" text="Jugadores">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Button layoutX="1196.0" layoutY="24.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CONFIRMAR" />
+            <Button layoutX="1196.0" layoutY="113.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CANCELAR" />
+            <Label layoutX="23.0" layoutY="28.0" prefHeight="24.0" prefWidth="77.0" text="Búsqueda">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox layoutX="102.0" layoutY="27.0" prefHeight="25.0" prefWidth="242.0" />
          </children>
       </Pane>
-      <Button layoutX="1234.0" layoutY="723.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="ELIMINAR" />
-      <Button layoutX="1024.0" layoutY="723.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="MODIFICAR" />
-      <Button layoutX="14.0" layoutY="723.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="IMPRIMIR" />
-      <Button layoutX="244.0" layoutY="723.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="AYUDA" />
+      <Button layoutX="1222.0" layoutY="440.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="ELIMINAR" />
+      <Button layoutX="1222.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="MODIFICAR" />
+      <Button layoutX="1222.0" layoutY="500.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="IMPRIMIR" />
+      <Button layoutX="1222.0" layoutY="560.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="SALIR" />
+      <Button layoutX="1222.0" layoutY="320.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CREAR" />
    </children>
 </Pane>
