@@ -19,66 +19,66 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Label>
-      <Pane layoutX="14.0" layoutY="77.0" prefHeight="221.0" prefWidth="1333.0" style="-fx-border-color: grey;">
+      <Pane layoutX="14.0" layoutY="77.0" prefHeight="182.0" prefWidth="1333.0" style="-fx-border-color: grey;">
          <children>
-            <Label layoutX="270.0" layoutY="27.0" text="Nombre">
+            <Label layoutX="391.0" layoutY="27.0" text="Nombre">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre" layoutX="370.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" />
-            <Label layoutX="270.0" layoutY="177.0" text="Lugar">
+            <TextField fx:id="tfNombre" layoutX="491.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label layoutX="391.0" layoutY="127.0" text="Lugar">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre1" layoutX="370.0" layoutY="177.0" prefHeight="25.0" prefWidth="460.0" />
-            <Label layoutX="270.0" layoutY="77.0" text="Juego">
+            <TextField fx:id="tfNombre1" layoutX="491.0" layoutY="127.0" prefHeight="25.0" prefWidth="241.0" />
+            <Label layoutX="391.0" layoutY="77.0" text="Juego">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="861.0" layoutY="177.0" text="Aforo">
+            <Label layoutX="782.0" layoutY="127.0" text="Aforo">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="660.0" layoutY="27.0" text="ONG">
+            <Label layoutX="781.0" layoutY="27.0" text="ONG">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="660.0" layoutY="77.0" text="Premio">
+            <Label layoutX="781.0" layoutY="77.0" text="Premio">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="861.0" layoutY="77.0" text="Donación">
+            <Label layoutX="982.0" layoutY="77.0" text="Donación">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre11" layoutX="972.0" layoutY="177.0" prefHeight="25.0" prefWidth="86.0" />
-            <TextField fx:id="tfNombre12" layoutX="745.0" layoutY="25.0" prefHeight="25.0" prefWidth="315.0" />
-            <TextField fx:id="tfNombre121" layoutX="972.0" layoutY="77.0" prefHeight="25.0" prefWidth="86.0" />
-            <TextField fx:id="tfNombre122" layoutX="745.0" layoutY="77.0" prefHeight="25.0" prefWidth="85.0" />
-            <ComboBox layoutX="370.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" />
-            <Button layoutX="1159.0" layoutY="109.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="CONFIRMAR">
+            <TextField fx:id="tfNombre11" layoutX="866.0" layoutY="127.0" prefHeight="25.0" prefWidth="86.0" />
+            <TextField fx:id="tfNombre12" layoutX="866.0" layoutY="25.0" prefHeight="25.0" prefWidth="302.0" />
+            <TextField fx:id="tfNombre121" layoutX="1082.0" layoutY="77.0" prefHeight="25.0" prefWidth="86.0" />
+            <TextField fx:id="tfNombre122" layoutX="866.0" layoutY="77.0" prefHeight="25.0" prefWidth="85.0" />
+            <ComboBox layoutX="491.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" />
+            <Button layoutX="303.0" layoutY="67.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0">
                <font>
                   <Font size="15.0" />
                </font></Button>
-            <DatePicker layoutX="370.0" layoutY="127.0" prefHeight="25.0" prefWidth="240.0" />
-            <Label layoutX="270.0" layoutY="127.0" text="Fecha">
+            <DatePicker layoutX="1082.0" layoutY="127.0" prefHeight="25.0" prefWidth="112.0" />
+            <Label layoutX="982.0" layoutY="127.0" text="Fecha">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Button layoutX="1159.0" layoutY="165.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="CANCELAR">
+            <Button layoutX="29.0" layoutY="120.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="258.0" text="LIMPIAR FORMULARIO">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <ComboBox layoutX="29.0" layoutY="74.0" prefHeight="25.0" prefWidth="209.0" />
+            <ComboBox layoutX="29.0" layoutY="70.0" prefHeight="25.0" prefWidth="260.0" />
             <Label layoutX="29.0" layoutY="26.0" text="Búsqueda">
                <font>
                   <Font size="15.0" />
@@ -102,15 +102,15 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Button layoutX="1228.0" layoutY="510.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="ELIMINAR">
+      <Button layoutX="1228.0" layoutY="502.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="ELIMINAR">
          <font>
             <Font size="15.0" />
          </font></Button>
-      <Button layoutX="1228.0" layoutY="440.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="MODIFICAR">
+      <Button layoutX="1228.0" layoutY="432.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="MODIFICAR">
          <font>
             <Font size="15.0" />
          </font></Button>
-      <Button layoutX="1228.0" layoutY="370.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="CREAR">
+      <Button layoutX="1228.0" layoutY="362.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="CREAR">
          <font>
             <Font size="15.0" />
          </font>
@@ -120,12 +120,18 @@
             <Font size="15.0" />
          </font>
       </Button>
-      <Button layoutX="1228.0" layoutY="626.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="IMPRIMIR">
+      <Label layoutX="221.0" layoutY="48.0" text="Error de ejemplo" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Button layoutX="1095.0" layoutY="273.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="UNIRSE">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <Label layoutX="221.0" layoutY="48.0" text="Error de ejemplo" textFill="RED">
+      <ComboBox layoutX="882.0" layoutY="277.0" prefHeight="25.0" prefWidth="195.0" />
+      <Label layoutX="798.0" layoutY="280.0" text="Equipo">
          <font>
             <Font size="15.0" />
          </font>
