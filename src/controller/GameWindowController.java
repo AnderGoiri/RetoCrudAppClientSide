@@ -7,12 +7,20 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -62,10 +70,20 @@ public class GameWindowController extends GenericController {
     private Label label;
 
     @FXML
-    private Button imprimirButton;
-
+    private Button btnExit;
+    
     @FXML
-    private Button salirButton;
+    private ComboBox cmbSearch;
+    
+    @FXML
+    private TextField tfSearchData;
+    
+    @FXML
+    private ComboBox cmbPVPType;
+    
+    @FXML
+    private DatePicker dpReleaseDate;
+    
     
     /**
      * User's table data model.
@@ -126,27 +144,71 @@ public class GameWindowController extends GenericController {
             //tbcolId = new TableColumn("id");
             tbcolId.setCellValueFactory(
                     new PropertyValueFactory<>("id"));
-            //tbcolName = new TableColumn("name");
             tbcolName.setCellValueFactory(
                     new PropertyValueFactory<>("name"));
-            //tbcolGenre = new TableColumn("genre");
+            tbcolName.setCellFactory(
+                TextFieldTableCell.forTableColumn());           
             tbcolGenre.setCellValueFactory(
                     new PropertyValueFactory<>("genre"));
-            //tbcolPlatform = new TableColumn("platform");
+            tbcolGenre.setCellFactory(
+                TextFieldTableCell.forTableColumn());
             tbcolPlatform.setCellValueFactory(
                     new PropertyValueFactory<>("platform"));
-            //tbcolPVPType = new TableColumn("PVPType");
+            tbcolPlatform.setCellFactory(
+                TextFieldTableCell.forTableColumn());
             tbcolPVPType.setCellValueFactory(
                     new PropertyValueFactory<>("PVPType"));
-            //tbcolReleaseDate = new TableColumn("releaseDate");
+            /*tbcolPVPType.setCellFactory(
+                TextFieldTableCell.forTableColumn());*/
             tbcolReleaseDate.setCellValueFactory(
                     new PropertyValueFactory<>("releaseDate"));
+            /*tbcolReleaseDate.setCellFactory(
+                DatePicker.forTableColumn());*/
+            
             //Create an obsrvable list for users table.
-            gamesData=FXCollections.observableArrayList(gameManager.getAllGames());
+            ObservableList<Game> gamesData=FXCollections.observableArrayList(gameManager.getAllGames());
             //Set table model.
+            
+            tbGames.setEditable(true);
+            
             tbGames.setItems(gamesData);
-            tbGames.getColumns().addAll(tbcolId, tbcolName, tbcolGenre, 
-                    tbcolPlatform, tbcolPVPType, tbcolReleaseDate);
+            /*tbGames.getColumns().addAll(tbcolId, tbcolName, tbcolGenre, 
+                    tbcolPlatform, tbcolPVPType, tbcolReleaseDate);*/
+            
+                    
+             // Create a context menu
+            ContextMenu contextMenu = new ContextMenu();
+
+            // CRUD options
+            MenuItem createItem = new MenuItem("    Create Game");
+            MenuItem readItem = new MenuItem("    Read Game");
+            MenuItem updateItem = new MenuItem("    Update Game");
+            MenuItem deleteItem = new MenuItem("    Delete Game");
+            MenuItem eventsItem = new MenuItem("    Events");
+            MenuItem teamsItem = new MenuItem("    Teams");
+            MenuItem gamesItem = new MenuItem("    Games");
+            
+            // Separator
+            SeparatorMenuItem separator = new SeparatorMenuItem();
+          
+            //TODO
+            // Add actions to CRUD options (you can customize these actions)
+            createItem.setOnAction(e -> System.out.println("Create action"));
+            readItem.setOnAction(e -> System.out.println("Read action"));
+            updateItem.setOnAction(e -> System.out.println("Update action"));
+            deleteItem.setOnAction(e -> System.out.println("Delete action"));
+            eventsItem.setOnAction(e -> System.out.println("Events action"));
+            teamsItem.setOnAction(e -> System.out.println("Teams action"));
+            gamesItem.setOnAction(e -> System.out.println("Games action"));
+            
+            
+            // Add CRUD options to the context menu
+            contextMenu.getItems().addAll(createItem, readItem, updateItem, deleteItem, separator, eventsItem, teamsItem, gamesItem);
+
+            // Attach the context menu to the root pane
+            root.setOnContextMenuRequested(event -> 
+                contextMenu.show(root, event.getScreenX(), event.getScreenY()));
+            
             
             stage.setScene(scene);
             //Show window.

@@ -23,7 +23,7 @@ import rest.UserRestClient;
  */
 public class GameManagerImplementation implements GameManager{
     //REST users web client
-    private GameRestClient webClient;
+    private AdminRestClient webClient;
     private static final Logger LOGGER=Logger.getLogger("GameManagerImplementation");
 
     /**
@@ -32,7 +32,7 @@ public class GameManagerImplementation implements GameManager{
      * server.
      */
     public GameManagerImplementation(){
-        webClient=new GameRestClient();
+        webClient=new AdminRestClient();
     }
    
     
@@ -42,7 +42,7 @@ public class GameManagerImplementation implements GameManager{
         try{
             LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
-            games = webClient.findAll_XML(new GenericType<List<Game>>() {});
+            games = webClient.findAllGames_XML(new GenericType<List<Game>>() {});
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception finding all games{0}",

@@ -10,11 +10,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
 /**
- * Jersey REST client generated for REST resource:GameFacadeREST
- * [entity.game]<br>
+ * Jersey REST client generated for REST resource:EventFacadeREST
+ * [entity.event]<br>
  * USAGE:
  * <pre>
- *        GameRestClient client = new GameRestClient();
+ *        EventRestClient client = new EventRestClient();
  *        Object response = client.XXX(...);
  *        // do whatever with response
  *        client.close();
@@ -22,15 +22,15 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author Andoni Sanz
  */
-public class GameRestClient {
+public class EventRestClient {
 
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
 
-    public GameRestClient() {
+    public EventRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entity.game");
+        webTarget = client.target(BASE_URI).path("entity.event");
     }
 
     public String countREST() throws ClientErrorException {
