@@ -7,6 +7,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
@@ -21,64 +23,78 @@
       </Label>
       <Pane layoutX="14.0" layoutY="77.0" prefHeight="182.0" prefWidth="1333.0" style="-fx-border-color: grey;">
          <children>
-            <Label layoutX="391.0" layoutY="27.0" text="Nombre">
+            <Label layoutX="345.0" layoutY="27.0" text="Nombre">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre" layoutX="491.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" />
-            <Label layoutX="391.0" layoutY="127.0" text="Lugar">
+            <TextField fx:id="tfNombre" layoutX="437.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label layoutX="345.0" layoutY="127.0" text="Lugar">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre1" layoutX="491.0" layoutY="127.0" prefHeight="25.0" prefWidth="241.0" />
-            <Label layoutX="391.0" layoutY="77.0" text="Juego">
+            <TextField fx:id="tfNombre1" layoutX="437.0" layoutY="127.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label layoutX="345.0" layoutY="77.0" text="Juego">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="782.0" layoutY="127.0" text="Aforo">
+            <Label layoutX="718.0" layoutY="127.0" text="Aforo">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="781.0" layoutY="27.0" text="ONG">
+            <Label layoutX="717.0" layoutY="27.0" text="ONG">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="781.0" layoutY="77.0" text="Premio">
+            <Label layoutX="717.0" layoutY="77.0" text="Premio">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="982.0" layoutY="77.0" text="Donación">
+            <Label layoutX="918.0" layoutY="77.0" text="Donación">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre11" layoutX="866.0" layoutY="127.0" prefHeight="25.0" prefWidth="86.0" />
-            <TextField fx:id="tfNombre12" layoutX="866.0" layoutY="25.0" prefHeight="25.0" prefWidth="302.0" />
-            <TextField fx:id="tfNombre121" layoutX="1082.0" layoutY="77.0" prefHeight="25.0" prefWidth="86.0" />
-            <TextField fx:id="tfNombre122" layoutX="866.0" layoutY="77.0" prefHeight="25.0" prefWidth="85.0" />
-            <ComboBox layoutX="491.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" />
-            <Button layoutX="303.0" layoutY="67.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0">
+            <TextField fx:id="tfNombre11" layoutX="802.0" layoutY="127.0" prefHeight="25.0" prefWidth="86.0" />
+            <TextField fx:id="tfNombre12" layoutX="802.0" layoutY="25.0" prefHeight="25.0" prefWidth="302.0" />
+            <TextField fx:id="tfNombre121" layoutX="1018.0" layoutY="77.0" prefHeight="25.0" prefWidth="86.0" />
+            <TextField fx:id="tfNombre122" layoutX="802.0" layoutY="77.0" prefHeight="25.0" prefWidth="85.0" />
+            <ComboBox layoutX="437.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" />
+            <Button layoutX="1171.0" layoutY="44.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="135.0" text="BUSCAR">
                <font>
                   <Font size="15.0" />
-               </font></Button>
-            <DatePicker layoutX="1082.0" layoutY="127.0" prefHeight="25.0" prefWidth="112.0" />
-            <Label layoutX="982.0" layoutY="127.0" text="Fecha">
+               </font>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../Downloads/Icono%20lupa.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <DatePicker layoutX="1018.0" layoutY="127.0" prefHeight="25.0" prefWidth="112.0" />
+            <Label layoutX="918.0" layoutY="127.0" text="Fecha">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Button layoutX="29.0" layoutY="120.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="258.0" text="LIMPIAR FORMULARIO">
+            <Button layoutX="1171.0" layoutY="105.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="135.0" text="LIMPIAR">
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../Downloads/Icono%20limpiar.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-            <ComboBox layoutX="29.0" layoutY="70.0" prefHeight="25.0" prefWidth="260.0" />
+            <ComboBox layoutX="29.0" layoutY="51.0" prefHeight="25.0" prefWidth="260.0" />
             <Label layoutX="29.0" layoutY="26.0" text="Búsqueda">
                <font>
                   <Font size="15.0" />
@@ -95,8 +111,8 @@
             <TableColumn minWidth="0.0" prefWidth="78.93341064453125" text="AFORO" />
             <TableColumn prefWidth="154.13336181640625" text="ONG" />
             <TableColumn prefWidth="154.1334228515625" text="PREMIO" />
-            <TableColumn prefWidth="123.733154296875" text="DONACIÓN" />
-            <TableColumn prefWidth="72.60009765625" text="GANADOR" />
+            <TableColumn prefWidth="104.0" text="DONACIÓN" />
+            <TableColumn prefWidth="92.7999267578125" text="GANADOR" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
