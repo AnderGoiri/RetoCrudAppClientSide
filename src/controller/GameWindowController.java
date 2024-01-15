@@ -1,6 +1,11 @@
 package controller;
 
 import businessLogic.BusinessLogicException;
+import extra.DatePickerCellGame;
+import java.time.Instant;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,9 +20,11 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
@@ -25,8 +32,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javax.ejb.CreateException;
 import model.Admin;
 import model.Game;
+import model.PVPType;
 import model.User;
 
 public class GameWindowController extends GenericController {
@@ -40,32 +50,33 @@ public class GameWindowController extends GenericController {
     * Game's id data table column.
     */
     @FXML
-    private TableColumn tbcolId;
+    private TableColumn<Game, Long> tbcolId;
     /**
     * Game's name data table column.
     */
     @FXML
-    private TableColumn tbcolName;
+    private TableColumn<Game, String> tbcolName;
     /**
     * Game's genre data table column.
     */
     @FXML
-    private TableColumn tbcolGenre;
+    private TableColumn<Game, String> tbcolGenre;
     /**
     * Game's platform data table column.
     */
     @FXML
-    private TableColumn tbcolPlatform;
+    private TableColumn<Game, String> tbcolPlatform;
     /**
     * Game's pvp type data table column.
     */
     @FXML
-    private TableColumn tbcolPVPType;
+    private TableColumn<Game, PVPType> tbcolPVPType;
     /**
     * Game's releasedate data table column.
     */
     @FXML
-    private TableColumn tbcolReleaseDate;
+    private TableColumn<Game, Date> tbcolReleaseDate;
+    
     @FXML
     private Label label;
 
@@ -83,6 +94,9 @@ public class GameWindowController extends GenericController {
     
     @FXML
     private DatePicker dpReleaseDate;
+    
+    @FXML
+    private Button btnAddRow;
     
     
     /**
@@ -133,8 +147,8 @@ public class GameWindowController extends GenericController {
             //Set department combo data model.
             
             
-            ObservableList<Game> games= 
-                    FXCollections.observableArrayList(gameManager.getAllGames());
+            /*ObservableList<Game> games= 
+                    FXCollections.observableArrayList(gameManager.getAllGames());*/
             
             
             //cbDepartamentos.setItems(departments);
@@ -158,23 +172,31 @@ public class GameWindowController extends GenericController {
                 TextFieldTableCell.forTableColumn());
             tbcolPVPType.setCellValueFactory(
                     new PropertyValueFactory<>("PVPType"));
-            /*tbcolPVPType.setCellFactory(
-                TextFieldTableCell.forTableColumn());*/
+            tbcolPVPType.setCellFactory(ComboBoxTableCell.forTableColumn(PVPType.values()));
+            tbcolPVPType.setOnEditCommit(
+                (TableColumn.CellEditEvent<Game, PVPType> t) -> {
+                try {
+                            
+                    ((Game)t.getTableView().getItems().get(t.getTablePosition().getRow())).setPVPType(t.getNewValue());
+                            Object selectedGame = tbGames.getSelectionModel().getSelectedItem();
+                            //String gameID = String.valueOf(((Game)tbGames.getSelectionModel().getSelectedItem()).getId());
+                            gameManager.updateGame(selectedGame);
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                });
             tbcolReleaseDate.setCellValueFactory(
                     new PropertyValueFactory<>("releaseDate"));
-            /*tbcolReleaseDate.setCellFactory(
-                DatePicker.forTableColumn());*/
+            tbcolReleaseDate.setCellFactory(column -> new DatePickerCellGame());
             
             //Create an obsrvable list for users table.
-            ObservableList<Game> gamesData=FXCollections.observableArrayList(gameManager.getAllGames());
-            //Set table model.
-            
+            gamesData=FXCollections.observableArrayList(gameManager.getAllGames());
+            //Set table model.            
             tbGames.setEditable(true);
             
             tbGames.setItems(gamesData);
-            /*tbGames.getColumns().addAll(tbcolId, tbcolName, tbcolGenre, 
-                    tbcolPlatform, tbcolPVPType, tbcolReleaseDate);*/
-            
+
                     
              // Create a context menu
             ContextMenu contextMenu = new ContextMenu();
@@ -196,7 +218,7 @@ public class GameWindowController extends GenericController {
             createItem.setOnAction(e -> System.out.println("Create action"));
             readItem.setOnAction(e -> System.out.println("Read action"));
             updateItem.setOnAction(e -> System.out.println("Update action"));
-            deleteItem.setOnAction(e -> System.out.println("Delete action"));
+            deleteItem.setOnAction(e -> deleteSelectedItem());
             eventsItem.setOnAction(e -> System.out.println("Events action"));
             teamsItem.setOnAction(e -> System.out.println("Teams action"));
             gamesItem.setOnAction(e -> System.out.println("Games action"));
@@ -209,6 +231,14 @@ public class GameWindowController extends GenericController {
             root.setOnContextMenuRequested(event -> 
                 contextMenu.show(root, event.getScreenX(), event.getScreenY()));
             
+            btnAddRow.setOnAction(event -> {
+                 try {
+                    addEmptyGame();
+                 } catch (CreateException e) {
+                    // Handle exception appropriately (e.g., show an error message)
+                    e.printStackTrace();
+                 }
+});
             
             stage.setScene(scene);
             //Show window.
@@ -231,6 +261,51 @@ public class GameWindowController extends GenericController {
         System.out.println("Salir button clicked!");
     }
 
+    public void addEmptyGame() throws CreateException {
+    try {
+                
+        Game newGame = new Game(); // Create an empty game
+        newGame.setName("Default Name");
+        newGame.setGenre("Default Genre");
+        newGame.setPlatform("Default Platform");
+        newGame.setPVPType(PVPType.TEAM_BASED_5V5);
+        
+        // Set default values or leave them empty, depending on your requirements
+        newGame.setReleaseDate(null); // Or set a default release date
+        // Set other properties as needed
+        // Add the new game to the database
+        gameManager.createGame(newGame);
+        
+        //gamesData.add(newGame);
+        
+        gamesData.clear();
+        gamesData = FXCollections.observableArrayList(gameManager.getAllGames());
+        tbGames.setItems(gamesData);    
+        tbGames.refresh();
+    } catch (Exception e) {
+        throw new CreateException("Failed to add an empty game: " + e.getMessage());
+    }
+    }   
+     private void deleteSelectedItem() {
+        Game selectedGame = (Game)tbGames.getSelectionModel().getSelectedItem();
+
+        if (selectedGame != null) {
+            try {
+                // Eliminar el juego de la base de datos
+                gameManager.deleteGame(selectedGame.getId());
+
+                // Eliminar el juego de la lista observable y la tabla
+                gamesData.remove(selectedGame);
+                 // Refresh the TableView to reflect the changes
+                
+                tbGames.refresh();
+
+            } catch (Exception e) {
+                // Manejar la excepción apropiadamente (por ejemplo, mostrar un mensaje de error)
+                e.printStackTrace();
+            }
+        }
+    }
     // You can add more methods to handle other events or perform specific actions
 
 }

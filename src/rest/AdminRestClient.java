@@ -7,8 +7,10 @@ package rest;
 
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import model.Game;
 
 /**
  * Jersey REST client generated for REST resource:AdminFacadeREST
@@ -195,13 +197,19 @@ public class AdminRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public void deleteGame_XML(Object requestEntity) throws ClientErrorException {
-        //webTarget.path("deleteGame").request(javax.ws.rs.core.MediaType.APPLICATION_XML).delete(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    public void deleteGame_XML(String id) throws ClientErrorException {
+        webTarget = client.target(BASE_URI).path("entity.game");
+        //Make request
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id}))
+                .request().delete(Game.class);
     }
 
-    public void deleteGame_JSON(Object requestEntity) throws ClientErrorException {
-        //webTarget.path("deleteGame").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).delete(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
-    }
+    /*public void deleteGame_JSON(String id) throws ClientErrorException {
+        webTarget = client.target(BASE_URI).path("entity.game");
+        //Make request
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id}))
+                .request().delete(Game.class);
+    }*/
 
     public void close() {
         client.close();

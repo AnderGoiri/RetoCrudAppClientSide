@@ -21,4 +21,7 @@ public interface GameManager {
      * @throws BusinessLogicException If there is any error while processing.
      */
     public Collection<Game> getAllGames() throws BusinessLogicException;
+    public Collection<Game> updateGame(Object obj) throws BusinessLogicException;
+    public Collection<Game> createGame(Object obj) throws BusinessLogicException;
+    public Collection<Game> deleteGame(Long id) throws BusinessLogicException;
 }

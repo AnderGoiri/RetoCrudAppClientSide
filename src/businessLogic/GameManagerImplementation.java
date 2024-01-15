@@ -52,4 +52,50 @@ public class GameManagerImplementation implements GameManager{
         return games;
     }
     
+    @Override
+    public Collection<Game> updateGame(Object obj) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Update Game gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            webClient.updateGame_XML(obj, Game.class);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception updating game}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error updating game\n"+ex.getMessage());
+        }
+        return games;
+    }
+    
+    @Override
+    public Collection<Game> createGame(Object obj) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            webClient.createGame_XML(obj, Game.class);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception Creating game}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error Creating game\n"+ex.getMessage());
+        }
+        return games;
+    }
+    @Override
+    public Collection<Game> deleteGame(Long id) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            webClient.deleteGame_XML(id.toString());
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception Creating game}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error Creating game\n"+ex.getMessage());
+        }
+        return games;
+    }
 }
