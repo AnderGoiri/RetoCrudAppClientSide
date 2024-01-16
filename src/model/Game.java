@@ -8,7 +8,6 @@ package model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Set;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,9 +24,9 @@ public class Game implements Serializable{
     
     private SimpleLongProperty id;
 
-    /*private Admin admin;
+    //private Admin admin;
 
-    private Set<Event> events;*/
+    //private Set<Event> events;
 
     private SimpleStringProperty name;
     private SimpleStringProperty genre;

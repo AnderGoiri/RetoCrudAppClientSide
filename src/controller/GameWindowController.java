@@ -38,6 +38,7 @@ import model.Admin;
 import model.Game;
 import model.PVPType;
 import model.User;
+import java.lang.String;
 
 public class GameWindowController extends GenericController {
 
@@ -78,7 +79,7 @@ public class GameWindowController extends GenericController {
     private TableColumn<Game, Date> tbcolReleaseDate;
     
     @FXML
-    private Label label;
+    private Label lblData;
 
     @FXML
     private Button btnExit;
@@ -90,7 +91,7 @@ public class GameWindowController extends GenericController {
     private TextField tfSearchData;
     
     @FXML
-    private ComboBox cmbPVPType;
+    private ComboBox<PVPType> cmbPVPType;
     
     @FXML
     private DatePicker dpReleaseDate;
@@ -145,12 +146,40 @@ public class GameWindowController extends GenericController {
                 }
             );
             //Set department combo data model.
+            // Create a combo box
             
             
-            /*ObservableList<Game> games= 
-                    FXCollections.observableArrayList(gameManager.getAllGames());*/
-            
-            
+            cmbSearch.setOnAction(event -> {
+                String selectedNamedQuery = (String) cmbSearch.getSelectionModel().getSelectedItem();
+                
+                handleComboBoxSelection(selectedNamedQuery);
+                //handleComboBoxSelection();
+            });
+        
+        // Add named queries to the combo box
+        ObservableList<String> namedQueriesList = FXCollections.observableArrayList(
+                "findAllGames",
+                "findGamesByName",
+                "findGamesByGenre",
+                "findGamesByPlatform",
+                "findGamesByPVPType",
+                "findGamesByReleaseDate",
+                "findAllGamesCreatedByAdmin"
+        );
+
+        cmbSearch.setItems(namedQueriesList);            
+        cmbSearch.setValue("findAllGames");
+        
+         // Obtén los valores del enum y conviértelos a una lista observable
+        ObservableList<PVPType> pvpTypes = FXCollections.observableArrayList(PVPType.values());
+        // Asigna la lista de valores al ComboBox
+        cmbPVPType.setItems(pvpTypes);
+
+        // Puedes establecer un valor predeterminado si es necesario
+        cmbPVPType.setValue(PVPType.TEAM_BASED_5V5);
+
+        // Puedes manejar eventos de selección si es necesario
+        cmbPVPType.setOnAction(event -> handlePVPTypeSelection());
             //cbDepartamentos.setItems(departments);
             //Add focus event handler.
             //tfLogin.focusedProperty().addListener(this::focusChanged);
@@ -196,8 +225,7 @@ public class GameWindowController extends GenericController {
             tbGames.setEditable(true);
             
             tbGames.setItems(gamesData);
-
-                    
+                   
              // Create a context menu
             ContextMenu contextMenu = new ContextMenu();
 
@@ -238,8 +266,9 @@ public class GameWindowController extends GenericController {
                     // Handle exception appropriately (e.g., show an error message)
                     e.printStackTrace();
                  }
-});
-            
+            });
+            hideSearchFields();
+                    
             stage.setScene(scene);
             //Show window.
             stage.show();
@@ -306,6 +335,59 @@ public class GameWindowController extends GenericController {
             }
         }
     }
-    // You can add more methods to handle other events or perform specific actions
+    private void handleComboBoxSelection(String selectedNamedQuery) {
+        //String selectedNamedQuery = (String) cmbSearch.getSelectionModel().getSelectedItem();
+        // Hide all text fields initially
+        
+        hideSearchFields();
+        // Show text fields based on the selected query
+        switch (selectedNamedQuery) {
+            case "findGamesByName":
+                lblData.setText("Nombre");
+                lblData.setVisible(true);
+                tfSearchData.setVisible(true);
+                break;
+            case "findGamesByGenre":
+                lblData.setText("Género");
+                lblData.setVisible(true);
+                tfSearchData.setVisible(true);
+                break;
+            case "findGamesByPlatform":
+                lblData.setText("Plataforma");
+                lblData.setVisible(true);
+                tfSearchData.setVisible(true);
+                break;
+            case "findGamesByPVPType":
+                lblData.setText("Tipo de PVP");
+                lblData.setVisible(true);
+                cmbPVPType.setVisible(true);
+                break;
+            case "findGamesByReleaseDate":
+                lblData.setText("Fecha de Lanzamiento");
+                lblData.setVisible(true);
+                dpReleaseDate.setVisible(true);
+                break;
+            case "findAllGamesCreatedByAdmin":
+                lblData.setText("Nombre de usuario de Admin");
+                lblData.setVisible(true);
+                tfSearchData.setVisible(true);
+                break;
+            // Add more cases for other queries
 
+            // Default case (show nothing for "findAllGames" or unknown queries)
+            default:
+                break;
+        }
+    }
+    private void hideSearchFields(){
+        tfSearchData.setVisible(false);
+        dpReleaseDate.setVisible(false);
+        cmbPVPType.setVisible(false);
+        lblData.setVisible(false);
+    }
+    private void handlePVPTypeSelection() {
+        // Lógica para manejar la selección del ComboBox
+        PVPType selectedPVPType = cmbPVPType.getValue();
+        System.out.println("Selected PVPType: " + selectedPVPType);
+    }
 }

@@ -51,6 +51,22 @@ public class GameManagerImplementation implements GameManager{
         }
         return games;
     }
+    @Override
+    public Collection<Game> findByName(String name) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            games = webClient.findGamesByName_XML(Game.class, name);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception finding all games{0}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
+        }
+        return games;
+    }
+    
     
     @Override
     public Collection<Game> updateGame(Object obj) throws BusinessLogicException {
