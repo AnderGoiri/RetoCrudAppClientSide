@@ -99,6 +99,8 @@ public class GameWindowController extends GenericController {
     @FXML
     private Button btnAddRow;
     
+    @FXML
+    private Button btnSearch;
     
     /**
      * User's table data model.
@@ -180,6 +182,8 @@ public class GameWindowController extends GenericController {
 
         // Puedes manejar eventos de selección si es necesario
         cmbPVPType.setOnAction(event -> handlePVPTypeSelection());
+        btnSearch.setOnAction(event -> handleSearchButton());
+
             //cbDepartamentos.setItems(departments);
             //Add focus event handler.
             //tfLogin.focusedProperty().addListener(this::focusChanged);
@@ -337,8 +341,7 @@ public class GameWindowController extends GenericController {
     }
     private void handleComboBoxSelection(String selectedNamedQuery) {
         //String selectedNamedQuery = (String) cmbSearch.getSelectionModel().getSelectedItem();
-        // Hide all text fields initially
-        
+        // Hide all text fields initially      
         hideSearchFields();
         // Show text fields based on the selected query
         switch (selectedNamedQuery) {
@@ -372,9 +375,6 @@ public class GameWindowController extends GenericController {
                 lblData.setVisible(true);
                 tfSearchData.setVisible(true);
                 break;
-            // Add more cases for other queries
-
-            // Default case (show nothing for "findAllGames" or unknown queries)
             default:
                 break;
         }
@@ -390,4 +390,45 @@ public class GameWindowController extends GenericController {
         PVPType selectedPVPType = cmbPVPType.getValue();
         System.out.println("Selected PVPType: " + selectedPVPType);
     }
+    @FXML
+private void handleSearchButton() {
+    try {
+        // Obtén la consulta seleccionada de la combo
+        String selectedNamedQuery = (String) cmbSearch.getValue();
+        
+        switch (selectedNamedQuery) {
+            case "findGamesByName":
+                gamesData.clear(); 
+                gamesData = FXCollections.observableArrayList(gameManager.findByName(tfSearchData.getText()));
+                break;
+            case "findGamesByGenre":
+              
+                break;
+            case "findGamesByPlatform":
+                
+                break;
+            case "findGamesByPVPType":
+                
+                break;
+            case "findGamesByReleaseDate":
+                
+                break;
+            case "findAllGamesCreatedByAdmin":
+                
+                break;
+            // Add more cases for other queries
+
+            // Default case (show nothing for "findAllGames" or unknown queries)
+            default:
+                break;
+        }
+                  
+        tbGames.setItems(gamesData);    
+        tbGames.refresh();
+        // Aquí puedes realizar otras acciones según tus requisitos
+    } catch (Exception e) {
+        // Maneja la excepción apropiadamente (por ejemplo, muestra un mensaje de error)
+        e.printStackTrace();
+    }
+}
 }

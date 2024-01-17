@@ -48,7 +48,7 @@ public class AdminRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findGamesByName_XML(Class<T> responseType, String name) throws ClientErrorException {
+    public <T> T findGamesByName_XML(GenericType<T> responseType, String name) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("gamesByName/{0}", new Object[]{name}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);

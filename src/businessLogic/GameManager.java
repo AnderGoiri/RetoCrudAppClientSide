@@ -24,4 +24,5 @@ public interface GameManager {
     public Collection<Game> updateGame(Object obj) throws BusinessLogicException;
     public Collection<Game> createGame(Object obj) throws BusinessLogicException;
     public Collection<Game> deleteGame(Long id) throws BusinessLogicException;
+    public Collection<Game> findByName(String name) throws BusinessLogicException;
 }

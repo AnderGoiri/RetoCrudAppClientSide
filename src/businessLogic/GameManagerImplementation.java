@@ -57,7 +57,7 @@ public class GameManagerImplementation implements GameManager{
         try{
             LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
-            games = webClient.findGamesByName_XML(Game.class, name);
+            games = webClient.findGamesByName_XML(new GenericType<List<Game>>() {}, name);
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception finding all games{0}",
