@@ -5,24 +5,27 @@
  */
 package main;
 
-import businessLogic.GameManager;
-import businessLogic.GameManagerImplementation;
-import controller.GameWindowController;
+import controller.LogInController;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import controller.LogInController;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author Andoni Sanz
+ * @author 2dam
  */
-public class RetoCrudAppClient extends javafx.application.Application{    
+
+public class Application extends javafx.application.Application{    
     /**
      * This method is called when the JavaFX application is launched. It is used
      * to initialize the primary stage (the main window) and set up the user
@@ -35,19 +38,12 @@ public class RetoCrudAppClient extends javafx.application.Application{
     @Override
     public void start(Stage primaryStage) {    
         try {
-            //Create Bussines Logic Controller to be passed to UI controllers
-            GameManager bussinessLogicController= new GameManagerImplementation();
-        
-            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
             Parent root = loader.load();
-            GameWindowController controller = loader.getController();
-            controller.setUsersManager(bussinessLogicController);
-            
-            controller.setStage(primaryStage);               
-                
+            LogInController controller = loader.getController();
+            controller.setStage(primaryStage);
             controller.initStage(root);
-            //primaryStage.show();
+            primaryStage.show();
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
