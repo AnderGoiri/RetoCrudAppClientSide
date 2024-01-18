@@ -7,8 +7,6 @@ package model;
 
 import java.util.Objects;
 import java.util.Set;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *

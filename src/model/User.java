@@ -14,8 +14,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
-
 /**
  *
  * @author Andoni Sanz
@@ -27,11 +25,11 @@ public class User implements Serializable{
     
     private SimpleStringProperty username;
     private SimpleStringProperty password;
-
     private SimpleStringProperty email;
     private SimpleStringProperty name;
     private SimpleStringProperty surnames;
-
+    private SimpleStringProperty user_type;
+    
     private SimpleObjectProperty<Date> birthDate;
 
     public User() {
@@ -118,6 +116,16 @@ public class User implements Serializable{
         this.birthDate.set(birthDate);
     }
 
+    @XmlElement(name="user_type")
+    public String getUser_type() {
+        return this.user_type.get();
+    }
+
+    public void setUser_type(String user_type) {
+        this.user_type.set(user_type);
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 7;

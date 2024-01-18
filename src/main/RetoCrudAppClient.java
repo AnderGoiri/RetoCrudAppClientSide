@@ -39,7 +39,7 @@ public class RetoCrudAppClient extends javafx.application.Application{
             GameManager bussinessLogicController= new GameManagerImplementation();
         
             //FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
             Parent root = loader.load();
             GameWindowController controller = loader.getController();
             controller.setUsersManager(bussinessLogicController);

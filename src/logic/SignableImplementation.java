@@ -11,9 +11,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.GenericType;
+import model.Player;
 /*import libraries.ApplicationPDU;
 import libraries.MessageType;*/
 import model.User;
+import rest.AdminRestClient;
+import rest.PlayerRestClient;
 import rest.UserRestClient;
 
 /**
@@ -23,6 +26,7 @@ import rest.UserRestClient;
 public class SignableImplementation implements Signable{
       
     private UserRestClient webClient;
+    private PlayerRestClient webClientPlayer;
     private static final Logger LOGGER=Logger.getLogger("GameManagerImplementation");
     //TODO 
     /**
@@ -37,8 +41,10 @@ public class SignableImplementation implements Signable{
     /**
      * The client socket.
      */
-    private Socket sCliente = null;
-    
+    public SignableImplementation(){
+        webClient=new UserRestClient();
+    }
+
     /**
      * This method writes a User through the Socket with the MessageType indicating that its a login. 
      * It returns a User with all the necessary data and a MessageType indicating any exception.
@@ -49,11 +55,18 @@ public class SignableImplementation implements Signable{
     @Override
     public User logIn(User u) throws IOException, CredentialsException, EmailAlreadyExistsException, ServerErrorException {
          //List<User> users = null;
+        User user = new User();
     try {
         LOGGER.info("GameManager: Logging in user from REST service (XML).");
         
         // Call the logIn_XML method on webClient
-        u = webClient.logIn_XML(u, User.class, u.getEmail(), u.getPassword());
+        user = (User)webClient.login_XML(u, User.class);
+        
+        if(user.getUser_type().equals("player")){
+            webClientPlayer = new PlayerRestClient();
+            webClientPlayer.findPlayerById_XML(Player.class, String.valueOf(user.getId()));
+            
+        }
         
     } catch (Exception ex) {
         LOGGER.log(Level.SEVERE, "GameManager: Exception during login{0}", ex.getMessage());
@@ -68,7 +81,7 @@ public class SignableImplementation implements Signable{
         // Handle the case when the list is empty (no user found)
         throw new CredentialsException("Invalid credentials");
     }*/
-        return new User();
+        return user;
     }
 
     @Override

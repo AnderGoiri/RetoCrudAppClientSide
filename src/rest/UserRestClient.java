@@ -79,20 +79,12 @@ public class UserRestClient {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T logIn_XML(Object requestEntity, Class<T> responseType, String email, String password) throws ClientErrorException {
-        return webTarget.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{email, password})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    public <T> T login_XML(Object requestEntity, Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("login").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
-    public <T> T logIn_JSON(Object requestEntity, Class<T> responseType, String email, String password) throws ClientErrorException {
-        return webTarget.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{email, password})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
-    }
-
-    public <T> T signUp_XML(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.path("signup").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
-    }
-
-    public <T> T signUp_JSON(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.path("signup").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
+    public <T> T login_JSON(Object requestEntity, Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("login").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
     }
 
     public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {
