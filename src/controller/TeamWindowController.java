@@ -1,8 +1,10 @@
 package controller;
 
+import exceptions.MaxCharException;
 import java.util.Date;
 import java.util.Observable;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -137,9 +139,27 @@ public class TeamWindowController extends GenericController {
             menuHelp.getItems().get(0).fire();
             **/
             
-            cmbBusqueda.getItems().addAll("Todos", "Por nombre", "Por fecha", "Por coach", "Equipos con victorias", "Mis Equipos", "");
+            ObservableList<String> namedQueriesList = FXCollections.observableArrayList(
+                    "Todos",
+                    "Por nombre",
+                    "Por fecha",
+                    "Por coach",
+                    "Equipos con victorias",
+                    "Mis Equipos",
+                    ""
+            );
+            cmbBusqueda.setItems(namedQueriesList);
             cmbBusqueda.setValue("");
+            cmbBusqueda.requestFocus();
             cmbBusqueda.setOnAction(this::handleComboBoxSelection);
+            
+            
+            btnBuscar.setDefaultButton(true);
+            
+            if(tbTeam.getItems().isEmpty()){
+                Label noTeamPlaceholder = new Label("There are no teams currently.");
+                tbTeam.setPlaceholder(noTeamPlaceholder);
+            }
             
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
@@ -154,10 +174,15 @@ public class TeamWindowController extends GenericController {
             case "Todos":
                btnBuscar.setDisable(false); 
             case "Por nombre":
+                 btnBuscar.setDisable(false); 
             case "Por fecha":
+                 btnBuscar.setDisable(false); 
             case "Por coach":
+                 btnBuscar.setDisable(false); 
             case "Equipos con victorias":
+                 btnBuscar.setDisable(false); 
             case "Mis equipos":
+                 btnBuscar.setDisable(false); 
             case "":
                 btnBuscar.setDisable(true);
         }
@@ -165,7 +190,12 @@ public class TeamWindowController extends GenericController {
     
     public void handleOnTextNotEmpty(Observable observable) {
     try {
-    
+        if (!tfNombre.getText().isEmpty() && !tfCoach.getText().isEmpty() && dpFundacion.getValue() != null){
+            //TODO if (User is a Player)
+            btnCrear.setDisable(false);
+        } else {
+            btnCrear.setDisable(true);
+        }
     } catch (MaxCharException e) {
         
     }
