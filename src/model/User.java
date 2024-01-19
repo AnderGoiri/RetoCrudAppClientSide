@@ -40,9 +40,10 @@ public class User implements Serializable{
         this.name = new SimpleStringProperty();
         this.surnames = new SimpleStringProperty();
         this.birthDate = new SimpleObjectProperty<Date>();
+        this.user_type = new SimpleStringProperty();
     }
 
-    public User(Long id, String username, String password, String email, String name, String surnames, Date birthDate) {
+    public User(Long id, String username, String password, String email, String name, String surnames, Date birthDate, String user_type) {
         this.id = new SimpleLongProperty(id);
         this.username = new SimpleStringProperty(username);
         this.password = new SimpleStringProperty(password);
@@ -50,6 +51,7 @@ public class User implements Serializable{
         this.name = new SimpleStringProperty(name);
         this.surnames = new SimpleStringProperty(surnames);
         this.birthDate = new SimpleObjectProperty<Date>(birthDate);
+        this.user_type = new SimpleStringProperty(user_type);
     }
   
     
