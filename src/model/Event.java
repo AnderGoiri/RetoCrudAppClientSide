@@ -320,5 +320,4 @@ public class Event implements Serializable {
     public void setPlayerevents(Set<PlayerEvent> playerevents) {
         this.playerevents = playerevents;
     }
-
 }
