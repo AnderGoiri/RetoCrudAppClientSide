@@ -16,90 +16,90 @@
    <children> 
       <!-- Include the HBox with the menu -->
       <fx:include fx:id="hBoxMenu" source="Menu.fxml" />
-      <Label layoutX="23.0" layoutY="35.0" text="EVENTOS">
+      <Label fx:id="lbVentana" layoutX="23.0" layoutY="35.0" text="EVENTOS">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>
       </Label>
       <Pane layoutX="14.0" layoutY="77.0" prefHeight="182.0" prefWidth="1333.0" style="-fx-border-color: grey;">
          <children>
-            <Label layoutX="345.0" layoutY="27.0" text="Nombre">
+            <Label fx:id="lbBusqueda" layoutX="29.0" layoutY="26.0" text="Búsqueda">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre" layoutX="437.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" />
-            <Label layoutX="345.0" layoutY="127.0" text="Lugar">
+            <ComboBox fx:id="cbBusqueda" layoutX="29.0" layoutY="51.0" prefHeight="25.0" prefWidth="260.0" />
+            <Label fx:id="lbNombre" layoutX="345.0" layoutY="27.0" text="Nombre">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre1" layoutX="437.0" layoutY="127.0" prefHeight="25.0" prefWidth="240.0" />
-            <Label layoutX="345.0" layoutY="77.0" text="Juego">
+            <TextField fx:id="tfNombre" layoutX="437.0" layoutY="27.0" prefHeight="25.0" prefWidth="240.0" promptText="Nombre del evento" />
+            <Label fx:id="lbJuego" layoutX="345.0" layoutY="77.0" text="Juego">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="718.0" layoutY="127.0" text="Aforo">
+            <ComboBox fx:id="cbJuego" layoutX="437.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" />
+            <Label fx:id="lbLugar" layoutX="345.0" layoutY="127.0" text="Lugar">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="717.0" layoutY="27.0" text="ONG">
+            <TextField fx:id="tfLugar" layoutX="437.0" layoutY="127.0" prefHeight="25.0" prefWidth="240.0" promptText="Dónde ocurre el evento" />
+            <Label fx:id="lbONG" layoutX="717.0" layoutY="27.0" text="ONG">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="717.0" layoutY="77.0" text="Premio">
+            <TextField fx:id="tfONG" layoutX="802.0" layoutY="25.0" prefHeight="25.0" prefWidth="302.0" promptText="ONG destinataria de la donación" />
+            <Label fx:id="lbPremio" layoutX="717.0" layoutY="77.0" text="Premio">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="918.0" layoutY="77.0" text="Donación">
+            <TextField fx:id="tfPremio" layoutX="802.0" layoutY="77.0" prefHeight="25.0" prefWidth="85.0" />
+            <Label fx:id="lbDonacion" layoutX="918.0" layoutY="77.0" text="Donación">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="tfNombre11" layoutX="802.0" layoutY="127.0" prefHeight="25.0" prefWidth="86.0" />
-            <TextField fx:id="tfNombre12" layoutX="802.0" layoutY="25.0" prefHeight="25.0" prefWidth="302.0" />
-            <TextField fx:id="tfNombre121" layoutX="1018.0" layoutY="77.0" prefHeight="25.0" prefWidth="86.0" />
-            <TextField fx:id="tfNombre122" layoutX="802.0" layoutY="77.0" prefHeight="25.0" prefWidth="85.0" />
-            <ComboBox layoutX="437.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" />
-            <Button layoutX="1171.0" layoutY="44.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="135.0" text="BUSCAR">
+            <TextField fx:id="tfDonacion" layoutX="1018.0" layoutY="77.0" prefHeight="25.0" prefWidth="86.0" />
+            <Label fx:id="lbAforo" layoutX="718.0" layoutY="127.0" text="Aforo">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tfAforo" layoutX="802.0" layoutY="127.0" prefHeight="25.0" prefWidth="86.0" />
+            <Label fx:id="lbFecha" layoutX="918.0" layoutY="127.0" text="Fecha">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="dpFecha" layoutX="1018.0" layoutY="127.0" prefHeight="25.0" prefWidth="112.0" />
+            <Button fx:id="btnBuscar" layoutX="1171.0" layoutY="44.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="135.0" text="BUSCAR">
                <font>
                   <Font size="15.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgBuscar" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../Downloads/Icono%20lupa.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
-            <DatePicker layoutX="1018.0" layoutY="127.0" prefHeight="25.0" prefWidth="112.0" />
-            <Label layoutX="918.0" layoutY="127.0" text="Fecha">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Button layoutX="1171.0" layoutY="105.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="135.0" text="LIMPIAR">
+            <Button fx:id="btnLimpiar" layoutX="1171.0" layoutY="105.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="135.0" text="LIMPIAR">
                <font>
                   <Font size="15.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgLimpiar" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../Downloads/Icono%20limpiar.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <ComboBox layoutX="29.0" layoutY="51.0" prefHeight="25.0" prefWidth="260.0" />
-            <Label layoutX="29.0" layoutY="26.0" text="Búsqueda">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
          </children></Pane>
       
             <TableView layoutX="14.0" layoutY="318.0" prefHeight="410.0" prefWidth="1183.0">
