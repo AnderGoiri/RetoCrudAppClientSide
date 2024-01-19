@@ -9,21 +9,13 @@
    <children>
       <MenuBar fx:id="menuBar" prefHeight="29.0" prefWidth="1366.0">
         <menus>
-          <Menu fx:id="menuActions" mnemonicParsing="false" text="Acciones">
+          <Menu fx:id="menuActions" mnemonicParsing="false" text="Actions">
                <items>
                   <MenuItem fx:id="menuItemReport" mnemonicParsing="false" onAction="#handleImprimirAction" text="Report" />
                   <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#handleImprimirAction" text="Salir" />
                </items>
           </Menu>
-          <Menu fx:id="menuNavigation" mnemonicParsing="false" text="Navegación">
-               <items>
-                  <MenuItem fx:id="menuItemCreate" mnemonicParsing="false" onAction="#handleImprimirAction" text="Crear" />
-                  <MenuItem fx:id="menuItemRead" mnemonicParsing="false" onAction="#handleImprimirAction" text="Buscar" />
-                  <MenuItem fx:id="menuItemUpdate" mnemonicParsing="false" onAction="#handleImprimirAction" text="Actualizar" />
-                  <MenuItem fx:id="menuItemDelete" mnemonicParsing="false" onAction="#handleImprimirAction" text="Borrar" />
-               </items>
-          </Menu>
-          <Menu fx:id="menuHelp" mnemonicParsing="false" text="Ayuda">
+          <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
                <items>
                   <MenuItem fx:id="menuItemAbout" mnemonicParsing="false" onAction="#handleHelpAction" text="About" />
                </items>

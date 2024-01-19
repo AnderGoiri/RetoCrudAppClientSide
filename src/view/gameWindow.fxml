@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<!-- Import HBox -->
+<!-- Import FXMLLoader -->
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameWindowController">
+   <children>
+      <!-- Include the HBox with the menu -->
+      <fx:include fx:id="hBoxMenu" source="Menu.fxml" />
+      
+      <TableView fx:id="tbGames" layoutX="23.0" layoutY="134.0" prefHeight="576.0" prefWidth="1302.0">
+        <columns>
+            <TableColumn fx:id="tbcolId" prefWidth="97.33332824707031" text="ID" />
+          <TableColumn fx:id="tbcolName" maxWidth="1000.0" prefWidth="354.6666717529297" text="NAME" />
+          <TableColumn fx:id="tbcolGenre" minWidth="0.0" prefWidth="285.0000305175781" text="GENRE" />
+          <TableColumn fx:id="tbcolPlatform" minWidth="0.0" prefWidth="204.0" text="PLATFORM" />
+          <TableColumn fx:id="tbcolPVPType" maxWidth="205.33331298828125" prefWidth="154.0" text="PVPTYPE" />
+          <TableColumn fx:id="tbcolReleaseDate" maxWidth="500.0" prefWidth="205.66668701171875" text="RELEASE DATE" />
+        </columns>
+      </TableView>
+      <Label layoutX="23.0" layoutY="45.0" prefHeight="40.0" prefWidth="97.0" text="GAMES">
+         <font>
+            <Font name="Consolas Bold" size="30.0" />
+         </font>
+      </Label>
+      <Button layoutX="1088.0" layoutY="49.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="107.0" text="Imprimir" />
+      <Button layoutX="1220.0" layoutY="49.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="107.0" text="Salir" />
+   </children>
+</Pane>
