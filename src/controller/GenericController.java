@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import businessLogic.GameManager;
+import businessLogic.TeamManager;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,16 +32,25 @@ public class GenericController {
      */
     protected final int MAX_LENGTH=255;
     /**
-     * The business logic object containing all business methods.
+     * The business logic GameManager object containing all business methods.
      */
     protected GameManager gameManager;
+    /**
+     * The business logic TeamManager object containing all business methods.
+     */
+    protected TeamManager teamManager;
     /**
      * Sets the business logic object to be used by this UI controller. 
      * @param usersManager An object implementing {@link UsersManager} interface.
      */
-    public void setUsersManager(GameManager gameManager){
+    public void setGameManager(GameManager gameManager){
         this.gameManager= gameManager;
     }
+
+    public void setTeamManager(TeamManager teamManager) {
+        this.teamManager = teamManager;
+    }    
+    
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the 

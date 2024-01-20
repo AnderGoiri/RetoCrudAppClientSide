@@ -21,6 +21,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -127,7 +128,13 @@ public class TeamWindowController extends GenericController {
             
             tbTeam.setEditable(false);
             
-            //TODO Mostrar datos tabla
+            //Setting Team TableView cell values
+            tbcolNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+            tbcolEntrenador.setCellValueFactory(new PropertyValueFactory<>("coach"));
+            tbcolFundacion.setCellValueFactory(new PropertyValueFactory<>("fundacion"));
+                
+            //Getting an observable list for team table
+            teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
             
             /**TODO
             //Obtains the layout containing the menu bar from the scene node graph
@@ -152,7 +159,7 @@ public class TeamWindowController extends GenericController {
             cmbBusqueda.setValue("");
             cmbBusqueda.requestFocus();
             cmbBusqueda.setOnAction(this::handleComboBoxSelection);
-            
+               
             
             btnBuscar.setDefaultButton(true);
             
@@ -167,22 +174,22 @@ public class TeamWindowController extends GenericController {
             lblError.setVisible(true);
         }
     }
-    
-    public void handleComboBoxSelection (ActionEvent event){
+
+    public void handleComboBoxSelection(ActionEvent event) {
         String selectedNamedQuery = (String) cmbBusqueda.getSelectionModel().getSelectedItem();
         switch (selectedNamedQuery) {
             case "Todos":
-               btnBuscar.setDisable(false); 
+                btnBuscar.setDisable(false);
             case "Por nombre":
-                 btnBuscar.setDisable(false); 
+                btnBuscar.setDisable(false);
             case "Por fecha":
-                 btnBuscar.setDisable(false); 
+                btnBuscar.setDisable(false);
             case "Por coach":
-                 btnBuscar.setDisable(false); 
+                btnBuscar.setDisable(false);
             case "Equipos con victorias":
-                 btnBuscar.setDisable(false); 
+                btnBuscar.setDisable(false);
             case "Mis equipos":
-                 btnBuscar.setDisable(false); 
+                btnBuscar.setDisable(false);
             case "":
                 btnBuscar.setDisable(true);
         }

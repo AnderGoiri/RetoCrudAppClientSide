@@ -6,7 +6,9 @@
 package businessLogic;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.core.GenericType;
 import model.Team;
 
 /**
@@ -16,16 +18,23 @@ import model.Team;
 public class TeamManagerImplementation implements TeamManager {
     private PlayerRestClient webClient;
     private static final Logger LOGGER=Logger.getLogger("TeamManagerImplementation");
+
+    public TeamManagerImplementation(PlayerRestClient webClient) {
+        this.webClient = new PlayerRestClient();
+    }
     
     @Override
     public List<Team> findAllTeams() throws BusinessLogicException {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding all teams.");
-            teams 
+            teams = webClient.findAllTeams_XML(new GenericType<List<Team>>() {
+            });
         } catch (Exception e) {
-            
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception finding all teams{0}", e.getMessage());
+            throw new BusinessLogicException("Error finding all teams\n" + e.getMessage());
         }
+        return teams;
     }
 
     @Override
