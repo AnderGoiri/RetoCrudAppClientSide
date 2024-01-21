@@ -7,6 +7,8 @@ package main;
 
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
+import businessLogic.TeamManager;
+import businessLogic.TeamManagerImplementation;
 import controller.GameWindowController;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -36,12 +38,12 @@ public class RetoCrudAppClient extends javafx.application.Application{
     public void start(Stage primaryStage) {    
         try {
             //Create Bussines Logic Controller to be passed to UI controllers
-            GameManager bussinessLogicController= new GameManagerImplementation();
+            TeamManager bussinessLogicController= new TeamManagerImplementation();
         
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/teamWindow.fxml"));
             Parent root = loader.load();
             GameWindowController controller = loader.getController();
-            controller.setUsersManager(bussinessLogicController);
+            controller.setTeamManager(bussinessLogicController);
             
             controller.setStage(primaryStage);               
                 

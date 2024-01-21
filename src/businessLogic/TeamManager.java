@@ -5,6 +5,7 @@
  */
 package businessLogic;
 
+import java.util.Collection;
 import java.util.List;
 import model.Team;
 
@@ -13,7 +14,7 @@ import model.Team;
  * @author Jagoba Bartolomé Barroso
  */
 public interface TeamManager {
-    public List<Team> findAllTeams() throws BusinessLogicException;
+    public Collection<Team> findAllTeams() throws BusinessLogicException;
     public List<Team> findTeamsByName() throws BusinessLogicException;
     public List<Team> findTeamsByDate() throws BusinessLogicException;
     public List<Team> findTeamsByCoach() throws BusinessLogicException;

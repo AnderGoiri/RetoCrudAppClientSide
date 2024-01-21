@@ -51,6 +51,7 @@ public class GameManagerImplementation implements GameManager{
         }
         return games;
     }
+    
     @Override
     public Collection<Game> findByName(String name) throws BusinessLogicException {
         List<Game> games =null;

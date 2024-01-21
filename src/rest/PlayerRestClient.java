@@ -8,30 +8,29 @@ package rest;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 
 /**
- * Jersey REST client generated for REST resource:GameFacadeREST
- * [entity.game]<br>
+ * Jersey REST client generated for REST resource:PlayerFacadeREST
+ * [entity.player]<br>
  * USAGE:
  * <pre>
- *        GameRestClient client = new GameRestClient();
- *        Object response = client.XXX(...);
- *        // do whatever with response
- *        client.close();
- * </pre>
+        PlayerRestClient client = new PlayerRestClient();
+        Object response = client.XXX(...);
+        // do whatever with response
+        client.close();
+ </pre>
  *
- * @author Andoni Sanz
+ * @author sunde
  */
-public class GameRestClient {
+public class PlayerRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
+    private static final String BASE_URI = "http://localhost:8080/RetoAppCrud/webresources";
 
-    public GameRestClient() {
+    public PlayerRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entity.game");
+        webTarget = client.target(BASE_URI).path("entity.player");
     }
 
     public String countREST() throws ClientErrorException {
@@ -98,16 +97,4 @@ public class GameRestClient {
         client.close();
     }
     
-      public <T> T findAllTeams_XML(GenericType<T> responseType) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path("findAllTeams");
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-
-    public <T> T findAllTeams_JSON(Class<T> responseType) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path("findAllTeams");
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
-    }
-
 }
