@@ -112,7 +112,7 @@
             <TableColumn fx:id="columnONG" prefWidth="154.13336181640625" text="ONG" />
             <TableColumn fx:id="columnPremio" prefWidth="154.1334228515625" text="PREMIO" />
             <TableColumn fx:id="columnDonacion" prefWidth="104.0" text="DONACIÓN" />
-            <TableColumn fx:id="ColumnGanador" prefWidth="92.7999267578125" text="GANADOR" />
+            <TableColumn fx:id="columnGanador" prefWidth="92.7999267578125" text="GANADOR" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

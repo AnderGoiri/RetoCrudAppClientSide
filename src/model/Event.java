@@ -32,7 +32,6 @@ public class Event implements Serializable {
     /**
      * Date of the event.
      */
-    
     private Date date;
     /**
      * Prize of the event for the winner.

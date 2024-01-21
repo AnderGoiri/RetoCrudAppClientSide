@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,51 +44,53 @@ public class EventsViewController extends GenericController {
     @FXML
     private TableView<?> tableViewEvents;
     @FXML
-    private TableColumn<?, ?> columnNombre, columnJuego, columnLugar, columnFecha, columnAforo, columnONG, columnPremio, columnDonacion, ColumnGanador;
+    private TableColumn<?, ?> columnNombre, columnJuego, columnLugar, columnFecha, columnAforo, columnONG, columnPremio, columnDonacion, columnGanador;
 
     /**
      * Initializes the controller class.
+     *
      * @param root
      */
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
             stage = new Stage();
+            
             //Set stage properties
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.setTitle("EVENTOS");
             stage.setResizable(false);
-            stage.setOnShowing(this::handleWindowShowing);
+            
+            //Set properties on showing
+            btnUnirse.setDisable(true);
+            btnBuscar.setDisable(true);
+            btnCrear.setDisable(true);
+            btnModificar.setDisable(true);
+            btnEliminar.setDisable(true);
+            cbEquipo.setDisable(true);
 
+            //Cargar los datos del combobox Juegos
+            tableViewEvents.setEditable(false);
+
+            lbError.setVisible(false);
+
+            btnBuscar.setDefaultButton(true);
+
+            //Setting Event TableView cell values
+            columnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+            columnJuego.setCellValueFactory(new PropertyValueFactory<>("juego"));
+            columnLugar.setCellValueFactory(new PropertyValueFactory<>("lugar"));
+            columnFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+            columnAforo.setCellValueFactory(new PropertyValueFactory<>("aforo"));
+            columnONG.setCellValueFactory(new PropertyValueFactory<>("ong"));
+            columnPremio.setCellValueFactory(new PropertyValueFactory<>("premio"));
+            columnDonacion.setCellValueFactory(new PropertyValueFactory<>("donacion"));
+            columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
+         
         } catch (Exception e) {
             showErrorAlert("No se ha podido abrir la ventana.\n"
                     + e.getMessage());
         }
     }
-
-    /**
-     * Initializes window state. It implements behavior for WINDOW_SHOWING type
-     * event.
-     *
-     * @param event The window event
-     */
-    private void handleWindowShowing(WindowEvent event) {
-        LOGGER.info("Beginning EventViewController::handleWindowShowing");
-        btnUnirse.setDisable(true);
-        btnBuscar.setDisable(true);
-        btnCrear.setDisable(true);
-        btnModificar.setDisable(true);
-        btnEliminar.setDisable(true);
-        cbEquipo.setDisable(true);
-        //Cargar los datos del combobox Juegos
-
-        tableViewEvents.setEditable(false);
-
-        lbError.setVisible(false);
-
-        btnBuscar.defaultButtonProperty();
-
-    }
-
 }
