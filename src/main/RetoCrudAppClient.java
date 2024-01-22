@@ -36,15 +36,12 @@ public class RetoCrudAppClient extends javafx.application.Application{
         try {
             //Create Bussines Logic Controller to be passed to UI controllers
             EventManager bussinessLogicController= new EventManagerImplementation();
-        
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
-            EventsViewController controller = loader.getController();
+            EventsViewController controller = loader.getController();           
             controller.setEventManager(bussinessLogicController);
-            controller.setStage(primaryStage);               
-                
+            controller.setStage(primaryStage);
             controller.initStage(root);
-            //primaryStage.show();
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }

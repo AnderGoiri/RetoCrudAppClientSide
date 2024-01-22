@@ -6,6 +6,8 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import model.Event;
 
 /**
  * FXML Controller class
@@ -55,13 +58,13 @@ public class EventsViewController extends GenericController {
         try {
             Scene scene = new Scene(root);
             stage = new Stage();
-            
+
             //Set stage properties
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.setTitle("EVENTOS");
             stage.setResizable(false);
-            
+
             //Set properties on showing
             btnUnirse.setDisable(true);
             btnBuscar.setDisable(true);
@@ -71,6 +74,10 @@ public class EventsViewController extends GenericController {
             cbEquipo.setDisable(true);
 
             //Cargar los datos del combobox Juegos
+            ObservableList<String> gameNames = FXCollections.observableArrayList();
+            //gameNames.stream().
+
+            //cbJuego.setItems(gameNames);
             tableViewEvents.setEditable(false);
 
             lbError.setVisible(false);
@@ -87,7 +94,10 @@ public class EventsViewController extends GenericController {
             columnPremio.setCellValueFactory(new PropertyValueFactory<>("premio"));
             columnDonacion.setCellValueFactory(new PropertyValueFactory<>("donacion"));
             columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
-         
+
+            ObservableList<Event> events = FXCollections.observableArrayList(eventManager.findAllEvents());
+
+            stage.show();
         } catch (Exception e) {
             showErrorAlert("No se ha podido abrir la ventana.\n"
                     + e.getMessage());
