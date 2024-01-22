@@ -21,7 +21,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -73,13 +72,10 @@ public class TeamWindowController extends GenericController {
     private Label lblBusqueda;
 
     @FXML
-    private ComboBox cmbBusqueda;
+    private ComboBox<String> cmbBusqueda;
 
     @FXML
     private Button btnLimpiar;
-
-    @FXML
-    private ImageView imgLimpiar;
 
     @FXML
     private Button btnModificar;
@@ -99,11 +95,11 @@ public class TeamWindowController extends GenericController {
     @FXML
     private Button btnEliminar;
 
-    private ObservableList<Team> teamsData;
+    private ObservableList<Team> teamsData = FXCollections.observableArrayList();
     
     public void initStage(Parent root) {
         try {
-            Scene scene = new Scene (root, 1366, 768);
+            Scene scene = new Scene (root);
             stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Equipos");
@@ -115,7 +111,7 @@ public class TeamWindowController extends GenericController {
             btnModificar.setDisable(true);
             btnEliminar.setDisable(true);
             
-            tfNombre.setDisable(false);
+            /*tfNombre.setDisable(false);
             tfCoach.setDisable(false);
             dpFundacion.setDisable(false);
             
@@ -123,29 +119,22 @@ public class TeamWindowController extends GenericController {
             
             btnSalir.setDisable(false);
             btnLimpiar.setDisable(false);
-            
+            */
             lblError.setVisible(false);
             
             tbTeam.setEditable(false);
             
-            //Setting Team TableView cell values
-            tbcolNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-            tbcolEntrenador.setCellValueFactory(new PropertyValueFactory<>("coach"));
-            tbcolFundacion.setCellValueFactory(new PropertyValueFactory<>("fundacion"));
-                
-            //Getting an observable list for team table
-            teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
-            
-            /**TODO
-            //Obtains the layout containing the menu bar from the scene node graph
-            HBox hBoxMenu = (HBox)root.getChildrenUnmodifiable().get(0);
-            //Get the menu bar from the children of the layout got before
-            MenuBar menuBar = (MenuBar) hBoxMenu.getChildren().get(0);
-            //Get the second menu from the menu bar
-            Menu menuHelp = menuBar.getMenus().get(1);
-            menuHelp.getItems().get(0).fire();
-            **/
-            
+            //TODO Mostrar datos tabla
+            /**
+             * TODO //Obtains the layout containing the menu bar from the scene
+             * node graph HBox hBoxMenu =
+             * (HBox)root.getChildrenUnmodifiable().get(0); //Get the menu bar
+             * from the children of the layout got before MenuBar menuBar =
+             * (MenuBar) hBoxMenu.getChildren().get(0); //Get the second menu
+             * from the menu bar Menu menuHelp = menuBar.getMenus().get(1);
+             * menuHelp.getItems().get(0).fire();
+            *
+             */
             ObservableList<String> namedQueriesList = FXCollections.observableArrayList(
                     "Todos",
                     "Por nombre",
@@ -159,15 +148,18 @@ public class TeamWindowController extends GenericController {
             cmbBusqueda.setValue("");
             cmbBusqueda.requestFocus();
             cmbBusqueda.setOnAction(this::handleComboBoxSelection);
-               
-            
+
             btnBuscar.setDefaultButton(true);
-            
-            if(tbTeam.getItems().isEmpty()){
-                Label noTeamPlaceholder = new Label("There are no teams currently.");
-                tbTeam.setPlaceholder(noTeamPlaceholder);
+
+            /*if(cmbBusqueda.getValue().equals("")){
+                Label SelectPlaceholder = new Label("Selecciona un tipo de búsqueda para mostrar datos.");
+                tbTeam.setPlaceholder(SelectPlaceholder);
             }
-            
+            if(tbTeam.getItems().isEmpty()){
+                Label noTeamPlaceholder = new Label("No existen datos que mostrar.");
+                tbTeam.setPlaceholder(noTeamPlaceholder);
+            }*/
+            stage.show();
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             lblError.setText("Ha ocurrido un error inesperado.");
@@ -177,40 +169,49 @@ public class TeamWindowController extends GenericController {
 
     public void handleComboBoxSelection(ActionEvent event) {
         String selectedNamedQuery = (String) cmbBusqueda.getSelectionModel().getSelectedItem();
-        switch (selectedNamedQuery) {
-            case "Todos":
-                btnBuscar.setDisable(false);
-            case "Por nombre":
-                btnBuscar.setDisable(false);
-            case "Por fecha":
-                btnBuscar.setDisable(false);
-            case "Por coach":
-                btnBuscar.setDisable(false);
-            case "Equipos con victorias":
-                btnBuscar.setDisable(false);
-            case "Mis equipos":
-                btnBuscar.setDisable(false);
-            case "":
-                btnBuscar.setDisable(true);
+        if (selectedNamedQuery != null) {
+            switch (selectedNamedQuery) {
+                case "Todos":
+                    btnBuscar.setDisable(false);
+                    break;
+                case "Por nombre":
+                    btnBuscar.setDisable(false);
+                    break;
+                case "Por fecha":
+                    btnBuscar.setDisable(false);
+                    break;
+                case "Por coach":
+                    btnBuscar.setDisable(false);
+                    break;
+                case "Equipos con victorias":
+                    btnBuscar.setDisable(false);
+                    break;
+                case "Mis equipos":
+                    btnBuscar.setDisable(false);
+                    break;
+                case "":
+                    btnBuscar.setDisable(true);
+                    break;
+            }
         }
     }
-    
-    public void handleOnTextNotEmpty(Observable observable) {
-    try {
-        if (!tfNombre.getText().isEmpty() && !tfCoach.getText().isEmpty() && dpFundacion.getValue() != null){
-            //TODO if (User is a Player)
-            btnCrear.setDisable(false);
-        } else {
-            btnCrear.setDisable(true);
+
+    /*public void handleOnTextNotEmpty(Observable observable) {
+        try {
+            if (!tfNombre.getText().isEmpty() && !tfCoach.getText().isEmpty() && dpFundacion.getValue() != null) {
+                //TODO if (User is a Player)
+                btnCrear.setDisable(false);
+            } else {
+                btnCrear.setDisable(true);
+            }
+        } catch (MaxCharException e) {
+            LOGGER.severe(e.getMessage());
+            lblError.setText("Ha sobrepasado el límite de carácteres disponibles.");
+            lblError.setVisible(true);
         }
-    } catch (MaxCharException e) {
-        
-    }
-    
-    }
-    
+
+    }*/
+
 
 
 }
-
-
