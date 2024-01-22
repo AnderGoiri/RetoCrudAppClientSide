@@ -11,7 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -97,10 +99,12 @@ public class EventsViewController extends GenericController {
 
             ObservableList<Event> events = FXCollections.observableArrayList(eventManager.findAllEvents());
 
+            tableViewEvents.setItems(events);
+
             stage.show();
         } catch (Exception e) {
-            showErrorAlert("No se ha podido abrir la ventana.\n"
-                    + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
+            alert.showAndWait();
         }
     }
 }

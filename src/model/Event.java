@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * Entity JPA class for Event data. This class contains the properties for the
@@ -16,36 +21,36 @@ public class Event implements Serializable {
     /**
      * Id field for event entity.
      */
-    private Long id;
+    private SimpleLongProperty id;
     /**
      * Name of the event.
      */
-    private String name;
+    private SimpleStringProperty name;
     /**
      * Location of the event.
      */
-    private String location;
+    private SimpleStringProperty location;
     /**
      * Entity that is going to perceive the money from the donations.
      */
-    private String ong;
+    private SimpleStringProperty ong;
     /**
      * Date of the event.
      */
-    private Date date;
+    private SimpleObjectProperty<Date> date;
     /**
      * Prize of the event for the winner.
      */
-    private Float prize;
+    private SimpleFloatProperty prize;
     /**
      * Percentage of the prize perceive by the NGO.
      */
-    private Float donation;
+    private SimpleFloatProperty donation;
     /**
      * Number of maximum participants in the event. Participants can be either
      * {@link Player} or {@link Team}.
      */
-    private Integer participantNum;
+    private SimpleIntegerProperty participantNum;
 
     /**
      * {@link Game} of the Event.
@@ -57,9 +62,19 @@ public class Event implements Serializable {
     private Organizer organizer;
 
     private Set<PlayerEvent> playerevents;
-    
+
     private Set<TeamEvent> teamevents;
 
+    public Event(Long id, String name, String location, String ong, Date date, Float prize, Float donation, Integer participantNum) {
+        this.id = new SimpleLongProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.location = new SimpleStringProperty(location);
+        this.ong = new SimpleStringProperty(ong);
+        this.date = new SimpleObjectProperty(date);
+        this.prize = new SimpleFloatProperty(prize);
+        this.donation = new SimpleFloatProperty(donation);
+        this.participantNum = new SimpleIntegerProperty(participantNum);
+    }
 
     /**
      * Gets id value of the Event.
@@ -67,7 +82,7 @@ public class Event implements Serializable {
      * @return the id value.
      */
     public Long getId() {
-        return id;
+        return this.id.get();
     }
 
     /**
@@ -76,7 +91,7 @@ public class Event implements Serializable {
      * @param id the id to set.
      */
     public void setId(Long id) {
-        this.id = id;
+        this.id.set(id);
     }
 
     /**
@@ -85,7 +100,7 @@ public class Event implements Serializable {
      * @return the name value.
      */
     public String getName() {
-        return name;
+        return this.name.get();
     }
 
     /**
@@ -94,7 +109,7 @@ public class Event implements Serializable {
      * @param name the name to set.
      */
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     /**
@@ -103,7 +118,7 @@ public class Event implements Serializable {
      * @return the location value.
      */
     public String getLocation() {
-        return location;
+        return this.location.get();
     }
 
     /**
@@ -112,7 +127,7 @@ public class Event implements Serializable {
      * @param location the location to set.
      */
     public void setLocation(String location) {
-        this.location = location;
+        this.location.set(location);
     }
 
     /**
@@ -121,7 +136,7 @@ public class Event implements Serializable {
      * @return the ong value.
      */
     public String getOng() {
-        return ong;
+        return this.ong.get();
     }
 
     /**
@@ -130,7 +145,7 @@ public class Event implements Serializable {
      * @param ong the ong to set.
      */
     public void setOng(String ong) {
-        this.ong = ong;
+        this.ong.set(ong);
     }
 
     /**
@@ -139,7 +154,7 @@ public class Event implements Serializable {
      * @return the date value.
      */
     public Date getDate() {
-        return date;
+        return this.date.get();
     }
 
     /**
@@ -148,7 +163,7 @@ public class Event implements Serializable {
      * @param date the date to set.
      */
     public void setDate(Date date) {
-        this.date = date;
+        this.date.set(date);
     }
 
     /**
@@ -157,7 +172,7 @@ public class Event implements Serializable {
      * @return the prize value.
      */
     public Float getPrize() {
-        return prize;
+        return this.prize.get();
     }
 
     /**
@@ -166,7 +181,7 @@ public class Event implements Serializable {
      * @param prize the prize to set.
      */
     public void setPrize(Float prize) {
-        this.prize = prize;
+        this.prize.set(prize);
     }
 
     /**
@@ -175,7 +190,7 @@ public class Event implements Serializable {
      * @return the donation value.
      */
     public Float getDonation() {
-        return donation;
+        return this.donation.get();
     }
 
     /**
@@ -184,7 +199,7 @@ public class Event implements Serializable {
      * @param donation the donation to set.
      */
     public void setDonation(Float donation) {
-        this.donation = donation;
+        this.donation.set(donation);
     }
 
     /**
@@ -193,7 +208,7 @@ public class Event implements Serializable {
      * @return the participantNum value.
      */
     public Integer getParticipantNum() {
-        return participantNum;
+        return this.participantNum.get();
     }
 
     /**
@@ -202,7 +217,7 @@ public class Event implements Serializable {
      * @param participantNum the participantNum to set
      */
     public void setParticipantNum(Integer participantNum) {
-        this.participantNum = participantNum;
+        this.participantNum.set(participantNum);
     }
 
     /**
@@ -240,7 +255,6 @@ public class Event implements Serializable {
     public void setOrganizer(Organizer organizer) {
         this.organizer = organizer;
     }
-
 
     /**
      * HashCode method implementation of the entity.
