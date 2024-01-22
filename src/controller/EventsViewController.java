@@ -47,7 +47,7 @@ public class EventsViewController extends GenericController {
     @FXML
     private ImageView imgBuscar, imgLimpiar;
     @FXML
-    private TableView<?> tableViewEvents;
+    private TableView<Event> tableViewEvents;
     @FXML
     private TableColumn<?, ?> columnNombre, columnJuego, columnLugar, columnFecha, columnAforo, columnONG, columnPremio, columnDonacion, columnGanador;
 
