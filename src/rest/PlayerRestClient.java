@@ -82,7 +82,7 @@ public class PlayerRestClient {
     public String findPlayerLevelById_XML(String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("findPlayerLevelById/{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(String.class);
+        return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
     }
 
     public String findPlayerLevelById_JSON(String id) throws ClientErrorException {

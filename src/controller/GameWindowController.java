@@ -2,6 +2,7 @@ package controller;
 
 import businessLogic.BusinessLogicException;
 import extra.DatePickerCellGame;
+//import static groovy.util.GroovyTestCase.assertEquals;
 import java.time.Instant;
 import java.util.Date;
 import java.util.logging.Level;
@@ -39,6 +40,7 @@ import model.Game;
 import model.PVPType;
 import model.User;
 import java.lang.String;
+import java.util.List;
 
 public class GameWindowController extends GenericController {
 
@@ -272,7 +274,9 @@ public class GameWindowController extends GenericController {
                  }
             });
             hideSearchFields();
-                    
+            
+         
+            
             stage.setScene(scene);
             //Show window.
             stage.show();

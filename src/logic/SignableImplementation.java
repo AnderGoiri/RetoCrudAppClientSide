@@ -56,18 +56,22 @@ public class SignableImplementation implements Signable{
     public User logIn(User u) throws IOException, CredentialsException, EmailAlreadyExistsException, ServerErrorException {
          //List<User> users = null;
         User user = new User();
-        Integer level;
+        Integer level = -1;
     try {
         LOGGER.info("GameManager: Logsing in user from REST service (XML).");
         
         // Call the logIn_XML method on webClient
         user = (User)webClient.login_XML(u, User.class);
         
-        if(user.getUser_type().equals("player")){
+        
+        /*if(user.getUser_type().equals("player")){
             webClientPlayer = new PlayerRestClient();
-            level = Integer.getInteger(webClientPlayer.findPlayerLevelById_XML(String.valueOf(user.getId())));
-            System.out.println(level);
+            String lvlStr = webClientPlayer.findPlayerLevelById_XML(String.valueOf(user.getId()));
+            level = Integer.parseInt(lvlStr);
         }
+        else if(user.getUser_type().equals("organizer")){
+            
+        }*/
         
     } catch (Exception ex) {
         LOGGER.log(Level.SEVERE, "GameManager: Exception during login{0}", ex.getMessage());
