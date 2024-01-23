@@ -5,11 +5,9 @@
  */
 package rest;
 
-import java.util.List;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import model.Team;
 
 /**
@@ -23,13 +21,13 @@ import model.Team;
  *        client.close();
  * </pre>
  *
- * @author sunde
+ * @author Jagoba Bartolomé Barroso
  */
 public class TeamRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/RetoAppCrud/webresources";
+    private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
 
     public TeamRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -52,12 +50,18 @@ public class TeamRestClient {
         return webTarget.path("createTeam").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
     }
 
-    public void deleteTeam_XML(Object requestEntity) throws ClientErrorException {
-        webTarget.path("deleteTeam").request(javax.ws.rs.core.MediaType.APPLICATION_XML).delete(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    public void deleteTeam_XML(String id) throws ClientErrorException {
+       webTarget = client.target(BASE_URI).path("entity.team");
+        //Make request
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id}))
+                .request().delete(Team.class);
     }
 
-    public void deleteTeam_JSON(Object requestEntity) throws ClientErrorException {
-        webTarget.path("deleteTeam").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).delete(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+    public void deleteTeam_JSON(String id) throws ClientErrorException {
+        webTarget = client.target(BASE_URI).path("entity.team");
+        //Make request
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id}))
+                .request().delete(Team.class);
     }
 
     public <T> T findRange_XML(Class<T> responseType, String from, String to) throws ClientErrorException {
@@ -72,15 +76,27 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findAllTeams_XML(GenericType<T> responseType) throws ClientErrorException {
+    public <T> T findAllTeams_XML(Class<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("allTeams");
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findAllTeams_JSON(GenericType<T> responseType) throws ClientErrorException {
+    public <T> T findAllTeams_JSON(Class<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("allTeams");
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
+    public <T> T findPlayerLevelById_XML(Class<T> responseType, String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("findPlayerLevelById/{0}", new Object[]{id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findPlayerLevelById_JSON(Class<T> responseType, String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("findPlayerLevelById/{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
@@ -98,15 +114,15 @@ public class TeamRestClient {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 
-    public <T> T findTeamsWithWins_XML(Class<T> responseType) throws ClientErrorException {
+    public <T> T findTeamsWithWins_XML(Class<T> responseType, String team_id) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path("Won/teamevents");
+        resource = resource.path(java.text.MessageFormat.format("Won/{0}", new Object[]{team_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findTeamsWithWins_JSON(Class<T> responseType) throws ClientErrorException {
+    public <T> T findTeamsWithWins_JSON(Class<T> responseType, String team_id) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path("Won/teamevents");
+        resource = resource.path(java.text.MessageFormat.format("Won/{0}", new Object[]{team_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
@@ -126,6 +142,18 @@ public class TeamRestClient {
         WebTarget resource = webTarget;
         resource = resource.path("count");
         return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
+    }
+
+    public <T> T findMyTeams_XML(Class<T> responseType, String player_id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("MyTeams/{0}", new Object[]{player_id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findMyTeams_JSON(Class<T> responseType, String player_id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("MyTeams/{0}", new Object[]{player_id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     public <T> T find_XML(Class<T> responseType, String id) throws ClientErrorException {

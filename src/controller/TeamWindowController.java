@@ -21,6 +21,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -94,8 +95,6 @@ public class TeamWindowController extends GenericController {
 
     @FXML
     private Button btnEliminar;
-
-    private ObservableList<Team> teamsData = FXCollections.observableArrayList();
     
     public void initStage(Parent root) {
         try {
@@ -111,7 +110,7 @@ public class TeamWindowController extends GenericController {
             btnModificar.setDisable(true);
             btnEliminar.setDisable(true);
             
-            /*tfNombre.setDisable(false);
+            tfNombre.setDisable(false);
             tfCoach.setDisable(false);
             dpFundacion.setDisable(false);
             
@@ -119,12 +118,18 @@ public class TeamWindowController extends GenericController {
             
             btnSalir.setDisable(false);
             btnLimpiar.setDisable(false);
-            */
+            
             lblError.setVisible(false);
             
             tbTeam.setEditable(false);
+ 
+            tbcolNombre.setCellValueFactory(new PropertyValueFactory<>("name"));
+            tbcolFundacion.setCellValueFactory(new PropertyValueFactory<>("fundacion"));
+            tbcolEntrenador.setCellValueFactory(new PropertyValueFactory<>("coach"));
+
+            ObservableList<Team> teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
+            tbTeam.setItems(teamsData);
             
-            //TODO Mostrar datos tabla
             /**
              * TODO //Obtains the layout containing the menu bar from the scene
              * node graph HBox hBoxMenu =
@@ -151,14 +156,14 @@ public class TeamWindowController extends GenericController {
 
             btnBuscar.setDefaultButton(true);
 
-            /*if(cmbBusqueda.getValue().equals("")){
+            if(cmbBusqueda.getValue().equals("")){
                 Label SelectPlaceholder = new Label("Selecciona un tipo de búsqueda para mostrar datos.");
                 tbTeam.setPlaceholder(SelectPlaceholder);
             }
             if(tbTeam.getItems().isEmpty()){
                 Label noTeamPlaceholder = new Label("No existen datos que mostrar.");
                 tbTeam.setPlaceholder(noTeamPlaceholder);
-            }*/
+            }
             stage.show();
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());

@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jagoba Bartolomé Barroso
  */
+@XmlRootElement(name="team")
 public class Team implements Serializable {
 
     private Long id;

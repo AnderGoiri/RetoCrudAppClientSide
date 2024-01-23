@@ -52,7 +52,7 @@ public class GameManagerImplementation implements GameManager{
         return games;
     }
     
-    @Override
+    /*@Override
     public Collection<Game> findByName(String name) throws BusinessLogicException {
         List<Game> games =null;
         try{
@@ -66,7 +66,7 @@ public class GameManagerImplementation implements GameManager{
             throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
         }
         return games;
-    }
+    }*/
     
     
     @Override
