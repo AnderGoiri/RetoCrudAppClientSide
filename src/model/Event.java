@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Ander Goirigolzarri Iturburu
  */
-//@XmlRootElement
+@XmlRootElement(name = "event")
 public class Event implements Serializable {
 
     /**
@@ -59,9 +59,8 @@ public class Event implements Serializable {
     private Organizer organizer;
 
     private Set<PlayerEvent> playerevents;
-    
-    private Set<TeamEvent> teamevents;
 
+    private Set<TeamEvent> teamevents;
 
     /**
      * Gets id value of the Event.
@@ -242,7 +241,6 @@ public class Event implements Serializable {
     public void setOrganizer(Organizer organizer) {
         this.organizer = organizer;
     }
-
 
     /**
      * HashCode method implementation of the entity.

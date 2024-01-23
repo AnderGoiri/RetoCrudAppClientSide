@@ -87,14 +87,14 @@ public class EventsViewController extends GenericController {
             btnBuscar.setDefaultButton(true);
 
             //Setting Event TableView cell values
-            columnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-            columnJuego.setCellValueFactory(new PropertyValueFactory<>("juego"));
-            columnLugar.setCellValueFactory(new PropertyValueFactory<>("lugar"));
-            columnFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-            columnAforo.setCellValueFactory(new PropertyValueFactory<>("aforo"));
+            columnNombre.setCellValueFactory(new PropertyValueFactory<>("name"));
+            columnJuego.setCellValueFactory(new PropertyValueFactory<>("game"));
+            columnLugar.setCellValueFactory(new PropertyValueFactory<>("location"));
+            columnFecha.setCellValueFactory(new PropertyValueFactory<>("date"));
+            columnAforo.setCellValueFactory(new PropertyValueFactory<>("participantNum"));
             columnONG.setCellValueFactory(new PropertyValueFactory<>("ong"));
-            columnPremio.setCellValueFactory(new PropertyValueFactory<>("premio"));
-            columnDonacion.setCellValueFactory(new PropertyValueFactory<>("donacion"));
+            columnPremio.setCellValueFactory(new PropertyValueFactory<>("prize"));
+            columnDonacion.setCellValueFactory(new PropertyValueFactory<>("donation"));
             columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
 
             ObservableList<Event> events = FXCollections.observableArrayList(eventManager.findAllEvents());
