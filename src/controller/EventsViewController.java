@@ -98,11 +98,12 @@ public class EventsViewController extends GenericController {
             columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
 
             ObservableList<Event> events = FXCollections.observableArrayList(eventManager.findAllEvents());
-
             tableViewEvents.setItems(events);
 
             stage.show();
         } catch (Exception e) {
+          //  e.printStackTrace();
+            LOGGER.severe(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }

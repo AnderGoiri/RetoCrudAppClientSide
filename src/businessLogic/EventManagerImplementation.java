@@ -35,6 +35,7 @@ public class EventManagerImplementation implements EventManager {
             events = webclient.findAll_XML(new GenericType<List<Event>>() {
             });
         } catch (Exception ex) {
+           // ex.printStackTrace();
             throw new BusinessLogicException("Error finding all events by Organizer" + ex.getMessage());
         }
         return events;
