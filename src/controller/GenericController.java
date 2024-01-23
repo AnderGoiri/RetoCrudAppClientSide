@@ -16,8 +16,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.ButtonBar;
 import javafx.stage.WindowEvent;
 
@@ -25,7 +23,9 @@ import javafx.stage.WindowEvent;
  * This is the base class for UI controllers in this application. It contains
  * common methods and references for objects used by UI controllers
  *
- * @author Andoni Sanz
+ * @author Jagoba Bartolomé Barroso
+ * @author Ander Goirigolzarri Iturburu
+ * @author Andoni Sanz Alcalde
  */
 public class GenericController {
 
@@ -53,17 +53,26 @@ public class GenericController {
     /**
      * Sets the business logic object to be used by this UI controller.
      *
-     * @param usersManager An object implementing {@link UsersManager}
-     * interface.
+     * @param gameManager An object implementing {@link GameManager} interface.
      */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
 
+    /**
+     * Sets the business logic object to be used by this UI controller.
+     *
+     * @param teamManager An object implementing {@link TeamManager} interface.
+     */
     public void setTeamManager(TeamManager teamManager) {
         this.teamManager = teamManager;
     }
 
+    /**
+     * Sets the business logic object to be used by this UI controller.
+     *
+     * @param eventManager An object implementing {@link EventManager} interface.
+     */
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
     }

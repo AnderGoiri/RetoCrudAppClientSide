@@ -6,6 +6,8 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,6 +28,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.Event;
+import model.Game;
 
 /**
  * FXML Controller class
@@ -37,7 +40,9 @@ public class EventsViewController extends GenericController {
     @FXML
     private Label lbVentana, lbBusqueda, lbNombre, lbJuego, lbLugar, lbONG, lbPremio, lbDonacion, lbAforo, lbFecha, lbError, lbEquipo;
     @FXML
-    private ComboBox<?> cbBusqueda, cbJuego, cbEquipo;
+    private ComboBox<String> cbBusqueda, cbJuego;
+    @FXML
+    private ComboBox<?> cbEquipo;
     @FXML
     private TextField tfNombre, tfLugar, tfONG, tfPremio, tfDonacion, tfAforo;
     @FXML
@@ -75,10 +80,26 @@ public class EventsViewController extends GenericController {
             btnEliminar.setDisable(true);
             cbEquipo.setDisable(true);
 
-            //Cargar los datos del combobox Juegos
-            ObservableList<String> gameNames = FXCollections.observableArrayList();
-            //gameNames.stream().
+            ObservableList<String> namedQueriesList = FXCollections.observableArrayList(
+                    "findEventsByOrganizer",
+                    "findEventsByGame",
+                    "findEventsWonByPlayer",
+                    "findEventsWonByTeam",
+                    "findEventsByONG"
+            );
+            cbBusqueda.setItems(namedQueriesList);
+            cbBusqueda.setValue("Elegir criterio de búsqueda");
 
+            //Cargar los datos del combobox Juegos
+            /*
+            ObservableList<String> gameNames = FXCollections.observableArrayList(
+                    gameManager.getAllGames()
+                            .stream()
+                            .map(Game::getName)
+                            .toString()
+            );
+            cbJuego.setItems(gameNames);
+             */
             //cbJuego.setItems(gameNames);
             tableViewEvents.setEditable(false);
 
@@ -99,15 +120,14 @@ public class EventsViewController extends GenericController {
 
             ObservableList<Event> events = FXCollections.observableArrayList(eventManager.findAllEvents());
             tableViewEvents.setItems(events);
-            
+
             // Set handlers
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
             btnSalir.setOnAction(event -> super.handleBtnClose(event));
-            
-            
+
             stage.show();
         } catch (Exception e) {
-          //  e.printStackTrace();
+            //  e.printStackTrace();
             LOGGER.severe(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
