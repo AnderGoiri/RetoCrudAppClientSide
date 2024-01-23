@@ -99,7 +99,12 @@ public class EventsViewController extends GenericController {
 
             ObservableList<Event> events = FXCollections.observableArrayList(eventManager.findAllEvents());
             tableViewEvents.setItems(events);
-
+            
+            // Set handlers
+            stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
+            btnSalir.setOnAction(event -> super.handleBtnClose(event));
+            
+            
             stage.show();
         } catch (Exception e) {
           //  e.printStackTrace();

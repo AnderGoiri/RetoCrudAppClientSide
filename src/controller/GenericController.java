@@ -12,11 +12,14 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import businessLogic.GameManager;
 import businessLogic.TeamManager;
+import java.util.Optional;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ButtonBar;
+import javafx.stage.WindowEvent;
 
 /**
  * This is the base class for UI controllers in this application. It contains
@@ -46,6 +49,7 @@ public class GenericController {
      * The business logic EventManager object containing all business methods.
      */
     protected EventManager eventManager;
+
     /**
      * Sets the business logic object to be used by this UI controller.
      *
@@ -59,13 +63,11 @@ public class GenericController {
     public void setTeamManager(TeamManager teamManager) {
         this.teamManager = teamManager;
     }
-    
-    
+
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
     }
-    
-    
+
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
@@ -128,5 +130,61 @@ public class GenericController {
     @FXML
     private void handleImprimirAction(ActionEvent event) {
 
+    }
+
+    /**
+     * Event handler for the window close request.
+     *
+     * This method is triggered when a user attempts to close the window. It
+     * logs the close request, creates a confirmation dialog asking the user to
+     * confirm the closure, and handles the closure based on the user's
+     * response. If the user confirms, the window is closed; otherwise, the
+     * closure is canceled, and the window remains open. The method consumes the
+     * event to prevent the default window close behavior.
+     *
+     * @param event The WindowEvent representing the window close request.
+     */
+    public void handleCloseRequest(WindowEvent event) {
+        try {
+            LOGGER.info("Window close requested...");
+            // Create a confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Closure");
+            alert.setHeaderText("Are you sure you want to close the app?");
+            // Add confirmation and cancel buttons to the dialog
+            ButtonType confirmButton = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(confirmButton, cancelButton);
+            // Show the dialog and wait for user response
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == confirmButton) {
+                // If the user confirms, close the window
+                event.consume(); // Stops the default window close
+                LOGGER.info("Window closed by user confirmation.");
+                stage.close();
+            } else {
+                // If the user cancels, do not close the window
+                event.consume(); // Stops the default window close
+                LOGGER.info("Window closure canceled by user.");
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error handling window close request", e);
+        }
+    }
+
+    /**
+     * Handles the "Salir" button click event. Closes the current window.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
+    @FXML
+    public void handleBtnClose(ActionEvent event) {
+        try {
+            LOGGER.info("Salir button clicked.");
+            Optional.ofNullable(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST))
+                    .ifPresent(this::handleCloseRequest);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error handling Salir button click", ex);
+        }
     }
 }
