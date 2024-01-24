@@ -24,6 +24,8 @@ public class ESportsFactory {
      * UsersManager type for a manager producing fake data for test purposes. 
      */
     public static final String REST_WEB_PLAYER="REST_WEB_PLAYER";
+    
+    public static final String REST_WEB_ESPORTS="REST_WEB_ESPORTS";
     /**
      * Factory creation method. It returns different {@link UsersManager} interface implementing 
      * objects depending on the type parameter value.
@@ -31,23 +33,31 @@ public class ESportsFactory {
      * @return An object implementing UsersManager according to type.
      * @throws OperationNotSupportedException If type is not supported.
      */
-    /*public static EsportsManager createUsersManager(String type) throws OperationNotSupportedException{
+    public static ESportsManager getManager(String type) throws OperationNotSupportedException{
         //The object to be returned.
-        UsersManager userManager=null;
+        ESportsManager manager=null;
         //Evaluate type parameter.
         switch(type){
-            case REST_WEB_CLIENT_TYPE:
+            case REST_WEB_ADMIN:
                 //If rest web client type is asked for, use UsersManagerImplementation.
-                userManager=new UsersManagerImplementation();
+                manager = new GameManagerImplementation();
                 break;
-            case TEST_MOCK_TYPE:
+            case REST_WEB_ORGANIZER:
                 //If rest fake data test type is asked for, use UsersManagerTestDataGenerator.
-                userManager=new UsersManagerTestDataGenerator();
+                //manager=new EventManagerImplementation();
                 break;
+            case REST_WEB_PLAYER:
+                //If rest fake data test type is asked for, use UsersManagerTestDataGenerator.
+                //manager=new TeamManagerImplementation();
+                break;
+            case REST_WEB_ESPORTS:
+                //If rest fake data test type is asked for, use UsersManagerTestDataGenerator.
+                manager = new ESportsManagerImplementation();
+                break;               
             default:
                 //If type is not one of the types accepted.
                 throw new OperationNotSupportedException("Users manager type not supported.");
         }
-        return userManager;
-    }*/
+        return manager;
+    }
 }

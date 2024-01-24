@@ -1,6 +1,8 @@
 package controller;
 
 import businessLogic.BusinessLogicException;
+import businessLogic.ESportsFactory;
+import businessLogic.GameManager;
 import extra.DatePickerCellGame;
 //import static groovy.util.GroovyTestCase.assertEquals;
 import java.time.Instant;
@@ -41,6 +43,7 @@ import model.PVPType;
 import model.User;
 import java.lang.String;
 import java.util.List;
+import javax.naming.OperationNotSupportedException;
 
 public class GameWindowController extends GenericController {
 
@@ -123,16 +126,6 @@ public class GameWindowController extends GenericController {
             stage.setTitle("Gestion de Juegos");
             stage.setResizable(false);
             
-            //tbGames = new TableView<>();
-            //tbGames.setEditable(true);
-            //stage.setOnShowing(this::handleWindowShowing);
-            //Add property change listeners for controls
-            /*tfLogin.textProperty().addListener(this::handleTextChanged);
-            tfNombre.textProperty().addListener(this::handleTextChanged);*/
-            //tbGames.getSelectionModel().selectedItemProperty().addListener(this::handleUsersTableSelectionChanged);
-            
-            //These following lines are an example workaround to allow Menu Help 
-            //to fire an action.It is preferable to avoid this but if you need it...
             
             //Obtains the layout containing the menu bar from the scene node graph
             HBox hBoxMenu= (HBox)root.getChildrenUnmodifiable().get(0);
@@ -215,8 +208,10 @@ public class GameWindowController extends GenericController {
                     ((Game)t.getTableView().getItems().get(t.getTablePosition().getRow())).setPVPType(t.getNewValue());
                             Object selectedGame = tbGames.getSelectionModel().getSelectedItem();
                             //String gameID = String.valueOf(((Game)tbGames.getSelectionModel().getSelectedItem()).getId());
-                            gameManager.updateGame(selectedGame);
+                            ((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).updateGame(selectedGame);
                 } catch (BusinessLogicException ex) {
+                    Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (OperationNotSupportedException ex) {
                     Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -226,7 +221,9 @@ public class GameWindowController extends GenericController {
             tbcolReleaseDate.setCellFactory(column -> new DatePickerCellGame());
             
             //Create an obsrvable list for users table.
-            gamesData=FXCollections.observableArrayList(gameManager.getAllGames());
+            
+                    
+            gamesData=FXCollections.observableArrayList(((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
             //Set table model.            
             tbGames.setEditable(true);
             
@@ -399,30 +396,37 @@ private void handleSearchButton() {
     try {
         // Obtén la consulta seleccionada de la combo
         String selectedNamedQuery = (String) cmbSearch.getValue();
-        
+        gamesData.clear(); 
         switch (selectedNamedQuery) {
-            case "findGamesByName":
-                gamesData.clear(); 
-                gamesData = FXCollections.observableArrayList(gameManager.findByName(tfSearchData.getText()));
+            case "findGamesByName":               
+                gamesData=FXCollections.observableArrayList(
+                        ((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByName(tfSearchData.getText()));
                 break;
             case "findGamesByGenre":
-              
+                gamesData=FXCollections.observableArrayList(
+                        ((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByGenre(tfSearchData.getText()));
                 break;
             case "findGamesByPlatform":
-                
+                gamesData=FXCollections.observableArrayList(
+                        ((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByPlatform(tfSearchData.getText()));
                 break;
             case "findGamesByPVPType":
-                
+                String pvpTypeStr = cmbPVPType.getValue().toString();
+                gamesData=FXCollections.observableArrayList(
+                        ((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByPVPType(pvpTypeStr));
                 break;
             case "findGamesByReleaseDate":
-                
+                gamesData=FXCollections.observableArrayList(
+                        ((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByReleaseDate(dpReleaseDate.getValue().toString()));
                 break;
             case "findAllGamesCreatedByAdmin":
-                
+                gamesData=FXCollections.observableArrayList(
+                        ((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findGamesCreatedByAdmin(tfSearchData.getText()));
                 break;
-            // Add more cases for other queries
-
-            // Default case (show nothing for "findAllGames" or unknown queries)
+            case "findAllGames":
+                gamesData=FXCollections.observableArrayList(
+                        ((GameManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
+                break;
             default:
                 break;
         }

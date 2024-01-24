@@ -55,9 +55,25 @@ public class GameManagerImplementation implements GameManager{
     public Collection<Game> findByName(String name) throws BusinessLogicException {
         List<Game> games =null;
         try{
-            LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
+            LOGGER.info("GameManager: Finding games by Name REST service (XML).");
             //Ask webClient for all gamesdata.
             games = webClient.findGamesByName_XML(new GenericType<List<Game>>() {}, name);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception finding games by name",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error finding games by name\n"+ex.getMessage());
+        }
+        return games;
+    }
+    
+    @Override
+    public Collection<Game> findByGenre(String genre) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            games = webClient.findGamesByGenre_XML(new GenericType<List<Game>>() {}, genre);
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception finding all games{0}",
@@ -67,6 +83,58 @@ public class GameManagerImplementation implements GameManager{
         return games;
     }
     
+    @Override
+    public Collection<Game> findByPlatform(String platform) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            games = webClient.findGamesByPlatform_XML(new GenericType<List<Game>>() {}, platform);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception finding all games{0}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
+        }
+        return games;
+    }
+
+    @Override
+    public Collection<Game> findByPVPType(String pvptype) throws BusinessLogicException {
+       List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            games = webClient.findGamesByPVPType_XML(new GenericType<List<Game>>() {}, pvptype);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception finding all games{0}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
+        }
+        return games;
+    }
+
+    @Override
+    public Collection<Game> findByReleaseDate(String releaseDate) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            games = webClient.findGamesByReleaseDate_XML(new GenericType<List<Game>>() {}, releaseDate);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception finding all games{0}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
+        }
+        return games;
+    }
+
+    @Override
+    public Collection<Game> findGamesCreatedByAdmin(String genre) throws BusinessLogicException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     @Override
     public Collection<Game> updateGame(Object obj) throws BusinessLogicException {
@@ -114,4 +182,11 @@ public class GameManagerImplementation implements GameManager{
         }
         return games;
     }
+
+    @Override
+    public void passwordRecovery(String mail) throws BusinessLogicException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }
