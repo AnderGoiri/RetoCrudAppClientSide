@@ -47,6 +47,7 @@ public class GameManagerImplementation implements GameManager{
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception finding all games{0}",
                     ex.getMessage());
+            ex.printStackTrace();
             throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
         }
         return games;

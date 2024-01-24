@@ -6,8 +6,10 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -89,22 +91,16 @@ public class EventsViewController extends GenericController {
             );
             cbBusqueda.setItems(namedQueriesList);
             cbBusqueda.setValue("Elegir criterio de búsqueda");
-
-            //Cargar los datos del combobox Juegos
-            /*
+            
             ObservableList<String> gameNames = FXCollections.observableArrayList(
-                    gameManager.getAllGames()
-                            .stream()
+                    gameManager.getAllGames().stream()
                             .map(Game::getName)
-                            .toString()
+                            .collect(Collectors.toList())
             );
             cbJuego.setItems(gameNames);
-             */
-            //cbJuego.setItems(gameNames);
+            
             tableViewEvents.setEditable(false);
-
             lbError.setVisible(false);
-
             btnBuscar.setDefaultButton(true);
 
             //Setting Event TableView cell values
@@ -129,6 +125,7 @@ public class EventsViewController extends GenericController {
         } catch (Exception e) {
             //  e.printStackTrace();
             LOGGER.severe(e.getMessage());
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
