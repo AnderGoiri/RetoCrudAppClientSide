@@ -34,6 +34,7 @@ public class EventRestClient {
         webTarget = client.target(BASE_URI).path("entity.event");
     }
 
+
     public <T> T findEventsByONG_XML(Class<T> responseType, String ongName) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("findEventsByONG/{0}", new Object[]{ongName}));

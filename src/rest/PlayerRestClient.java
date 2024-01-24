@@ -10,11 +10,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
 /**
- * Jersey REST client generated for REST resource:GameFacadeREST
- * [entity.game]<br>
+ * Jersey REST client generated for REST resource:PlayerFacadeREST
+ * [entity.player]<br>
  * USAGE:
  * <pre>
- *        GameRestClient client = new GameRestClient();
+ *        PlayerRestClient client = new PlayerRestClient();
  *        Object response = client.XXX(...);
  *        // do whatever with response
  *        client.close();
@@ -22,15 +22,15 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author Andoni Sanz
  */
-public class GameRestClient {
+public class PlayerRestClient {
 
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
 
-    public GameRestClient() {
+    public PlayerRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entity.game");
+        webTarget = client.target(BASE_URI).path("entity.player");
     }
 
     public String countREST() throws ClientErrorException {
@@ -77,6 +77,18 @@ public class GameRestClient {
 
     public void create_JSON(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+    }
+
+    public String findPlayerLevelById_XML(String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("findPlayerLevelById/{0}", new Object[]{id}));
+        return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
+    }
+
+    public String findPlayerLevelById_JSON(String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("findPlayerLevelById/{0}", new Object[]{id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(String.class);
     }
 
     public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {

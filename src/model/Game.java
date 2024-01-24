@@ -23,9 +23,9 @@ public class Game implements Serializable {
 
     private SimpleLongProperty id;
 
-    /*private Admin admin;
+    //private Admin admin;
 
-    private Set<Event> events;*/
+    //private Set<Event> events;
     private SimpleStringProperty name;
     private SimpleStringProperty genre;
     private SimpleStringProperty platform;

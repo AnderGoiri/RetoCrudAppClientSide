@@ -7,8 +7,8 @@ package model;
 
 import java.util.Objects;
 import java.util.Set;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleSetProperty;
 
 /**
  *
@@ -17,37 +17,35 @@ import javax.xml.bind.annotation.XmlTransient;
 
 public class Player extends User {
 
+    private SimpleSetProperty<Team> teams;
 
-    private Set<Team> teamsOfPlayer;
+    private SimpleSetProperty<PlayerEvent> playerevent;
+    
+    private SimpleIntegerProperty level;
 
-
-    private Set<PlayerEvent> playerevent;
-
-    private Integer level;
-
-    public void setTeamsOfPlayer(Set<Team> teamsOfPlayer) {
-        this.teamsOfPlayer = teamsOfPlayer;
+    public void setTeams(SimpleSetProperty<Team> teams) {
+        this.teams.set(teams);
     }
 
-    public void setPlayerevent(Set<PlayerEvent> playerevent) {
-        this.playerevent = playerevent;
+    public void setPlayerevent(SimpleSetProperty<PlayerEvent> playerevent) {
+        this.playerevent.set(playerevent);
     }
 
     public void setLevel(Integer level) {
-        this.level = level;
+        this.level.set(level);
     }
 
 
     public Set<PlayerEvent> getPlayerevent() {
-        return playerevent;
+        return this.playerevent.get();
     }
 
-    public Set<Team> getTeamsOfPlayer() {
-        return teamsOfPlayer;
+    public Set<Team> getTeams() {
+        return this.teams.get();
     }
 
     public Integer getLevel() {
-        return level;
+        return this.level.get();
     }
 
     @Override

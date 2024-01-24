@@ -23,7 +23,7 @@ import rest.UserRestClient;
  */
 public class GameManagerImplementation implements GameManager{
     //REST users web client
-    private GameRestClient webClient;
+    private AdminRestClient webClient;
     private static final Logger LOGGER=Logger.getLogger("GameManagerImplementation");
 
     /**
@@ -32,7 +32,7 @@ public class GameManagerImplementation implements GameManager{
      * server.
      */
     public GameManagerImplementation(){
-        webClient=new GameRestClient();
+        webClient=new AdminRestClient();
     }
    
     
@@ -42,7 +42,22 @@ public class GameManagerImplementation implements GameManager{
         try{
             LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
-            games = webClient.findAll_XML(new GenericType<List<Game>>() {});
+            games = webClient.findAllGames_XML(new GenericType<List<Game>>() {});
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception finding all games{0}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
+        }
+        return games;
+    }
+    @Override
+    public Collection<Game> findByName(String name) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            games = webClient.findGamesByName_XML(new GenericType<List<Game>>() {}, name);
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception finding all games{0}",
@@ -53,4 +68,51 @@ public class GameManagerImplementation implements GameManager{
         return games;
     }
     
+    
+    @Override
+    public Collection<Game> updateGame(Object obj) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Update Game gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            webClient.updateGame_XML(obj, Game.class);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception updating game}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error updating game\n"+ex.getMessage());
+        }
+        return games;
+    }
+    
+    @Override
+    public Collection<Game> createGame(Object obj) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            webClient.createGame_XML(obj, Game.class);
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception Creating game}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error Creating game\n"+ex.getMessage());
+        }
+        return games;
+    }
+    @Override
+    public Collection<Game> deleteGame(Long id) throws BusinessLogicException {
+        List<Game> games =null;
+        try{
+            LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
+            //Ask webClient for all gamesdata.
+            webClient.deleteGame_XML(id.toString());
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "GameManager: Exception Creating game}",
+                    ex.getMessage());
+            throw new BusinessLogicException("Error Creating game\n"+ex.getMessage());
+        }
+        return games;
+    }
 }
