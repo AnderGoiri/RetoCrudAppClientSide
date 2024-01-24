@@ -8,6 +8,7 @@ package rest;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import model.Team;
 
 /**
@@ -76,7 +77,7 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findAllTeams_XML(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAllTeams_XML(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("allTeams");
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);

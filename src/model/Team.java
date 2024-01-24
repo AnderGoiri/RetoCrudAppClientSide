@@ -6,9 +6,15 @@
 package model;
 
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -37,7 +43,7 @@ public class Team implements Serializable {
         return name;
     }
 
-    public Date getFoundation() {
+    public Date getFoundation() throws FileNotFoundException, IOException, ParseException{
         return foundation;
     }
 
