@@ -138,7 +138,7 @@ public class TeamWindowController extends GenericController {
             tbTeam.setEditable(false);
  
             tbcolNombre.setCellValueFactory(new PropertyValueFactory<>("name"));
-
+            tbcolEntrenador.setCellValueFactory(new PropertyValueFactory<>("coach"));
             tbcolFundacion.setCellValueFactory(new PropertyValueFactory<>("foundation"));
             
             //TODO Cambiar a relative path
@@ -172,17 +172,6 @@ public class TeamWindowController extends GenericController {
             cmbBusqueda.setItems(namedQueriesList);
             cmbBusqueda.setValue("");
             cmbBusqueda.requestFocus();
-            cmbBusqueda.setOnAction((event) -> {
-                try {
-                    this.handleComboBoxSelection(event);
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
-                    showErrorAlert("No se ha podido abrir la ventana.");
-                } catch (WrongCriteriaException ex) {
-                    lblError.setText("Rellena el campo correcto para hacer una búsqueda con parámetro.");
-                    lblError.setVisible(true);
-                }
-            });
 
             btnBuscar.setDefaultButton(true);
 
@@ -198,6 +187,18 @@ public class TeamWindowController extends GenericController {
                 //tbTeam.getPlaceholder().isVisible();
             }
             stage.show();
+            
+             cmbBusqueda.setOnAction((event) -> {
+                try {
+                    this.handleComboBoxSelection(event);
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    showErrorAlert("No se ha podido abrir la ventana.");
+                } catch (WrongCriteriaException ex) {
+                    lblError.setText("Rellena el campo correcto para hacer una búsqueda con parámetro.");
+                    lblError.setVisible(true);
+                }
+            });
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             lblError.setText("Ha ocurrido un error inesperado.");
@@ -212,6 +213,7 @@ public class TeamWindowController extends GenericController {
                 case "Todos":
                     btnBuscar.setDisable(false);
                     if (btnBuscar.isPressed()){
+                        teamsData.clear();
                         teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
                         tbTeam.setItems(teamsData);
                     }
@@ -219,8 +221,9 @@ public class TeamWindowController extends GenericController {
                 case "Por nombre":
                     btnBuscar.setDisable(false);
                     if (btnBuscar.isPressed()){
-                        if (!tfNombre.equals("")){
-                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsByName());
+                        if (!tfNombre.getText().equals("")){
+                            teamsData.clear();
+                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsByName(tfNombre.getText()));
                             tbTeam.setItems(teamsData);
                         } else {
                             throw new WrongCriteriaException();
@@ -229,20 +232,22 @@ public class TeamWindowController extends GenericController {
                     break;
                 case "Por fecha":
                     btnBuscar.setDisable(false);
-                    if (btnBuscar.isPressed()){
-                       if (!dpFundacion.equals("")){
-                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsByDate());
+                    if (btnBuscar.isPressed()) {
+                        if (!dpFundacion.getValue().toString().equals("")) {
+                            teamsData.clear();
+                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsByDate(dpFundacion.getValue().toString()));
                             tbTeam.setItems(teamsData);
                         } else {
                             throw new WrongCriteriaException();
-                        } 
+                        }
                     }
                     break;
                 case "Por coach":
                     btnBuscar.setDisable(false);
                     if (btnBuscar.isPressed()){
-                        if (!tfCoach.equals("")){
-                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsByCoach());
+                        if (!tfCoach.getText().equals("")){
+                            teamsData.clear();
+                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsByCoach(tfCoach.getText()));
                             tbTeam.setItems(teamsData);
                         } else {
                             throw new WrongCriteriaException();
@@ -251,22 +256,23 @@ public class TeamWindowController extends GenericController {
                     break;
                 case "Equipos con victorias":
                     btnBuscar.setDisable(false);
-                    if (btnBuscar.isPressed()){
-
-                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsWithWins());
-                            tbTeam.setItems(teamsData);
-
+                    if (btnBuscar.isPressed()) {
+                        teamsData.clear();
+                        teamsData = FXCollections.observableArrayList(teamManager.findTeamsWithWins());
+                        tbTeam.setItems(teamsData);
                     }
                     break;
-                case "Mis equipos":
+                case "Mis Equipos":
                     btnBuscar.setDisable(false);
-                    if (btnBuscar.isPressed()){
-                            teamsData = FXCollections.observableArrayList(teamManager.findMyTeams());
-                            tbTeam.setItems(teamsData);
-     
+                    if (btnBuscar.isPressed()) {
+                        teamsData.clear();
+                        //TODO Parametro player
+                        teamsData = FXCollections.observableArrayList(teamManager.findMyTeams());
+                        tbTeam.setItems(teamsData);
                     }
                     break;
                 case "":
+                    teamsData.clear();
                     btnBuscar.setDisable(true);
                     break;
             }

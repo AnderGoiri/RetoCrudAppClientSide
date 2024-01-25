@@ -40,20 +40,29 @@ public class TeamManagerImplementation implements TeamManager {
     }
 
     @Override
-    public List<Team> findTeamsByName() throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Team> findTeamsByName(String name) throws BusinessLogicException {
+        List<Team> teams = null;
+        try {
+            LOGGER.info("TeamManager: Finding all teams.");
+            teams = webClient.findTeamsByName_XML(new GenericType<List<Team>>() {
+            }, name);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by name{0}", e.getMessage());
+            throw new BusinessLogicException("Error finding teams by name\n" + e.getMessage());
+        }
+        return teams;
     }
 
     @Override
-    public List<Team> findTeamsByDate() throws BusinessLogicException {
+    public List<Team> findTeamsByDate(String date) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
-    public List<Team> findTeamsByCoach() throws BusinessLogicException {
+    public List<Team> findTeamsByCoach(String coach) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public List<Team> findTeamsWithWins() throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -83,5 +92,5 @@ public class TeamManagerImplementation implements TeamManager {
     public void deleteTeam() throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+   
 }

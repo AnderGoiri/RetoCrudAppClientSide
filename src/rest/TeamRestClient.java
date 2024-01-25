@@ -185,6 +185,18 @@ public class TeamRestClient {
         return webTarget.path("updateTeam").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
     }
 
+    public <T> T findTeamsByName_XML(GenericType<T> responseType, String name) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("byName/{0}", new Object[]{name}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findTeamsByName_JSON(GenericType<T> responseType, String name) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("byName/{0}", new Object[]{name}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+
     public <T> T findTeamsByDate_XML(Class<T> responseType, String date) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("byDate/{0}", new Object[]{date}));
