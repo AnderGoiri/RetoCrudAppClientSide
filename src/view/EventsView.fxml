@@ -40,7 +40,7 @@
                         <Font size="15.0" />
                     </font>
                 </Label>
-                <ComboBox fx:id="cbJuego" layoutX="437.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" />
+                <ComboBox fx:id="cbJuego" layoutX="437.0" layoutY="77.0" prefHeight="25.0" prefWidth="240.0" promptText="Lista de Juegos disponibles" />
                 <Label fx:id="lbLugar" layoutX="345.0" layoutY="127.0" text="Lugar">
                     <font>
                         <Font size="15.0" />

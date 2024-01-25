@@ -71,7 +71,8 @@ public class GenericController {
     /**
      * Sets the business logic object to be used by this UI controller.
      *
-     * @param eventManager An object implementing {@link EventManager} interface.
+     * @param eventManager An object implementing {@link EventManager}
+     * interface.
      */
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;

@@ -6,12 +6,15 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -91,14 +94,14 @@ public class EventsViewController extends GenericController {
             );
             cbBusqueda.setItems(namedQueriesList);
             cbBusqueda.setValue("Elegir criterio de búsqueda");
-            
+
             ObservableList<String> gameNames = FXCollections.observableArrayList(
                     gameManager.getAllGames().stream()
                             .map(Game::getName)
                             .collect(Collectors.toList())
             );
             cbJuego.setItems(gameNames);
-            
+
             tableViewEvents.setEditable(false);
             lbError.setVisible(false);
             btnBuscar.setDefaultButton(true);
@@ -120,7 +123,37 @@ public class EventsViewController extends GenericController {
             // Set handlers
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
             btnSalir.setOnAction(event -> super.handleBtnClose(event));
+            btnLimpiar.setOnAction(event -> handleCleanRequest(event));
 
+            // Set listeners
+            /* 
+            * The lambda expression (observable, oldValue, newValue) -> checkFormFields().
+            * Observable: It is the object that emitted the event, in this case, the textProperty().
+            * oldValue: It is the old value before the change occurred.
+            * newValue: It is the new value after the change occurred.
+             */
+            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            tfLugar.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            dpFecha.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            cbJuego.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            tfONG.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            tfPremio.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            tfDonacion.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+
+            tableViewEvents.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    tfNombre.setText(newValue.getName());
+                    tfLugar.setText(newValue.getLocation());
+                    dpFecha.setValue(newValue.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                    cbJuego.setValue(newValue.getGame().getName());
+                    tfONG.setText(newValue.getName());
+                    tfPremio.setText(String.valueOf(newValue.getPrize()));
+                    tfDonacion.setText(String.valueOf(newValue.getDonation()));
+                    tfAforo.setText(String.valueOf(newValue.getParticipantNum()));
+                }
+            });
+            
             stage.show();
         } catch (Exception e) {
             //  e.printStackTrace();
@@ -129,5 +162,35 @@ public class EventsViewController extends GenericController {
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
+    }
+
+    public void handleCleanRequest(ActionEvent event) {
+        try {
+            LOGGER.info("Limpiar button clicked.");
+            tfNombre.clear();
+            tfLugar.clear();
+            tfONG.clear();
+            tfPremio.clear();
+            tfDonacion.clear();
+            tfAforo.clear();
+            dpFecha.getEditor().clear();
+            cbBusqueda.getSelectionModel().clearSelection();
+            cbJuego.getSelectionModel().clearSelection();
+            cbEquipo.getSelectionModel().clearSelection();
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error cleaning the form", ex);
+        }
+    }
+
+    private void checkFormFields() {
+        boolean allFieldsFilled = !tfNombre.getText().isEmpty()
+                && !tfLugar.getText().isEmpty()
+                && dpFecha.getValue() != null
+                && cbJuego.getValue() != null
+                && !tfONG.getText().isEmpty()
+                && !tfPremio.getText().isEmpty()
+                && !tfDonacion.getText().isEmpty()
+                && !tfAforo.getText().isEmpty();
+        btnCrear.setDisable(!allFieldsFilled);
     }
 }
