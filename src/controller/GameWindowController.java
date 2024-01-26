@@ -301,6 +301,7 @@ public class GameWindowController extends GenericController {
     public void addEmptyGame() throws CreateException {
     try {
         
+        
         Game newGame = new Game(); // Create an empty game
         newGame.setName("Default Name");
         newGame.setGenre("Default Genre");
@@ -310,16 +311,18 @@ public class GameWindowController extends GenericController {
         //check if there is any empty game already on the table
         if(!gamesData.get(gamesData.size()-1).equals(newGame))
         {
-            gameManager.createGame(newGame);       
-            //gamesData.add(newGame);        
-            gamesData.clear();
-            gamesData = FXCollections.observableArrayList(gameManager.getAllGames());
-            tbGames.setItems(gamesData);  
+            gameManager.createGame(newGame);    
+            
+            if(gamesData != null){
+                gamesData = FXCollections.observableArrayList(gameManager.getAllGames());
+                tbGames.setItems(gamesData);
+            }
+              
         }
         else{
-               lblError.setText("Ya se añadió una juego vacío a la tabla");
+               lblError.setText("Ya se añadió un juego vacío a la tabla");
         } 
-        tbGames.refresh();
+        //tbGames.refresh();
     } catch (Exception e) {
         throw new CreateException("Failed to add an empty game: " + e.getMessage());
     }

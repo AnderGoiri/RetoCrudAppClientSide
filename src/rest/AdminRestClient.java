@@ -180,8 +180,10 @@ public class AdminRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T createGame_XML(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.path("createGame").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    public void createGame_XML(Object requestEntity) throws ClientErrorException {
+        webTarget = client.target(BASE_URI).path("entity.game");
+        //Make request
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     public <T> T createGame_JSON(Object requestEntity, Class<T> responseType) throws ClientErrorException {
