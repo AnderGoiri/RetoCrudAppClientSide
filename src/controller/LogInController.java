@@ -3,6 +3,8 @@ package controller;
 import businessLogic.BusinessLogicException;
 import businessLogic.ESportsFactory;
 import businessLogic.ESportsManager;
+import businessLogic.EventManager;
+import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
 import exceptions.CredentialsException;
@@ -43,7 +45,7 @@ import model.User;
  *
  * @author Ander Goirigolzarri Iturburu
  */
-public class LogInController {
+public class LogInController extends GenericController {
 
     private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     private Stage stage;
@@ -106,7 +108,6 @@ public class LogInController {
             LOGGER.info("Control events handlers set");
 
         } catch (Exception ex) {
-            // Show an error message to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Application Error");
@@ -170,20 +171,22 @@ public class LogInController {
             // Handle the login button click event here.
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
-            //Validate the format of the email, it must have a text before an '@' and a text before and after '.'
-            //Pattern that must be respected
+            /*
+            Validate the format of the email, it must have a text before an '@' and a text before and after '.'. 
+            Pattern that must be respected.
+             */
             String regexEmail = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
             Pattern patternEmail = Pattern.compile(regexEmail);
-            //Validate if the pattern doesn't match the txtEmail field text
             if (!patternEmail.matcher(txtEmail.getText()).matches()) {
                 LOGGER.severe("Wrong email format");
                 throw new EmailFormatException("El formato de las credenciales no es correcto");
             }
-            //Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number
-            //Pattern that must be respected
+            /*
+            Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number
+            Pattern that must be respected
+             */
             String regexPassword = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
             Pattern patternPassword = Pattern.compile(regexPassword);
-            //Validate if the pattern doesn't match the password field
             if (!patternPassword.matcher(pwdPassword.getText()).matches()) {
                 LOGGER.severe("Wrong password format");
                 throw new PasswordFormatException("El formato de las credenciales no es correcto");
@@ -218,8 +221,7 @@ public class LogInController {
             Stage parentStage = new Stage();
 
             mainWindowController.setStage(parentStage);
-
-            mainWindowController.initStage(root, mainWindowUser);*/
+           mainWindowController.initStage(root, mainWindowUser);*/
 
             stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {

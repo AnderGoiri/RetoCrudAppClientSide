@@ -13,21 +13,19 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Andoni Sanz
  */
-@XmlRootElement(name="game")
-public class Game implements Serializable{    
-    
+@XmlRootElement(name = "game")
+public class Game implements Serializable {
+
     private SimpleLongProperty id;
 
     //private Admin admin;
 
     //private Set<Event> events;
-
     private SimpleStringProperty name;
     private SimpleStringProperty genre;
     private SimpleStringProperty platform;
@@ -55,7 +53,8 @@ public class Game implements Serializable{
         this.PVPType = new SimpleObjectProperty<PVPType>(PVPType);
         this.releaseDate = new SimpleObjectProperty<Date>(releaseDate);
     }
-    @XmlElement(name="id")
+
+    @XmlElement(name = "id")
     public Long getId() {
         return this.id.get();
     }
@@ -64,7 +63,7 @@ public class Game implements Serializable{
         this.id.set(id);
     }
 
-    @XmlElement(name="name")
+    @XmlElement(name = "name")
     public String getName() {
         return this.name.get();
     }
@@ -73,7 +72,7 @@ public class Game implements Serializable{
         this.name.set(name);
     }
 
-    @XmlElement(name="genre")
+    @XmlElement(name = "genre")
     public String getGenre() {
         return this.genre.get();
     }
@@ -82,7 +81,7 @@ public class Game implements Serializable{
         this.genre.set(genre);
     }
 
-    @XmlElement(name="platform")
+    @XmlElement(name = "platform")
     public String getPlatform() {
         return this.platform.get();
     }
@@ -91,7 +90,7 @@ public class Game implements Serializable{
         this.platform.set(platform);
     }
 
-    @XmlElement(name="PVPType")
+    @XmlElement(name = "PVPType")
     public PVPType getPVPType() {
         return this.PVPType.get();
     }
@@ -100,7 +99,7 @@ public class Game implements Serializable{
         this.PVPType.set(PVPType);
     }
 
-    @XmlElement(name="releaseDate")
+    @XmlElement(name = "releaseDate")
     public Date getReleaseDate() {
         return this.releaseDate.get();
     }
@@ -115,14 +114,12 @@ public class Game implements Serializable{
     /*public Admin getAdmin() {
         return admin;
     }*/
-
     /**
      * @param admin the admin to set
      */
     /*public void setAdmin(Admin admin) {
         this.admin = admin;
     }*/
-
     /**
      * @return the events
      */
@@ -130,14 +127,12 @@ public class Game implements Serializable{
     public Set<Event> getEvents() {
         return events;
     }*/
-
     /**
      * @param events the events to set
      */
     /*public void setEvents(Set<Event> events) {
         this.events = events;
     }*/
-
     @Override
     public int hashCode() {
         int hash = 5;
@@ -161,5 +156,10 @@ public class Game implements Serializable{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }
