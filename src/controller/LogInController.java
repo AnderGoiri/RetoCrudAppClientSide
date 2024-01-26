@@ -40,6 +40,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import javax.naming.OperationNotSupportedException;
 import model.User;
+import security.Hash;
 
 /**
  * This class contains the responses for behavior of the Log In view
@@ -173,8 +174,8 @@ public class LogInController {
                 throw new EmailFormatException("El formato de las credenciales no es correcto");
             }
             /*
-            Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number
-            Pattern that must be respected
+            Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number.
+            Pattern that must be respected.
              */
             String regexPassword = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
             Pattern patternPassword = Pattern.compile(regexPassword);
@@ -185,9 +186,9 @@ public class LogInController {
             // Add the provided data to the User
             User user = new User();
             user.setEmail(email);
-            user.setPassword(password);
+            user.setPassword(new Hash().hashPassword(password));
+            User appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
 
-            //User mainWindowUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
             //Create Bussines Logic Controller to be passed to UI controllers
             EventManager eventLogicController = new EventManagerImplementation();
             GameManager gameLogicController = new GameManagerImplementation();
@@ -205,11 +206,9 @@ public class LogInController {
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
-            /*
         } catch (CredentialsException ex) {
             LOGGER.severe("Credentials Exception: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
-             */
         } catch (Exception ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
