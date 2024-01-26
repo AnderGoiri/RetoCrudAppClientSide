@@ -20,6 +20,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Player;
+import model.User;
 
 /**
  *
@@ -44,8 +46,9 @@ public class RetoCrudAppClient extends javafx.application.Application{
             Parent root = loader.load();
             TeamWindowController controller = loader.getController();
             controller.setTeamManager(bussinessLogicController);
-            controller.setStage(primaryStage);                  
-            controller.initStage(root);
+            controller.setStage(primaryStage);    
+            User user = new Player();
+            controller.initStage(root, user);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
