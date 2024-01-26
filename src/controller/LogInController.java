@@ -7,6 +7,7 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
+import static controller.GenericController.LOGGER;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
@@ -44,8 +45,9 @@ import model.User;
  * This class contains the responses for behavior of the Log In view
  *
  * @author Ander Goirigolzarri Iturburu
+ * @author Andoni Alcalde Sanz
  */
-public class LogInController extends GenericController {
+public class LogInController {
 
     private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     private Stage stage;
@@ -57,9 +59,7 @@ public class LogInController extends GenericController {
     @FXML
     private PasswordField pwdPassword;
     @FXML
-    private Hyperlink hrefSignUp;
-    @FXML
-    private Hyperlink hrefPasswordRecovery;
+    private Hyperlink hrefSignUp, hrefPasswordRecovery;
     @FXML
     private Button loginButton;
     @FXML
@@ -67,8 +67,7 @@ public class LogInController extends GenericController {
     @FXML
     private ImageView odooIcon;
 
-    // Instance of the SignableImplementation object
-    private final Signable signable = SignableFactory.getSignable();
+    private final Signable signable = SignableFactory.getSignable();     // Instance of the SignableImplementation object
 
     private TranslateTransition translateTransition;
     private TranslateTransition translateTransition2;
@@ -85,20 +84,14 @@ public class LogInController extends GenericController {
             LOGGER.info("Initializing stage...");
             Scene scene = new Scene(root, 600, 400);
             stage.setScene(scene);
-            // Establish window title
-            stage.setTitle("Iniciar sesión");
-            // Window is not resizable
-            stage.setResizable(false);
-            // Disable 'Entrar' button
-            loginButton.setDisable(true);
-            // Establish the 'Entrar' button as the default button
-            loginButton.setDefaultButton(true);
-            // Show the window
-            stage.show();
+            stage.setTitle("eSportsHub - Iniciar sesión"); //Establish window title
+            stage.setResizable(false); //Window is not resizable
+            loginButton.setDisable(true); //Disable 'Entrar' button
+            loginButton.setDefaultButton(true); //Establish the 'Entrar' button as the default button
+            stage.show(); //Show the window
             LOGGER.info("Log In Window initialized and shown");
             // Set control events handlers
             LOGGER.info("Setting control evetns handlers...");
-
             loginButton.setOnAction(this::handleLoginButtonAction);
             hrefSignUp.setOnAction(this::handleHrefSignupAction);
             hrefPasswordRecovery.setOnAction(this::handleHrefPasswordRecovery);
@@ -106,14 +99,13 @@ public class LogInController extends GenericController {
             pwdPassword.textProperty().addListener(this::handleTextChange);
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
             LOGGER.info("Control events handlers set");
-
         } catch (Exception ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Application Error");
             alert.setContentText("Failed to initialize the application. Please try restarting the app.");
             alert.showAndWait(); // Shows the alert and waits for the user response 
-            LOGGER.severe("Exception during initialization: " + ex.getMessage());
+            LOGGER.log(Level.SEVERE, "Exception during initialization: {0}", ex.getMessage());
         }
     }
 
@@ -125,7 +117,6 @@ public class LogInController extends GenericController {
         translateTransition = new TranslateTransition(Duration.seconds(1.8), rectangle);
         translateTransition.setFromX(-450); // Final position outside the screen
         translateTransition.setToX(0); // Final position inside the screen
-
         translateTransition2 = new TranslateTransition(Duration.seconds(3), odooIcon);
         translateTransition2.setFromY(-600); // Final position outside the screen
         translateTransition2.setToY(0); // Final position inside the screen
@@ -196,40 +187,29 @@ public class LogInController extends GenericController {
             user.setEmail(email);
             user.setPassword(password);
 
-            // Send the User created to the logic Tier and recieve a full informed User
-            User mainWindowUser = signable.logIn(user);
-
-            // Close this window and open a MainWindow
-            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GameView.fxml"));
-            
-             //Create Bussines Logic Controller to be passed to UI controllers
-            GameManager bussinessLogicController= new GameManagerImplementation();
-        
-            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
+            //User mainWindowUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
+            //Create Bussines Logic Controller to be passed to UI controllers
+            EventManager eventLogicController = new EventManagerImplementation();
+            GameManager gameLogicController = new GameManagerImplementation();
+            //TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
-            GameWindowController controller = loader.getController();
-            controller.setUsersManager(bussinessLogicController);
-            Stage parentStage = new Stage();
-            controller.setStage(parentStage);               
-                
+            EventsViewController controller = loader.getController();
+            controller.setEventManager(eventLogicController);
+            controller.setGameManager(gameLogicController);
+            //teamController.setTeamManager(teamLogicController);
+            Stage applicationStage = new Stage();
+            controller.setStage(applicationStage);
             controller.initStage(root);
-            //primaryStage.show();
-            
-           /* Parent root = loader.load();
-            MainWindowController mainWindowController = loader.getController();
-            Stage parentStage = new Stage();
-
-            mainWindowController.setStage(parentStage);
-           mainWindowController.initStage(root, mainWindowUser);*/
-
             stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
+            /*
         } catch (CredentialsException ex) {
             LOGGER.severe("Credentials Exception: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
+             */
         } catch (Exception ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
@@ -294,7 +274,7 @@ public class LogInController extends GenericController {
             LOGGER.severe("Exception during handling 'Sign Up' hyperlink: " + ex.getMessage());
         }
     }
-    
+
     @FXML
     private void handleHrefPasswordRecovery(ActionEvent e) {
         try {
@@ -312,11 +292,10 @@ public class LogInController extends GenericController {
                 LOGGER.severe("Wrong email format");
                 throw new EmailFormatException("El formato de las credenciales no es correcto");
             }
-            
-            
+
             String emailStr = txtEmail.getText();
-            ((ESportsManager)ESportsFactory.getManager(ESportsFactory.REST_WEB_ESPORTS)).passwordRecovery(emailStr);
-            
+            ((ESportsManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ESPORTS)).passwordRecovery(emailStr);
+
             // Close this window
             stage.close();
         } catch (EmailFormatException ex) {
@@ -345,39 +324,31 @@ public class LogInController extends GenericController {
         lblError.setText(e);
     }
 
-    /**
-     * Event handler for the window close request.
-     *
-     * This method is triggered when a user attempts to close the window. It
-     * logs the close request, creates a confirmation dialog asking the user to
-     * confirm the closure, and handles the closure based on the user's
-     * response. If the user confirms, the window is closed; otherwise, the
-     * closure is canceled, and the window remains open. The method consumes the
-     * event to prevent the default window close behavior.
-     *
-     * @param event The WindowEvent representing the window close request.
-     */
     private void handleCloseRequest(WindowEvent event) {
-        LOGGER.info("Window close requested...");
-        // Create a confirmation dialog
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Closure");
-        alert.setHeaderText("Are you sure you want to close the window?");
-        // Add confirmation and cancel buttons to the dialog
-        ButtonType confirmButton = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(confirmButton, cancelButton);
-        // Show the dialog and wait for user response
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == confirmButton) {
-            // If the user confirms, close the window
-            event.consume(); // Stops the default window close
-            LOGGER.info("Window closed by user confirmation.");
-            stage.close();
-        } else {
-            // If the user cancels, do not close the window
-            event.consume(); // Stops the default window close
-            LOGGER.info("Window closure canceled by user.");
+        try {
+            LOGGER.info("Window close requested...");
+            // Create a confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Closure");
+            alert.setHeaderText("Are you sure you want to close the app?");
+            // Add confirmation and cancel buttons to the dialog
+            ButtonType confirmButton = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(confirmButton, cancelButton);
+            // Show the dialog and wait for user response
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == confirmButton) {
+                // If the user confirms, close the window
+                event.consume(); // Stops the default window close
+                LOGGER.info("Window closed by user confirmation.");
+                stage.close();
+            } else {
+                // If the user cancels, do not close the window
+                event.consume(); // Stops the default window close
+                LOGGER.info("Window closure canceled by user.");
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error handling window close request", e);
         }
     }
 }

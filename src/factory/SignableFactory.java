@@ -5,7 +5,7 @@
  */
 package factory;
 
-import logic.SignableImplementation;
+import businessLogic.SignableImplementation;
 
 /**
  *

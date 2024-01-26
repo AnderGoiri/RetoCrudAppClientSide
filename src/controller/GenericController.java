@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ButtonBar;
 import javafx.stage.WindowEvent;
 
@@ -191,8 +193,16 @@ public class GenericController {
     public void handleBtnClose(ActionEvent event) {
         try {
             LOGGER.info("Salir button clicked.");
-            Optional.ofNullable(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST))
-                    .ifPresent(this::handleCloseRequest);
+            // Load the LoginFXML.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller of the login window
+            LogInController controller = loader.getController();
+
+            // Set the primary stage (main window) to display the login window
+            controller.setStage(stage);
+            controller.initStage(root);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error handling Salir button click", ex);
         }

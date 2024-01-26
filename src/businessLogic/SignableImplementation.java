@@ -1,4 +1,4 @@
-package logic;
+package businessLogic;
 
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;

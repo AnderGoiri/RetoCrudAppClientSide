@@ -1,32 +1,34 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package main;
 
-import businessLogic.EventManager;
-import businessLogic.EventManagerImplementation;
-import businessLogic.GameManager;
-import businessLogic.GameManagerImplementation;
-import controller.LogInController;
 import java.io.IOException;
 import static javafx.application.Application.launch;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import controller.LogInController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * The Application class represents the main entry point of the JavaFX
+ * application. It initializes the primary stage (main window) and sets up the
+ * user interface of the application.
  *
- * @author 2dam
+ * <p>
+ * The primary stage represents the Log In Window of the application.
+ * </p>
+ *
+ * <p>
+ * The main method is provided as the entry point of the application.
+ * </p>
+ *
+ * <p>
+ * This class extends {@link javafx.application.Application}.
+ * </p>
+ *
+ * @author Jagoba Bartolomé Barroso
+ * @author Ander Goirigolzarri Iturburu
+ * @author Andoni Sanz Alcalde
  */
 public class Application extends javafx.application.Application {
 
@@ -53,6 +55,8 @@ public class Application extends javafx.application.Application {
     }
 
     /**
+     * The main method serves as the entry point of the application.
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
