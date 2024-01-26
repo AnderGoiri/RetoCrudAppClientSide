@@ -24,4 +24,5 @@ public interface TeamManager {
     public void createTeam(Team newTeam) throws BusinessLogicException;
     public void modifyTeam() throws BusinessLogicException;
     public void deleteTeam() throws BusinessLogicException;
+
 }

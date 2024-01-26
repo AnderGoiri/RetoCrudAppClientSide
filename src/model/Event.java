@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity JPA class for Event data. This class contains the properties for the
@@ -11,6 +12,7 @@ import java.util.Set;
  *
  * @author Ander Goirigolzarri Iturburu
  */
+@XmlRootElement(name = "event")
 public class Event implements Serializable {
 
     /**
@@ -32,7 +34,6 @@ public class Event implements Serializable {
     /**
      * Date of the event.
      */
-    
     private Date date;
     /**
      * Prize of the event for the winner.
@@ -58,9 +59,8 @@ public class Event implements Serializable {
     private Organizer organizer;
 
     private Set<PlayerEvent> playerevents;
-    
-    private Set<TeamEvent> teamevents;
 
+    private Set<TeamEvent> teamevents;
 
     /**
      * Gets id value of the Event.
@@ -242,7 +242,6 @@ public class Event implements Serializable {
         this.organizer = organizer;
     }
 
-
     /**
      * HashCode method implementation of the entity.
      *
@@ -320,5 +319,4 @@ public class Event implements Serializable {
     public void setPlayerevents(Set<PlayerEvent> playerevents) {
         this.playerevents = playerevents;
     }
-
 }

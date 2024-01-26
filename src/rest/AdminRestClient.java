@@ -36,19 +36,31 @@ public class AdminRestClient {
         webTarget = client.target(BASE_URI).path("entity.admin");
     }
 
-    public <T> T findGamesByReleaseDate_XML(Class<T> responseType, String releaseDate) throws ClientErrorException {
+    public <T> T findGamesByReleaseDate_XML(GenericType<T> responseType, String releaseDate) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("gamesByReleaseDate/{0}", new Object[]{releaseDate}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findGamesByReleaseDate_JSON(Class<T> responseType, String releaseDate) throws ClientErrorException {
+    public <T> T findGamesByReleaseDate_JSON(GenericType<T> responseType, String releaseDate) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("gamesByReleaseDate/{0}", new Object[]{releaseDate}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
+    
+    public <T> T findGamesByPVPType_XML(GenericType<T> responseType, String pvptype) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("gamesByPVPType/{0}", new Object[]{pvptype}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
 
-    public <T> T findGamesByName_XML(Class<T> responseType, String name) throws ClientErrorException {
+    public <T> T findGamesByPVPType_JSON(GenericType<T> responseType, String pvptype) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("gamesByPVPType/{0}", new Object[]{pvptype}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+    }
+    
+    public <T> T findGamesByName_XML(GenericType<T> responseType, String name) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("gamesByName/{0}", new Object[]{name}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -60,13 +72,13 @@ public class AdminRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findGamesByPlatform_XML(Class<T> responseType, String platform) throws ClientErrorException {
+    public <T> T findGamesByPlatform_XML(GenericType<T> responseType, String platform) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("gamesByPlatform/{0}", new Object[]{platform}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findGamesByPlatform_JSON(Class<T> responseType, String platform) throws ClientErrorException {
+    public <T> T findGamesByPlatform_JSON(GenericType<T> responseType, String platform) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("gamesByPlatform/{0}", new Object[]{platform}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -185,13 +197,13 @@ public class AdminRestClient {
                 post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T findGamesByGenre_XML(Class<T> responseType, String genre) throws ClientErrorException {
+    public <T> T findGamesByGenre_XML(GenericType<T> responseType, String genre) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("gamesByGenre/{0}", new Object[]{genre}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findGamesByGenre_JSON(Class<T> responseType, String genre) throws ClientErrorException {
+    public <T> T findGamesByGenre_JSON(GenericType<T> responseType, String genre) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("gamesByGenre/{0}", new Object[]{genre}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);

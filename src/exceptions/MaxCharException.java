@@ -29,4 +29,3 @@ public class MaxCharException extends Exception {
     }
     
 }
-

@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ButtonBar;
 import javafx.stage.WindowEvent;
 
@@ -77,7 +79,7 @@ public class GenericController {
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
     }
-
+  
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
@@ -193,6 +195,7 @@ public class GenericController {
             LOGGER.info("Salir button clicked.");
             Optional.ofNullable(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST))
                     .ifPresent(this::handleCloseRequest);
+
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error handling Salir button click", ex);
         }

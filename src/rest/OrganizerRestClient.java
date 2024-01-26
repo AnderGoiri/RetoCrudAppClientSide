@@ -10,27 +10,27 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
 /**
- * Jersey REST client generated for REST resource:PlayerFacadeREST
- * [entity.player]<br>
+ * Jersey REST client generated for REST resource:OrganizerFacadeREST
+ * [entity.organizer]<br>
  * USAGE:
  * <pre>
- *        PlayerRestClient client = new PlayerRestClient();
+ *        OrganizerRestClient client = new OrganizerRestClient();
  *        Object response = client.XXX(...);
  *        // do whatever with response
  *        client.close();
  * </pre>
  *
- * @author Andoni Sanz
+ * @author Ander Goirigolzarri Iturburu
  */
-public class PlayerRestClient {
+public class OrganizerRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/RetoAppCrud/webresources";
+    private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
 
-    public PlayerRestClient() {
+    public OrganizerRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entity.player");
+        webTarget = client.target(BASE_URI).path("entity.organizer");
     }
 
     public String countREST() throws ClientErrorException {
@@ -77,18 +77,6 @@ public class PlayerRestClient {
 
     public void create_JSON(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
-    }
-
-    public String findPlayerLevelById_XML(String id) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("findPlayerLevelById/{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
-    }
-
-    public String findPlayerLevelById_JSON(String id) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("findPlayerLevelById/{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(String.class);
     }
 
     public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {

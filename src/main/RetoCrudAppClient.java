@@ -5,10 +5,11 @@
  */
 package main;
 
+import businessLogic.EventManager;
+import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
-import businessLogic.TeamManager;
-import businessLogic.TeamManagerImplementation;
+import controller.EventsViewController;
 import controller.GameWindowController;
 import controller.TeamWindowController;
 import java.io.IOException;
@@ -18,7 +19,6 @@ import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Player;
 import model.User;
@@ -41,14 +41,17 @@ public class RetoCrudAppClient extends javafx.application.Application{
     public void start(Stage primaryStage) {    
         try {
             //Create Bussines Logic Controller to be passed to UI controllers
-            TeamManager bussinessLogicController= new TeamManagerImplementation();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TeamView.fxml"));
+            EventManager eventLogicController= new EventManagerImplementation();
+            GameManager gameLogicController = new GameManagerImplementation();
+            //TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
-            TeamWindowController controller = loader.getController();
-            controller.setTeamManager(bussinessLogicController);
-            controller.setStage(primaryStage);    
-            User user = new Player();
-            controller.initStage(root, user);
+            EventsViewController controller = loader.getController();                      
+            controller.setEventManager(eventLogicController);
+            controller.setGameManager(gameLogicController);
+            //teamController.setTeamManager(teamLogicController);
+            controller.setStage(primaryStage);
+            controller.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }

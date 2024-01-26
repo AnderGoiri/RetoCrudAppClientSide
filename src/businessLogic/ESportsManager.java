@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package businessLogic;
 
-/**
- *
- * @author Andoni Sanz
- */
-public class ESportsManager {
-    
+
+public interface ESportsManager {
+    // Métodos de la interfaz
+    public void passwordRecovery(String mail) throws BusinessLogicException;
 }

@@ -14,8 +14,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
-
 /**
  *
  * @author Andoni Sanz
@@ -27,11 +25,11 @@ public class User implements Serializable{
     
     private SimpleStringProperty username;
     private SimpleStringProperty password;
-
     private SimpleStringProperty email;
     private SimpleStringProperty name;
     private SimpleStringProperty surnames;
-
+    private SimpleStringProperty user_type;
+    
     private SimpleObjectProperty<Date> birthDate;
 
     public User() {
@@ -42,9 +40,10 @@ public class User implements Serializable{
         this.name = new SimpleStringProperty();
         this.surnames = new SimpleStringProperty();
         this.birthDate = new SimpleObjectProperty<Date>();
+        this.user_type = new SimpleStringProperty();
     }
 
-    public User(Long id, String username, String password, String email, String name, String surnames, Date birthDate) {
+    public User(Long id, String username, String password, String email, String name, String surnames, Date birthDate, String user_type) {
         this.id = new SimpleLongProperty(id);
         this.username = new SimpleStringProperty(username);
         this.password = new SimpleStringProperty(password);
@@ -52,6 +51,7 @@ public class User implements Serializable{
         this.name = new SimpleStringProperty(name);
         this.surnames = new SimpleStringProperty(surnames);
         this.birthDate = new SimpleObjectProperty<Date>(birthDate);
+        this.user_type = new SimpleStringProperty(user_type);
     }
   
     
@@ -118,6 +118,16 @@ public class User implements Serializable{
         this.birthDate.set(birthDate);
     }
 
+    @XmlElement(name="user_type")
+    public String getUser_type() {
+        return this.user_type.get();
+    }
+
+    public void setUser_type(String user_type) {
+        this.user_type.set(user_type);
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 7;

@@ -5,10 +5,30 @@
  */
 package businessLogic;
 
+import java.util.Collection;
+import model.Event;
+
 /**
+ * Business logic interface encapsulating business methods for events
+ * management.
  *
- * @author Jagoba Bartolomé Barroso
+ * @author Ander Goirigolzarri Iturburu
  */
 public interface EventManager {
+
+    public Collection<Event> findAllEvents() throws BusinessLogicException;
     
+    public Collection<Event> findEventsByOrganizer() throws BusinessLogicException;
+
+    public Collection<Event> findEventsByGame() throws BusinessLogicException;
+
+    public Collection<Event> findEventsWonByPlayer() throws BusinessLogicException;
+
+    public Collection<Event> findEventsWonByTeam() throws BusinessLogicException;
+
+    public Collection<Event> findEventsByONG() throws BusinessLogicException;
+
+    public void deletePlayerEventByEventId() throws BusinessLogicException;
+
+    public void deleteTeamEventByEventId() throws BusinessLogicException;
 }
