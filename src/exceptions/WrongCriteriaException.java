@@ -9,13 +9,13 @@ package exceptions;
  *
  * @author Jagoba Bartolomé Barroso
  */
-public class MaxCharException extends Exception {
+public class WrongCriteriaException extends Exception {
 
      /**
      * Creates a new instance of <code>MaxCharException</code> without detail
      * message.
      */
-    public MaxCharException() {
+    public WrongCriteriaException() {
     }
 
     /**
@@ -24,8 +24,9 @@ public class MaxCharException extends Exception {
      *
      * @param msg the detail message.
      */
-    public MaxCharException(String msg) {
+    public WrongCriteriaException(String msg) {
         super(msg);
     }
     
 }
+

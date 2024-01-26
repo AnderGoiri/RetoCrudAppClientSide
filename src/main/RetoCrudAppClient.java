@@ -11,6 +11,7 @@ import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
 import controller.EventsViewController;
 import controller.GameWindowController;
+import controller.TeamWindowController;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +20,8 @@ import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import model.Player;
+import model.User;
 
 /**
  *

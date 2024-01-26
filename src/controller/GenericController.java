@@ -79,7 +79,7 @@ public class GenericController {
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
     }
-
+  
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
@@ -193,16 +193,9 @@ public class GenericController {
     public void handleBtnClose(ActionEvent event) {
         try {
             LOGGER.info("Salir button clicked.");
-            // Load the LoginFXML.fxml file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
-            Parent root = loader.load();
+            Optional.ofNullable(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST))
+                    .ifPresent(this::handleCloseRequest);
 
-            // Get the controller of the login window
-            LogInController controller = loader.getController();
-
-            // Set the primary stage (main window) to display the login window
-            controller.setStage(stage);
-            controller.initStage(root);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error handling Salir button click", ex);
         }

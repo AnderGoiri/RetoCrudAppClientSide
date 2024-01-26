@@ -9,13 +9,13 @@ package exceptions;
  *
  * @author Jagoba Bartolomé Barroso
  */
-public class MaxCharException extends Exception {
+public class TextFormatException extends Exception {
 
      /**
      * Creates a new instance of <code>MaxCharException</code> without detail
      * message.
      */
-    public MaxCharException() {
+    public TextFormatException() {
     }
 
     /**
@@ -24,8 +24,9 @@ public class MaxCharException extends Exception {
      *
      * @param msg the detail message.
      */
-    public MaxCharException(String msg) {
+    public TextFormatException(String msg) {
         super(msg);
     }
     
 }
+
