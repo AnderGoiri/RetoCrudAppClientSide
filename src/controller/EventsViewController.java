@@ -151,9 +151,15 @@ public class EventsViewController extends GenericController {
                     tfPremio.setText(String.valueOf(newValue.getPrize()));
                     tfDonacion.setText(String.valueOf(newValue.getDonation()));
                     tfAforo.setText(String.valueOf(newValue.getParticipantNum()));
+
+                    btnModificar.setDisable(false);
+                    btnEliminar.setDisable(false);
+                } else {
+                    btnModificar.setDisable(true);
+                    btnEliminar.setDisable(true);
                 }
             });
-            
+
             stage.show();
         } catch (Exception e) {
             //  e.printStackTrace();

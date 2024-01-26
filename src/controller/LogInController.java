@@ -5,6 +5,10 @@
  */
 package controller;
 
+import businessLogic.EventManager;
+import businessLogic.EventManagerImplementation;
+import businessLogic.GameManager;
+import businessLogic.GameManagerImplementation;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
@@ -12,7 +16,6 @@ import factory.Signable;
 import factory.SignableFactory;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
@@ -29,7 +32,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.User;
@@ -39,7 +41,7 @@ import model.User;
  *
  * @author Ander Goirigolzarri Iturburu
  */
-public class LogInController {
+public class LogInController extends GenericController {
 
     private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     private Stage stage;
@@ -65,19 +67,13 @@ public class LogInController {
             LOGGER.info("Initializing stage...");
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            // Establish window title
-            stage.setTitle("Iniciar sesión");
-            // Window is not resizable
-            stage.setResizable(false);
-            // Disable 'Entrar' button
-            loginButton.setDisable(true);
+            stage.setTitle("Iniciar sesión"); // Establish window title
+            stage.setResizable(false); // Window is not resizable
+            loginButton.setDisable(true); // Disable 'Entrar' button
             // Establish the focus on the first field
+            loginButton.setDefaultButton(true); // Establish the 'Entrar' button as the default button
 
-            // Establish the 'Entrar' button as the default button
-            loginButton.setDefaultButton(true);
-
-            // Show the window
-            stage.show();
+            stage.show(); // Show the window
             LOGGER.info("Log In Window initialized and shown");
             // Set control events handlers
             LOGGER.info("Setting control evetns handlers...");
@@ -88,7 +84,6 @@ public class LogInController {
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
             LOGGER.info("Control events handlers set");
         } catch (Exception ex) {
-            // Show an error message to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Application Error");
@@ -108,26 +103,27 @@ public class LogInController {
 
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
-        System.out.println("Logeando");
         try {
             LOGGER.info("Log In Button pressed...");
             // Handle the login button click event here.
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
-            //Validate the format of the email, it must have a text before an '@' and a text before and after '.'
-            //Pattern that must be respected
+            /*
+            Validate the format of the email, it must have a text before an '@' and a text before and after '.'. 
+            Pattern that must be respected.
+             */
             String regexEmail = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
             Pattern patternEmail = Pattern.compile(regexEmail);
-            //Validate if the pattern doesn't match the txtEmail field text
             if (!patternEmail.matcher(txtEmail.getText()).matches()) {
                 LOGGER.severe("Wrong email format");
                 throw new EmailFormatException("El formato del email no es correcto");
             }
-            //Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number
-            //Pattern that must be respected
+            /*
+            Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number
+            Pattern that must be respected
+             */
             String regexPassword = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
             Pattern patternPassword = Pattern.compile(regexPassword);
-            //Validate if the pattern doesn't match the password field
             if (!patternPassword.matcher(pwdPassword.getText()).matches()) {
                 LOGGER.severe("Wrong password format");
                 throw new PasswordFormatException("El formato de la contraseña no es correcto");
@@ -142,14 +138,23 @@ public class LogInController {
             //SignableFactory.getSignable().logIn(user);
             Signable signable = SignableFactory.getSignable();
             mainWindowUser = signable.logIn(user);
-            
+
+            //Create Bussines Logic Controller to be passed to UI controllers
+            EventManager eventLogicController = new EventManagerImplementation();
+            GameManager gameLogicController = new GameManagerImplementation();
+            //TeamManager teamLogicController = new TeamManagerImplementation();
+
             // Close this window and open a MainWindow
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventView.fxml"));
             Parent root = loader.load();
-            MainWindowController mainWindowController = loader.getController();
+            EventsViewController eventViewController = loader.getController();
+            eventViewController.setEventManager(eventLogicController);
+            eventViewController.setGameManager(gameLogicController);
+            //eventViewController.setTeamManager(teamLogicController);
+
             Stage parentStage = new Stage();
-            mainWindowController.setStage(parentStage);
-            mainWindowController.initStage(root, mainWindowUser);
+            eventViewController.setStage(parentStage);
+            eventViewController.initStage(root);
 
             stage.close();
 
@@ -157,7 +162,7 @@ public class LogInController {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (CredentialsException ex) {
-            LOGGER.severe("Credentials Exception: " + ex.getMessage());   
+            LOGGER.severe("Credentials Exception: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (Exception ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
@@ -211,7 +216,8 @@ public class LogInController {
         lblError.setText(e);
     }
 
-    private void handleCloseRequest(WindowEvent event) {
+    @Override //TO-DO: Check if this method here is necessary
+    public void handleCloseRequest(WindowEvent event) {
         LOGGER.info("Window close requested...");
         // Create a confirmation dialog
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

@@ -5,6 +5,10 @@
  */
 package main;
 
+import businessLogic.EventManager;
+import businessLogic.EventManagerImplementation;
+import businessLogic.GameManager;
+import businessLogic.GameManagerImplementation;
 import controller.LogInController;
 import java.io.IOException;
 import static javafx.application.Application.launch;
@@ -24,26 +28,25 @@ import java.util.logging.Logger;
  *
  * @author 2dam
  */
+public class Application extends javafx.application.Application {
 
-public class Application extends javafx.application.Application{    
     /**
      * This method is called when the JavaFX application is launched. It is used
      * to initialize the primary stage (the main window) and set up the user
      * interface of the application.
      *
      * @param primaryStage The primary stage for this application, where the
-     * application scene can be set. The first stage represents the Log In Window of the
-     * application.
+     * application scene can be set. The first stage represents the Log In
+     * Window of the application.
      */
     @Override
-    public void start(Stage primaryStage) {    
+    public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
             Parent root = loader.load();
             LogInController controller = loader.getController();
             controller.setStage(primaryStage);
             controller.initStage(root);
-            primaryStage.show();
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
