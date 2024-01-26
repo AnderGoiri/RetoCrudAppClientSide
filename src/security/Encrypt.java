@@ -29,7 +29,6 @@ public class Encrypt {
             // Agrega el proveedor Bouncy Castle
             Security.addProvider(new BouncyCastleProvider());
 
-            // Recupera la clave privada
             byte[] privateKeyBytes;
             try (FileInputStream fis = new FileInputStream(
                     Paths.get(System.getProperty("user.home"),
@@ -40,16 +39,14 @@ public class Encrypt {
                 fis.read(privateKeyBytes);
             }
 
-            KeyFactory keyFactory = KeyFactory.getInstance("EC", "BC"); // "BC" indica el uso del proveedor Bouncy Castle
+            // Convierte los bytes de la clave privada en un objeto PrivateKey
+            KeyFactory keyFactory = KeyFactory.getInstance("EC", "BC");
             PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
             PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
 
             // Configura el algoritmo ECIES
             Cipher cipher = Cipher.getInstance("ECIES", "BC");
-
-            // Configura los parámetros de la curva elíptica
-            ECParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec("secp256r1");
-            cipher.init(Cipher.ENCRYPT_MODE, privateKey, ecSpec);
+            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
 
             // Convierte la contraseña a bytes y encripta
             byte[] encryptedBytes = cipher.doFinal(password.getBytes());

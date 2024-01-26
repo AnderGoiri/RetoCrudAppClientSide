@@ -41,6 +41,7 @@ import javafx.util.Duration;
 import javax.naming.OperationNotSupportedException;
 import model.User;
 import security.Hash;
+import security.Encrypt;
 
 /**
  * This class contains the responses for behavior of the Log In view
@@ -186,7 +187,14 @@ public class LogInController {
             // Add the provided data to the User
             User user = new User();
             user.setEmail(email);
-            user.setPassword(new Hash().hashPassword(password));
+            
+            System.out.println(password);
+            String hashedpassword = new Hash().hashPassword(password);
+            System.out.println(hashedpassword);
+            String encryptedpassword = new Encrypt().encrypt(hashedpassword);
+            System.out.println(encryptedpassword);
+            
+            user.setPassword(new Hash().hashPassword(password));        
             User appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
 
             //Create Bussines Logic Controller to be passed to UI controllers
