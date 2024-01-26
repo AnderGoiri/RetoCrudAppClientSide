@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javafx.scene.input.KeyCode.T;
 import javax.ws.rs.core.GenericType;
 import model.Team;
 import rest.PlayerRestClient;
@@ -44,8 +45,7 @@ public class TeamManagerImplementation implements TeamManager {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding all teams.");
-            teams = webClient.findTeamsByName_XML(new GenericType<List<Team>>() {
-            }, name);
+            teams = webClient.findTeamsByName_XML(new GenericType<List<Team>>() {}, name);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by name{0}", e.getMessage());
             throw new BusinessLogicException("Error finding teams by name\n" + e.getMessage());
@@ -79,11 +79,6 @@ public class TeamManagerImplementation implements TeamManager {
     }
 
     @Override
-    public void createTeam() throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void modifyTeam() throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -91,6 +86,17 @@ public class TeamManagerImplementation implements TeamManager {
     @Override
     public void deleteTeam() throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createTeam(Team newTeam) throws BusinessLogicException {
+        try {
+            LOGGER.info("TeamManager: Creating team.");
+            webClient.createTeam_XML(newTeam, Team.class);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception creating team{0}", e.getMessage());
+            throw new BusinessLogicException("Error creating team\n" + e.getMessage());
+        }
     }
    
 }

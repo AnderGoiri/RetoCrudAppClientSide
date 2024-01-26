@@ -21,7 +21,7 @@ public interface TeamManager {
     public List<Team> findTeamsWithWins() throws BusinessLogicException;
     public List<Team> findMyTeams() throws BusinessLogicException;
     public void joinTeam() throws BusinessLogicException;
-    public void createTeam() throws BusinessLogicException;
+    public void createTeam(Team newTeam) throws BusinessLogicException;
     public void modifyTeam() throws BusinessLogicException;
     public void deleteTeam() throws BusinessLogicException;
 }

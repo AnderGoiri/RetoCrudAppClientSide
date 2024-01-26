@@ -30,7 +30,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Label layoutX="14.0" layoutY="37.0" prefHeight="40.0" prefWidth="131.0" text="EQUIPOS">
+      <Label fx:id="titulo" layoutX="14.0" layoutY="37.0" prefHeight="40.0" prefWidth="131.0" text="EQUIPOS">
           <font>
             <Font name="Consolas Bold" size="30.0" />
          </font>
@@ -41,7 +41,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="tfNombre" layoutX="454.0" layoutY="30.0" prefHeight="25.0" prefWidth="292.0" />
+            <TextField fx:id="tfNombre" layoutX="454.0" layoutY="30.0" prefHeight="25.0" prefWidth="292.0" promptText="Nombre del equipo" />
             <Label fx:id="lblFundacion" layoutX="377.0" layoutY="117.0" prefHeight="24.0" prefWidth="77.0" text="Fundación">
                <font>
                   <Font size="15.0" />
@@ -50,8 +50,8 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="tfCoach" layoutX="860.0" layoutY="30.0" prefHeight="25.0" prefWidth="300.0" />
-            <DatePicker fx:id="dpFundacion" layoutX="455.0" layoutY="116.0" prefHeight="25.0" prefWidth="300.0" />
+            <TextField fx:id="tfCoach" layoutX="860.0" layoutY="30.0" prefHeight="25.0" prefWidth="300.0" promptText="Nombre del entrenador" />
+            <DatePicker fx:id="dpFundacion" layoutX="455.0" layoutY="116.0" prefHeight="25.0" prefWidth="300.0" promptText="Fecha de fundación" />
             <Button fx:id="btnBuscar" layoutX="272.0" layoutY="77.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0">
                <graphic>
                   <ImageView fitHeight="27.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
@@ -81,7 +81,7 @@
       <Button fx:id="btnCrear" layoutX="1222.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CREAR" />
       <Button fx:id="btnSalir" layoutX="1222.0" layoutY="689.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="SALIR" />
       <Button fx:id="btnUnirse" layoutX="1222.0" layoutY="320.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="UNIRSE" />
-      <Label fx:id="lblError" layoutX="233.0" layoutY="48.0" prefHeight="24.0" prefWidth="219.0" text="Error de ejemplo" textFill="RED">
+      <Label fx:id="lblError" layoutX="233.0" layoutY="48.0" prefHeight="24.0" prefWidth="391.0" text="Error de ejemplo" textFill="RED">
          <font>
             <Font size="15.0" />
          </font>

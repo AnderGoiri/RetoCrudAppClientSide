@@ -43,12 +43,12 @@ public class TeamRestClient {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T createTeam_XML(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.path("createTeam").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    public <T> T createTeam_XML(Team newTeam, Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("createTeam").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(newTeam, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
-    public <T> T createTeam_JSON(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.path("createTeam").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
+    public <T> T createTeam_JSON(Team newTeam, Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("createTeam").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(newTeam, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
     }
 
     public void deleteTeam_XML(String id) throws ClientErrorException {
