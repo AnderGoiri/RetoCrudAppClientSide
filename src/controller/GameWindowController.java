@@ -85,6 +85,9 @@ public class GameWindowController extends GenericController {
     
     @FXML
     private Label lblData;
+    
+    @FXML
+    private Label lblError;
 
     @FXML
     private Button btnExit;
@@ -297,24 +300,25 @@ public class GameWindowController extends GenericController {
 
     public void addEmptyGame() throws CreateException {
     try {
-                
+        
         Game newGame = new Game(); // Create an empty game
         newGame.setName("Default Name");
         newGame.setGenre("Default Genre");
         newGame.setPlatform("Default Platform");
         newGame.setPVPType(PVPType.TEAM_BASED_5V5);
-        
-        // Set default values or leave them empty, depending on your requirements
-        newGame.setReleaseDate(null); // Or set a default release date
-        // Set other properties as needed
-        // Add the new game to the database
-        gameManager.createGame(newGame);
-        
-        //gamesData.add(newGame);
-        
-        gamesData.clear();
-        gamesData = FXCollections.observableArrayList(gameManager.getAllGames());
-        tbGames.setItems(gamesData);    
+        newGame.setReleaseDate(null);
+        //check if there is any empty game already on the table
+        if(!gamesData.get(gamesData.size()-1).equals(newGame))
+        {
+            gameManager.createGame(newGame);       
+            //gamesData.add(newGame);        
+            gamesData.clear();
+            gamesData = FXCollections.observableArrayList(gameManager.getAllGames());
+            tbGames.setItems(gamesData);  
+        }
+        else{
+               lblError.setText("Ya se añadió una juego vacío a la tabla");
+        } 
         tbGames.refresh();
     } catch (Exception e) {
         throw new CreateException("Failed to add an empty game: " + e.getMessage());

@@ -4,6 +4,7 @@ import businessLogic.BusinessLogicException;
 import businessLogic.ESportsFactory;
 import businessLogic.ESportsManager;
 import businessLogic.GameManager;
+import businessLogic.GameManagerImplementation;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
@@ -196,14 +197,29 @@ public class LogInController {
             User mainWindowUser = signable.logIn(user);
 
             // Close this window and open a MainWindow
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
+            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GameView.fxml"));
+            
+             //Create Bussines Logic Controller to be passed to UI controllers
+            GameManager bussinessLogicController= new GameManagerImplementation();
+        
+            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
             Parent root = loader.load();
+            GameWindowController controller = loader.getController();
+            controller.setUsersManager(bussinessLogicController);
+            Stage parentStage = new Stage();
+            controller.setStage(parentStage);               
+                
+            controller.initStage(root);
+            //primaryStage.show();
+            
+           /* Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
             Stage parentStage = new Stage();
 
             mainWindowController.setStage(parentStage);
 
-            mainWindowController.initStage(root, mainWindowUser);
+            mainWindowController.initStage(root, mainWindowUser);*/
 
             stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {
