@@ -13,8 +13,6 @@ import java.security.Security;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import javax.crypto.Cipher;
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.spec.ECParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
@@ -29,20 +27,20 @@ public class Encrypt {
             // Agrega el proveedor Bouncy Castle
             Security.addProvider(new BouncyCastleProvider());
 
-            byte[] privateKeyBytes;
+            byte[] publicKeyBytes;
             try (FileInputStream fis = new FileInputStream(
                     Paths.get(System.getProperty("user.home"),
-                            "\\esportshub\\security", "privateKey.der")
+                            "\\esportshub\\security", "publicKey.der")
                             .toString()
             )) {
-                privateKeyBytes = new byte[fis.available()];
-                fis.read(privateKeyBytes);
+                publicKeyBytes = new byte[fis.available()];
+                fis.read(publicKeyBytes);
             }
 
             // Convierte los bytes de la clave privada en un objeto PrivateKey
             KeyFactory keyFactory = KeyFactory.getInstance("EC", "BC");
-            PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-            PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+            PKCS8EncodedKeySpec publicKeySpec = new PKCS8EncodedKeySpec(publicKeyBytes);
+            PrivateKey privateKey = keyFactory.generatePrivate(publicKeySpec);
 
             // Configura el algoritmo ECIES
             Cipher cipher = Cipher.getInstance("ECIES", "BC");

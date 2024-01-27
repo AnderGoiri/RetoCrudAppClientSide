@@ -7,7 +7,6 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
-import static controller.GenericController.LOGGER;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
