@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
@@ -40,11 +41,11 @@ public class Encrypt {
             // Convierte los bytes de la clave privada en un objeto PrivateKey
             KeyFactory keyFactory = KeyFactory.getInstance("EC", "BC");
             PKCS8EncodedKeySpec publicKeySpec = new PKCS8EncodedKeySpec(publicKeyBytes);
-            PrivateKey privateKey = keyFactory.generatePrivate(publicKeySpec);
+            PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
             // Configura el algoritmo ECIES
             Cipher cipher = Cipher.getInstance("ECIES", "BC");
-            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
             // Convierte la contraseña a bytes y encripta
             byte[] encryptedBytes = cipher.doFinal(password.getBytes());
