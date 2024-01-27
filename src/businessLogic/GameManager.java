@@ -22,8 +22,8 @@ public interface GameManager extends ESportsManager{
      */
     public Collection<Game> getAllGames() throws BusinessLogicException;
     public Collection<Game> updateGame(Object obj) throws BusinessLogicException;
-    public Collection<Game> createGame(Object obj) throws BusinessLogicException;
-    public Collection<Game> deleteGame(Long id) throws BusinessLogicException;
+    public void createGame(Object obj) throws BusinessLogicException;
+    public void deleteGame(Long id) throws BusinessLogicException;
     public Collection<Game> findByName(String name) throws BusinessLogicException;
     public Collection<Game> findByGenre(String genre) throws BusinessLogicException;
     public Collection<Game> findByPlatform(String genre) throws BusinessLogicException;

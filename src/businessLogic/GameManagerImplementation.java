@@ -79,7 +79,6 @@ public class GameManagerImplementation implements GameManager{
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception finding all games{0}",
                     ex.getMessage());
-            ex.printStackTrace();
             throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
         }
         return games;
@@ -155,34 +154,30 @@ public class GameManagerImplementation implements GameManager{
     }
     
     @Override
-    public Collection<Game> createGame(Object obj) throws BusinessLogicException {
-        List<Game> games =null;
+    public void createGame(Object obj) throws BusinessLogicException {
         try{
             LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
-            webClient.createGame_XML(obj, Game.class);
+            webClient.createGame_XML(obj);
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception Creating game}",
                     ex.getMessage());
             throw new BusinessLogicException("Error Creating game\n"+ex.getMessage());
         }
-        return games;
     }
     @Override
-    public Collection<Game> deleteGame(Long id) throws BusinessLogicException {
-        List<Game> games =null;
+    public void deleteGame(Long id) throws BusinessLogicException {
         try{
-            LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
+            LOGGER.info("GameManager: Delete Game gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
             webClient.deleteGame_XML(id.toString());
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
-                    "GameManager: Exception Creating game}",
+                    "GameManager: Exception Deleting game}",
                     ex.getMessage());
-            throw new BusinessLogicException("Error Creating game\n"+ex.getMessage());
+            throw new BusinessLogicException("Error Deleting game\n"+ex.getMessage());
         }
-        return games;
     }
 
     @Override
