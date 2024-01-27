@@ -124,12 +124,14 @@ public class TeamWindowController extends GenericController {
      
     public void initStage(Parent root, User user) {
         try {
+            // Window setters
             Scene scene = new Scene (root);
             stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Equipos");
             stage.setResizable(false);
             
+            // Disabling Buttons and Textfields
             btnUnirse.setDisable(true);
             btnBuscar.setDisable(true);
             btnCrear.setDisable(true);
@@ -149,6 +151,7 @@ public class TeamWindowController extends GenericController {
             
             tbTeam.setEditable(false);
  
+            // Getters for the values of each cell
             tbcolNombre.setCellValueFactory(new PropertyValueFactory<>("name"));
             tbcolEntrenador.setCellValueFactory(new PropertyValueFactory<>("coach"));
             tbcolFundacion.setCellValueFactory(new PropertyValueFactory<>("foundation"));
@@ -158,9 +161,11 @@ public class TeamWindowController extends GenericController {
             //dateFormatPattern = configFile.getProperty("dateFormatPattern");
             //tbcolFundacion.setCellFactory(DatePickerCellTeam.forTableColumn(dateFormatPattern));
             
+            // Setting all info from the server into the TableView
             teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
             tbTeam.setItems(teamsData);
 
+            // All combo options
             ObservableList<String> namedQueriesList = FXCollections.observableArrayList(
                     "Todos",
                     "Por nombre",
@@ -170,20 +175,27 @@ public class TeamWindowController extends GenericController {
                     "Mis Equipos",
                     ""
             );
+            // Setting default selected item for search combo
             cmbBusqueda.setItems(namedQueriesList);
             cmbBusqueda.setValue("");
+            
+            // Setting default message for placeholder
             Label SelectPlaceholder = new Label("Selecciona un tipo de búsqueda para mostrar datos.");
             tbTeam.setPlaceholder(SelectPlaceholder);
 
+            // Show the view
             stage.show();
             
+            // Check if there is no data in Team table
             if(tbTeam.getItems().isEmpty()){
                 Label noTeamPlaceholder = new Label("No existen datos que mostrar.");
                 tbTeam.setPlaceholder(noTeamPlaceholder); 
             }
             
+            // Put focus on Search combo
             cmbBusqueda.requestFocus();
 
+            // Set search button as default
             btnBuscar.setDefaultButton(true);
             
             //Obtains the layout containing the menu bar from the scene node graph
@@ -201,7 +213,7 @@ public class TeamWindowController extends GenericController {
                     }
                 }
             );
-
+            // Added a handler for the Search combo
             cmbBusqueda.setOnAction((event) -> {
                 try {
                     this.handleComboBoxSelection(event); 
@@ -243,6 +255,10 @@ public class TeamWindowController extends GenericController {
             // TODO Check multiple selection in table
             tbTeam.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue!=null){
+                    btnCrear.setDisable(true);
+                    btnModificar.setDisable(false);
+                    btnUnirse.setDisable(false);
+                    btnEliminar.setDisable(false);
                     tfNombre.setText(newValue.getName());
                     tfCoach.setText(newValue.getCoach());
                     try {

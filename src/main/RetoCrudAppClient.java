@@ -9,6 +9,8 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
+import businessLogic.TeamManager;
+import businessLogic.TeamManagerImplementation;
 import controller.EventsViewController;
 import controller.GameWindowController;
 import controller.TeamWindowController;
@@ -43,15 +45,16 @@ public class RetoCrudAppClient extends javafx.application.Application{
             //Create Bussines Logic Controller to be passed to UI controllers
             EventManager eventLogicController= new EventManagerImplementation();
             GameManager gameLogicController = new GameManagerImplementation();
-            //TeamManager teamLogicController = new TeamManagerImplementation();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
+            TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TeamView.fxml"));
             Parent root = loader.load();
-            EventsViewController controller = loader.getController();                      
-            controller.setEventManager(eventLogicController);
-            controller.setGameManager(gameLogicController);
-            //teamController.setTeamManager(teamLogicController);
+            TeamWindowController controller = loader.getController();                      
+            //controller.setEventManager(eventLogicController);
+            //controller.setGameManager(gameLogicController);
+            controller.setTeamManager(teamLogicController);
             controller.setStage(primaryStage);
-            controller.initStage(root);
+            User user = new Player();
+            controller.initStage(root, user);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
