@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package security;
 
 import java.io.FileInputStream;
-import java.nio.file.Paths;
 import java.security.KeyFactory;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
-import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -25,26 +18,22 @@ public class Encrypt {
     public String encrypt(String password) {
         String encryptedPassword = null;
         try {
-            // Agrega el proveedor Bouncy Castle
+            // Add Bouncy Castle provider
             Security.addProvider(new BouncyCastleProvider());
 
             byte[] publicKeyBytes;
             try (FileInputStream fis = new FileInputStream(
-                    Paths.get(System.getProperty("user.home"),
-                            "\\esportshub\\security", "publicKey.der")
-                            .toString()
-            )) {
+                    System.getProperty("user.home") + "\\esportshub\\security\\publicKey.der")) {
                 publicKeyBytes = new byte[fis.available()];
                 fis.read(publicKeyBytes);
             }
 
-            // Convierte los bytes de la clave privada en un objeto PrivateKey
-            KeyFactory keyFactory = KeyFactory.getInstance("EC", "BC");
-            PKCS8EncodedKeySpec publicKeySpec = new PKCS8EncodedKeySpec(publicKeyBytes);
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("EC");
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
             // Configura el algoritmo ECIES
-            Cipher cipher = Cipher.getInstance("ECIES", "BC");
+            Cipher cipher = Cipher.getInstance("ECIES");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
             // Convierte la contraseña a bytes y encripta
@@ -52,7 +41,6 @@ public class Encrypt {
 
             // Codifica los bytes encriptados a Base64
             encryptedPassword = Base64.getEncoder().encodeToString(encryptedBytes);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
