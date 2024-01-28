@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import static javafx.scene.input.KeyCode.T;
 import javax.ws.rs.core.GenericType;
 import model.Team;
+import model.User;
 import rest.PlayerRestClient;
 import rest.TeamRestClient;
 
@@ -60,7 +61,15 @@ public class TeamManagerImplementation implements TeamManager {
     
     @Override
     public List<Team> findTeamsByCoach(String coach) throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Team> teams = null;
+        try {
+            LOGGER.info("TeamManager: Finding all teams.");
+            teams = webClient.findTeamsByCoach_XML(new GenericType<List<Team>>() {}, coach);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by coach{0}", e.getMessage());
+            throw new BusinessLogicException("Error finding teams by coach\n" + e.getMessage());
+        }
+        return teams;
     }
     
     @Override
@@ -69,8 +78,16 @@ public class TeamManagerImplementation implements TeamManager {
     }
 
     @Override
-    public List<Team> findMyTeams() throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Team> findMyTeams(User player) throws BusinessLogicException {
+        List<Team> teams = null;
+        try {
+            LOGGER.info("TeamManager: Finding the player's teams.");
+            teams = webClient.findTeamsByCoach_XML(new GenericType<List<Team>>() {}, player.getId().toString());
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception finding the player's teams{0}", e.getMessage());
+            throw new BusinessLogicException("Error finding the player's teams\n" + e.getMessage());
+        }
+        return teams;
     }
 
     @Override

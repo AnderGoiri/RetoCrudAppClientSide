@@ -8,6 +8,7 @@ package businessLogic;
 import java.util.Collection;
 import java.util.List;
 import model.Team;
+import model.User;
 
 /**
  *
@@ -19,7 +20,7 @@ public interface TeamManager {
     public List<Team> findTeamsByDate(String date) throws BusinessLogicException;
     public List<Team> findTeamsByCoach(String coach) throws BusinessLogicException;
     public List<Team> findTeamsWithWins() throws BusinessLogicException;
-    public List<Team> findMyTeams() throws BusinessLogicException;
+    public List<Team> findMyTeams(User player) throws BusinessLogicException;
     public void joinTeam() throws BusinessLogicException;
     public void createTeam(Team newTeam) throws BusinessLogicException;
     public void modifyTeam(Team selectedTeam) throws BusinessLogicException;

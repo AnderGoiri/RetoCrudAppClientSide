@@ -22,6 +22,7 @@ import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import model.Admin;
 import model.Player;
 import model.User;
 

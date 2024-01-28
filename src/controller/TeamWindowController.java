@@ -219,7 +219,7 @@ public class TeamWindowController extends GenericController {
             // Added a handler for the Search combo
             cmbBusqueda.setOnAction((event) -> {
                 try {
-                    this.handleComboBoxSelection(event);
+                    this.handleComboBoxSelection(event, user);
                 } catch (BusinessLogicException ex) {
                     Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
                     showErrorAlert("No se ha podido abrir la ventana.");
@@ -256,7 +256,7 @@ public class TeamWindowController extends GenericController {
 
             // Selecting info from the table into the form
             tbTeam.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue.intValue() >= 0) {
+                if (newValue.intValue() >= 0 && user instanceof Player) {
                     LOGGER.info("Selected a table row.");
                     btnModificar.setDisable(false);
                     btnUnirse.setDisable(false);
@@ -286,6 +286,7 @@ public class TeamWindowController extends GenericController {
             
             // Deleting a team
             btnEliminar.setOnAction(event -> handleDeleteTeam(event));
+            
             // Closing the window
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
             //TODO Change it to go back to login
@@ -298,7 +299,7 @@ public class TeamWindowController extends GenericController {
         }
     }
 
-    public void handleComboBoxSelection(ActionEvent event) throws BusinessLogicException, WrongCriteriaException {
+    public void handleComboBoxSelection(ActionEvent event, User user) throws BusinessLogicException, WrongCriteriaException {
         String selectedNamedQuery = (String) cmbBusqueda.getValue();
         if (selectedNamedQuery != null) {
             lblError.setVisible(false);
@@ -318,6 +319,7 @@ public class TeamWindowController extends GenericController {
                             }
                         }
                     });
+                    handleEmptyTable();
                     break;
                 case "Por nombre":
                     btnBuscar.setDisable(false);
@@ -338,6 +340,7 @@ public class TeamWindowController extends GenericController {
                             }
                         }
                     });
+                    handleEmptyTable();
                     break;
                 case "Por fecha":
                     btnBuscar.setDisable(false);
@@ -350,18 +353,28 @@ public class TeamWindowController extends GenericController {
                             throw new WrongCriteriaException();
                         }
                     }
+                    handleEmptyTable();
                     break;
                 case "Por coach":
                     btnBuscar.setDisable(false);
-                    if (btnBuscar.isPressed()) {
-                        if (!tfCoach.getText().equals("")) {
-                            teamsData.clear();
-                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsByCoach(tfCoach.getText()));
-                            tbTeam.setItems(teamsData);
-                        } else {
-                            throw new WrongCriteriaException();
+                    btnBuscar.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            try {
+                                teamsData.clear();
+                                teamsData = FXCollections.observableArrayList(teamManager.findTeamsByCoach(tfCoach.getText()));
+                                tbTeam.setItems(teamsData);
+                            } catch (BusinessLogicException ex) {
+                                Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                                lblError.setText("No se ha rellenado el campo correspondiente o no es correcto.");
+                                lblError.setVisible(true);
+                                teamsData.clear();
+                                Label noTeamPlaceholder = new Label("No existen datos correspondientes a la búsqueda.");
+                                tbTeam.setPlaceholder(noTeamPlaceholder);
+                            }
                         }
-                    }
+                    });
+                    handleEmptyTable();
                     break;
                 case "Equipos con victorias":
                     btnBuscar.setDisable(false);
@@ -370,20 +383,34 @@ public class TeamWindowController extends GenericController {
                         teamsData = FXCollections.observableArrayList(teamManager.findTeamsWithWins());
                         tbTeam.setItems(teamsData);
                     }
+                    handleEmptyTable();
                     break;
                 case "Mis Equipos":
                     btnBuscar.setDisable(false);
-                    if (btnBuscar.isPressed()) {
-                        teamsData.clear();
-                        //TODO Parametro player
-                        teamsData = FXCollections.observableArrayList(teamManager.findMyTeams());
-                        tbTeam.setItems(teamsData);
-                    }
+                    btnBuscar.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            try {
+                                teamsData.clear();
+                                teamsData = FXCollections.observableArrayList(teamManager.findMyTeams(user));
+                                tbTeam.setItems(teamsData);
+                            } catch (BusinessLogicException ex) {
+                                Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                                lblError.setText("No se ha rellenado el campo correspondiente o no es correcto.");
+                                lblError.setVisible(true);
+                                teamsData.clear();
+                                Label noTeamPlaceholder = new Label("No existen datos correspondientes a la búsqueda.");
+                                tbTeam.setPlaceholder(noTeamPlaceholder);
+                            }
+                        }
+                    });
+                    handleEmptyTable();
                     break;
                 case "":
                     teamsData.clear();
                     btnBuscar.setDisable(true);
                     break;
+                    
             }
         }
     }
@@ -424,7 +451,6 @@ public class TeamWindowController extends GenericController {
 
     private void handleCreateTeam(ActionEvent event) {
         try {
-            LOGGER.info("entramo al handler");
             // Clearing the table and creating a Team
             teamsData.clear();
             Team newTeam = new Team();
@@ -476,7 +502,7 @@ public class TeamWindowController extends GenericController {
         }
     }
 
-    private void handleEmptyTable(ActionEvent event) {
+    private void handleEmptyTable() {
         try {
             // Check if the TableView is empty
             if (tbTeam.getItems().isEmpty()) {

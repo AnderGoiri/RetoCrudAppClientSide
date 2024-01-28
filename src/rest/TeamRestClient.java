@@ -127,7 +127,7 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findTeamsByCoach_XML(Class<T> responseType, String coach) throws ClientErrorException {
+    public <T> T findTeamsByCoach_XML(GenericType<T> responseType, String coach) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("byCoach/{0}", new Object[]{coach}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
