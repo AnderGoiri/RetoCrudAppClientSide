@@ -52,7 +52,7 @@ public class GameManagerImplementation implements GameManager{
         return games;
     }
     
-    /*@Override
+    @Override
     public Collection<Game> findByName(String name) throws BusinessLogicException {
         List<Game> games =null;
         try{
@@ -82,7 +82,7 @@ public class GameManagerImplementation implements GameManager{
             throw new BusinessLogicException("Error finding all games\n"+ex.getMessage());
         }
         return games;
-    }*/
+    }
     
     @Override
     public Collection<Game> findByPlatform(String platform) throws BusinessLogicException {
@@ -158,7 +158,7 @@ public class GameManagerImplementation implements GameManager{
         try{
             LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
-            webClient.createGame_XML(obj);
+            webClient.createGame_XML(obj, Game.class);
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception Creating game}",
