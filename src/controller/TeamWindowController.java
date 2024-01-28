@@ -278,7 +278,7 @@ public class TeamWindowController extends GenericController {
             
             // Modifying a team
             
-            
+            // Closing the window
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
             //TODO Change it to go back to login
             btnSalir.setOnAction(event -> super.handleBtnClose(event));
