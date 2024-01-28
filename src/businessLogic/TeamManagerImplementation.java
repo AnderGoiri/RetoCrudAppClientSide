@@ -79,13 +79,25 @@ public class TeamManagerImplementation implements TeamManager {
     }
 
     @Override
-    public void modifyTeam() throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modifyTeam(Team selectedTeam) throws BusinessLogicException {
+        try {
+            LOGGER.info("TeamManager: Modifying team.");
+            webClient.updateTeam_XML(selectedTeam, Team.class);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception modifying team{0}", e.getMessage());
+            throw new BusinessLogicException("Error modifying team\n" + e.getMessage());
+        }
     }
 
     @Override
-    public void deleteTeam() throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteTeam(Team selectedTeam) throws BusinessLogicException {
+        try {
+            LOGGER.info("TeamManager: Deleting team.");
+            webClient.deleteTeam_XML(selectedTeam);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception modifying team{0}", e.getMessage());
+            throw new BusinessLogicException("Error modifying team\n" + e.getMessage());
+        }
     }
 
     @Override

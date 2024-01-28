@@ -22,7 +22,7 @@ public interface TeamManager {
     public List<Team> findMyTeams() throws BusinessLogicException;
     public void joinTeam() throws BusinessLogicException;
     public void createTeam(Team newTeam) throws BusinessLogicException;
-    public void modifyTeam() throws BusinessLogicException;
-    public void deleteTeam() throws BusinessLogicException;
+    public void modifyTeam(Team selectedTeam) throws BusinessLogicException;
+    public void deleteTeam(Team selectedTeam) throws BusinessLogicException;
 
 }
