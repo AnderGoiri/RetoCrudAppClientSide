@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import businessLogic.GameManager;
+import businessLogic.OrganizerManager;
 import businessLogic.TeamManager;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -52,6 +53,8 @@ public class GenericController {
      */
     protected EventManager eventManager;
 
+    protected OrganizerManager organizerManager;
+
     /**
      * Sets the business logic object to be used by this UI controller.
      *
@@ -79,7 +82,11 @@ public class GenericController {
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
     }
-  
+
+    public void setOrganizerManager(OrganizerManager organizerManager) {
+        this.organizerManager = organizerManager;
+    }
+
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the

@@ -7,6 +7,7 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
+import businessLogic.OrganizerFactory;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
@@ -189,7 +190,7 @@ public class LogInController {
             user.setPassword(new Encrypt()
                     .encrypt(new Hash()
                             .hashPassword(password)));
-            
+
             User appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
 
             //Create Bussines Logic Controller to be passed to UI controllers
@@ -202,9 +203,10 @@ public class LogInController {
             controller.setEventManager(eventLogicController);
             controller.setGameManager(gameLogicController);
             //teamController.setTeamManager(teamLogicController);
+            controller.setOrganizerManager(OrganizerFactory.getOrganizermanager());
             Stage applicationStage = new Stage();
             controller.setStage(applicationStage);
-            controller.initStage(root);
+            controller.initStage(root, appUser);
             stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
