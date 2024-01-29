@@ -146,13 +146,13 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
     }
 
-    public <T> T findMyTeams_XML(Class<T> responseType, String player_id) throws ClientErrorException {
+    public <T> T findMyTeams_XML(GenericType<T> responseType, String player_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("MyTeams/{0}", new Object[]{player_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findMyTeams_JSON(Class<T> responseType, String player_id) throws ClientErrorException {
+    public <T> T findMyTeams_JSON(GenericType<T> responseType, String player_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("MyTeams/{0}", new Object[]{player_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -198,13 +198,13 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findTeamsByDate_XML(Class<T> responseType, String date) throws ClientErrorException {
+    public <T> T findTeamsByDate_XML(GenericType<T> responseType, String date) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("byDate/{0}", new Object[]{date}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findTeamsByDate_JSON(Class<T> responseType, String date) throws ClientErrorException {
+    public <T> T findTeamsByDate_JSON(GenericType<T> responseType, String date) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("byDate/{0}", new Object[]{date}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);

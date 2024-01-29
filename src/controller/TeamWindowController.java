@@ -9,6 +9,7 @@ import exceptions.TeamAlreadyExistsException;
 import exceptions.TextFormatException;
 import exceptions.WrongCriteriaException;
 import extra.DatePickerCellTeam;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -368,17 +369,39 @@ public class TeamWindowController extends GenericController {
                     break;
                 case "Por fecha":
                     btnBuscar.setDisable(false);
-                    if (btnBuscar.isPressed()) {
-                        if (!dpFundacion.getValue().toString().equals("")) {
-                            teamsData.clear();
-                            teamsData = FXCollections.observableArrayList(teamManager.findTeamsByDate(dpFundacion.getValue().toString()));
-                            tbTeam.setItems(teamsData);
-                        } else {
-                            throw new WrongCriteriaException();
+                    btnBuscar.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            try {
+                                LocalDate selectedDate = dpFundacion.getValue();
+                                if (selectedDate != null) {
+                                    teamsData.clear();
+                                    teamsData.addAll(teamManager.findTeamsByDate(selectedDate.toString()));
+                                    tbTeam.setItems(teamsData);
+
+                                    if (teamsData.isEmpty()) {
+                                        throw new BusinessLogicException("No existen equipos con la fecha seleccionada.");
+                                    }
+                                } else {
+                                    throw new WrongCriteriaException();
+                                }
+                            } catch (BusinessLogicException | WrongCriteriaException ex) {
+                                Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                                lblError.setText("No se han encontrado equipos con la fecha seleccionada.");
+                                lblError.setVisible(true);
+                                teamsData.clear();
+                                Label noTeamPlaceholder = new Label("No existen datos correspondientes a la búsqueda.");
+                                tbTeam.setPlaceholder(noTeamPlaceholder);
+                            } catch (Exception ex) {
+                                Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                                lblError.setText("Ha ocurrido un error al buscar equipos por fecha.");
+                                lblError.setVisible(true);
+                            }
                         }
-                    }
+                    });
                     handleEmptyTable();
                     break;
+
                 case "Por coach":
                     btnBuscar.setDisable(false);
                     btnBuscar.setOnAction(new EventHandler<ActionEvent>() {
@@ -434,7 +457,7 @@ public class TeamWindowController extends GenericController {
                     teamsData.clear();
                     btnBuscar.setDisable(true);
                     break;
-                    
+
             }
         }
     }

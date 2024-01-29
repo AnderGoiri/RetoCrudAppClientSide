@@ -46,7 +46,7 @@ public class TeamManagerImplementation implements TeamManager {
     public List<Team> findTeamsByName(String name) throws BusinessLogicException {
         List<Team> teams = null;
         try {
-            LOGGER.info("TeamManager: Finding all teams.");
+            LOGGER.info("TeamManager: Finding teams by name.");
             teams = webClient.findTeamsByName_XML(new GenericType<List<Team>>() {}, name);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by name{0}", e.getMessage());
@@ -57,14 +57,22 @@ public class TeamManagerImplementation implements TeamManager {
 
     @Override
     public List<Team> findTeamsByDate(String date) throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Team> teams = null;
+        try {
+            LOGGER.info("TeamManager: Finding teams by date.");
+            teams = webClient.findTeamsByDate_XML(new GenericType<List<Team>>() {}, date);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by date{0}", e.getMessage());
+            throw new BusinessLogicException("Error finding teams by date\n" + e.getMessage());
+        }
+        return teams;
     }
     
     @Override
     public List<Team> findTeamsByCoach(String coach) throws BusinessLogicException {
         List<Team> teams = null;
         try {
-            LOGGER.info("TeamManager: Finding all teams.");
+            LOGGER.info("TeamManager: Finding teams by coach.");
             teams = webClient.findTeamsByCoach_XML(new GenericType<List<Team>>() {}, coach);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by coach{0}", e.getMessage());
@@ -83,7 +91,7 @@ public class TeamManagerImplementation implements TeamManager {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding the player's teams.");
-            teams = webClient.findTeamsByCoach_XML(new GenericType<List<Team>>() {}, player.getId().toString());
+            teams = webClient.findMyTeams_XML(new GenericType<List<Team>>() {}, player.getId().toString());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding the player's teams{0}", e.getMessage());
             throw new BusinessLogicException("Error finding the player's teams\n" + e.getMessage());
