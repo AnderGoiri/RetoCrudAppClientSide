@@ -9,6 +9,7 @@ import static controller.GenericController.LOGGER;
 import extra.DatePickerCellEvent;
 import java.io.InputStream;
 import java.time.ZoneId;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
@@ -69,6 +70,8 @@ public class EventsViewController extends GenericController {
 
     private String dateFormatPattern;
 
+    private Collection<Game> games;
+
     /**
      * Initializes the controller class.
      *
@@ -103,8 +106,10 @@ public class EventsViewController extends GenericController {
             cbBusqueda.setItems(namedQueriesList);
             cbBusqueda.setValue("Elegir criterio de b\u00FAsqueda");
 
+            games = gameManager.getAllGames();
+
             ObservableList<String> gameNames = FXCollections.observableArrayList(
-                    gameManager.getAllGames().stream()
+                    games.stream()
                             .map(Game::getName)
                             .collect(Collectors.toList())
             );
@@ -131,7 +136,6 @@ public class EventsViewController extends GenericController {
             columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
 
             //columnFecha.setCellFactory(DatePickerCellEvent.forTableColumn(dateFormatPattern));
-
             eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
             tableViewEvents.setItems(eventsData);
 
@@ -220,23 +224,29 @@ public class EventsViewController extends GenericController {
 
     private void handleCreateEvent(ActionEvent event) {
         try {
-            // Clearing the table and creating an Event
-            eventsData.clear();
             Event newEvent = new Event();
 
-            // Set pattern to validate
-            // Compare the pattern
             // Create the event with the info from the table
             newEvent.setName(tfNombre.getText());
             newEvent.setLocation(tfLugar.getText());
             newEvent.setOng(tfONG.getText());
-            newEvent.setParticipantNum(tfAforo.getAnchor());
+            newEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
             newEvent.setDate(Date.from(dpFecha.getValue()
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
             newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
             newEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
-            //newEvent.setGame();
-
+            /*
+            To establish a Game for the event, we take the game collection declared in this controller.
+            Then create a stream filetered by the value of the Game ComboBox.
+            The result is always going to be one Game.
+            This stream is converted to a a list. To retrieve the game we use 
+            the get() method for the first position of the list. 
+             */
+            newEvent.setGame(games.stream()
+                    .filter((g -> g.getName()
+                    .equals(cbJuego.getValue())))
+                    .collect(Collectors.toList())
+                    .get(0));
             eventManager.createEvent(newEvent);
             eventsData.clear();
             eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());

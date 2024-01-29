@@ -43,11 +43,11 @@ public class EventManagerImplementation implements EventManager {
     public Collection<Event> findAllEvents() throws BusinessLogicException {
         List<Event> events = null;
         try {
-            LOGGER.info("EventManager: finding all events by Organizer");
+            LOGGER.info("EventManager: finding all events.");
             events = webclient.findAll_XML(new GenericType<List<Event>>() {
             });
         } catch (Exception ex) {
-            // ex.printStackTrace();
+            LOGGER.severe("Error finding all events: " + ex.getMessage());
             throw new BusinessLogicException("Error finding all events by Organizer" + ex.getMessage());
         }
         return events;
