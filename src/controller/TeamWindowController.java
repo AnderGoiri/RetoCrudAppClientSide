@@ -663,7 +663,7 @@ public class TeamWindowController extends GenericController {
             }
         } catch (Exception e) {
             LOGGER.severe("Error joining the team: " + e.getMessage());
-            lblError.setText("An error occurred while joining the team.");
+            //lblError.setText("An error occurred while joining the team.");
             lblError.setVisible(true);
         }
     }
