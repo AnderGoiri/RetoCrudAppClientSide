@@ -17,7 +17,7 @@ import model.Event;
 public interface EventManager {
 
     public Collection<Event> findAllEvents() throws BusinessLogicException;
-    
+
     public Collection<Event> findEventsByOrganizer() throws BusinessLogicException;
 
     public Collection<Event> findEventsByGame() throws BusinessLogicException;
@@ -31,4 +31,10 @@ public interface EventManager {
     public void deletePlayerEventByEventId() throws BusinessLogicException;
 
     public void deleteTeamEventByEventId() throws BusinessLogicException;
+
+    public void createEvent(Event newEvent) throws BusinessLogicException;
+
+    public void modifyEvent(Event selectedEvent) throws BusinessLogicException;
+
+    public void deleteEvent(Event selectedEvent) throws BusinessLogicException;
 }

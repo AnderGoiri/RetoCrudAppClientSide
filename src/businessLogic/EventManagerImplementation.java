@@ -7,6 +7,7 @@ package businessLogic;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.GenericType;
 import model.Event;
@@ -28,6 +29,17 @@ public class EventManagerImplementation implements EventManager {
     }
 
     @Override
+    public void createEvent(Event newEvent) throws BusinessLogicException {
+        try {
+            LOGGER.info("EventManager: Creating Event.");
+            webclient.create_XML(newEvent);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "EventManager: exception creating event{0}", e.getMessage());
+            throw new BusinessLogicException("Error creating team\n" + e.getMessage());
+        }
+    }
+
+    @Override
     public Collection<Event> findAllEvents() throws BusinessLogicException {
         List<Event> events = null;
         try {
@@ -35,7 +47,7 @@ public class EventManagerImplementation implements EventManager {
             events = webclient.findAll_XML(new GenericType<List<Event>>() {
             });
         } catch (Exception ex) {
-           // ex.printStackTrace();
+            // ex.printStackTrace();
             throw new BusinessLogicException("Error finding all events by Organizer" + ex.getMessage());
         }
         return events;
@@ -47,8 +59,8 @@ public class EventManagerImplementation implements EventManager {
         try {
             LOGGER.info("EventManager: finding all events by Organizer");
             //events = webclient
-              //      .findEventsByOrganizer_XML(new GenericType<List<Event>>() {
-                //    });
+            //      .findEventsByOrganizer_XML(new GenericType<List<Event>>() {
+            //    });
         } catch (Exception ex) {
             throw new BusinessLogicException("Error finding all events by Organizer" + ex.getMessage());
         }
@@ -82,6 +94,16 @@ public class EventManagerImplementation implements EventManager {
 
     @Override
     public void deleteTeamEventByEventId() throws BusinessLogicException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void modifyEvent(Event selectedEvent) throws BusinessLogicException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteEvent(Event selectedEvent) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
