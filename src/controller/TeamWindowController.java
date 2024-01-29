@@ -1,7 +1,11 @@
 package controller;
 
-import businessLogic.BusinessLogicException;
+import exceptions.BusinessLogicException;
+import exceptions.CoachFormatException;
 import exceptions.MaxCharException;
+import exceptions.NameFormatException;
+import exceptions.NoDataException;
+import exceptions.TeamAlreadyExistsException;
 import exceptions.TextFormatException;
 import exceptions.WrongCriteriaException;
 import extra.DatePickerCellTeam;
@@ -159,7 +163,7 @@ public class TeamWindowController extends GenericController {
             tbcolEntrenador.setCellValueFactory(new PropertyValueFactory<>("coach"));
             tbcolFundacion.setCellValueFactory(new PropertyValueFactory<>("foundation"));
 
-            //TODO Cambiar a relative path
+            // Getting date pattern from properties file
             input = getClass().getClassLoader().getResourceAsStream("config/parameters.properties");
             configFile.load(input);
             dateFormatPattern = configFile.getProperty("dateFormatPattern");
@@ -287,12 +291,32 @@ public class TeamWindowController extends GenericController {
             // Deleting a team
             btnEliminar.setOnAction(event -> handleDeleteTeam(event));
             
+            // Joining a team
+            btnUnirse.setOnAction(event -> handleJoinTeam(event, user));
+            
+            // Check if any of the buttons is pressed
+            boolean buttonPressed = btnCrear.isPressed() || btnModificar.isPressed() || btnEliminar.isPressed() || btnUnirse.isPressed();
+
+            // Check if all text fields are empty
+            boolean allFieldsEmpty = tfNombre.getText().isEmpty() && tfCoach.getText().isEmpty() && dpFundacion.getValue() == null;
+
+            // If any button is pressed and all fields are empty, throw NoDataException
+            if (buttonPressed && allFieldsEmpty) {
+                throw new NoDataException("No hay datos con los que operar.");
+            }
+            
             // Closing the window
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
             //TODO Change it to go back to login
             btnSalir.setOnAction(event -> super.handleBtnClose(event));
+            
+            
 
-        } catch (Exception e) {
+        } catch (NoDataException e) {
+            LOGGER.severe(e.getMessage());
+            lblError.setText(e.getMessage());
+            lblError.setVisible(true);
+        }catch (Exception e) {
             LOGGER.severe(e.getMessage());
             lblError.setText("Ha ocurrido un error inesperado.");
             lblError.setVisible(true);
@@ -510,6 +534,7 @@ public class TeamWindowController extends GenericController {
                 Label selectPlaceholder = new Label("No data matching the selected criteria.");
                 tbTeam.setPlaceholder(selectPlaceholder);
             }
+            
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
         }
@@ -519,21 +544,42 @@ public class TeamWindowController extends GenericController {
         try {
             lblError.setVisible(false);
             // Get the selected team in the table
+            // Get the selected team in the table
             Team selectedTeam = tbTeam.getSelectionModel().getSelectedItem();
 
             // Check if there is a selected team
             if (selectedTeam != null) {
-                // Modify the team data with the information from the form
-                selectedTeam.setName(tfNombre.getText());
-                selectedTeam.setCoach(tfCoach.getText());
+                // Set the pattern to validate the tfNombre and tfCoach
+                String regexName = "^[a-zA-Z0-9 ]+$";
+
+                // Compare the pattern
+                if (!tfNombre.getText().matches(regexName)) {
+                    throw new NameFormatException("El campo Nombre debe tener caracteres alfanuméricos y espacios.");
+                }
+
+                // Compare the pattern
+                if (!tfCoach.getText().matches(regexName)) {
+                    throw new CoachFormatException("El campo Coach debe tener caracteres alfanuméricos y espacios.");
+                }
 
                 // Convert LocalDate to Date
-                LocalDate localDate = dpFundacion.getValue();
-                Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                selectedTeam.setFoundation(date);
+                LocalDate localFundacion = dpFundacion.getValue();
+                Date newDate = Date.from(localFundacion.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-                // Call the method to modify the team in the database
-                teamManager.modifyTeam(selectedTeam);
+                // Check if the form info did change from the selected item in the TableView
+                if (!tfNombre.getText().equals(selectedTeam.getName())
+                        || !tfCoach.getText().equals(selectedTeam.getCoach())
+                        || !newDate.equals(selectedTeam.getFoundation())) {
+
+                    // Call the method to modify the team in the database
+                    selectedTeam.setName(tfNombre.getText());
+                    selectedTeam.setCoach(tfCoach.getText());
+                    selectedTeam.setFoundation(newDate);
+
+                    teamManager.modifyTeam(selectedTeam);
+                } else {
+                    throw new TeamAlreadyExistsException("El equipo no ha sido modificado.");
+                }
 
                 // Refresh the table with the modified data
                 tbTeam.refresh();
@@ -544,6 +590,19 @@ public class TeamWindowController extends GenericController {
                 lblError.setText("No team selected");
                 lblError.setVisible(true);
             }
+
+        } catch (TeamAlreadyExistsException e) {
+            LOGGER.severe("Error modifying the team: " + e.getMessage());
+            lblError.setText(e.getMessage());
+            lblError.setVisible(true);
+        } catch (CoachFormatException e) {
+            LOGGER.severe("Error modifying the team: " + e.getMessage());
+            lblError.setText(e.getMessage());
+            lblError.setVisible(true);
+        } catch (NameFormatException e) {
+            LOGGER.severe("Error modifying the team: " + e.getMessage());
+            lblError.setText(e.getMessage());
+            lblError.setVisible(true);
         } catch (Exception e) {
             LOGGER.severe("Error modifying the team: " + e.getMessage());
             lblError.setText("An error occurred while modifying the team.");
@@ -561,11 +620,11 @@ public class TeamWindowController extends GenericController {
             if (selectedTeam != null) {
                 // Call the method to delete the team in the database
                 teamManager.deleteTeam(selectedTeam);
-                
+
                 // Deleting the team from the TableView list
                 int selectedIndex = tbTeam.getSelectionModel().getSelectedIndex();
                 teamsData.remove(selectedIndex);
-                
+
                 // Refresh the table with the modified data
                 tbTeam.refresh();
 
@@ -581,5 +640,31 @@ public class TeamWindowController extends GenericController {
             lblError.setVisible(true);
         }
     }
-    
+
+    private void handleJoinTeam(ActionEvent event, User user) {
+        try {
+            lblError.setVisible(false);
+            // Get the selected team in the table
+            Team selectedTeam = tbTeam.getSelectionModel().getSelectedItem();
+
+            // Check if there is a selected team
+            if (selectedTeam != null) {
+                // Call the method to join the team in the database
+                teamManager.joinTeam(selectedTeam, user);
+
+                // Refresh the table with the modified data
+                tbTeam.refresh();
+
+                LOGGER.info("Team joined.");
+            } else {
+                LOGGER.warning("No team selected.");
+                lblError.setText("No team selected");
+                lblError.setVisible(true);
+            }
+        } catch (Exception e) {
+            LOGGER.severe("Error joining the team: " + e.getMessage());
+            lblError.setText("An error occurred while joining the team.");
+            lblError.setVisible(true);
+        }
+    }
 }

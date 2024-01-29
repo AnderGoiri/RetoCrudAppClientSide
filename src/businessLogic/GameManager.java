@@ -5,6 +5,7 @@
  */
 package businessLogic;
 
+import exceptions.BusinessLogicException;
 import java.util.Collection;
 import model.Admin;
 import model.Game;

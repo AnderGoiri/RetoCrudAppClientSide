@@ -10,6 +10,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import model.Team;
+import model.User;
 
 /**
  * Jersey REST client generated for REST resource:TeamFacadeREST
@@ -28,7 +29,7 @@ public class TeamRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/RetoAppCrud/webresources";
+    private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
 
     public TeamRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -209,8 +210,26 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    public <T> T joinTeam_XML(Team selectedTeam, User user, Class<T> responseType) throws ClientErrorException {
+        return webTarget
+                .path("joinTeam")
+                .queryParam("teamId", selectedTeam.getId()) // Assuming Team has a method getId()
+                .queryParam("userId", user.getId()) // Assuming User has a method getId()
+                .request(javax.ws.rs.core.MediaType.APPLICATION_XML)
+                .put(javax.ws.rs.client.Entity.entity(selectedTeam, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    }
+
+    public <T> T joinTeam_JSON(Team selectedTeam, User user, Class<T> responseType) throws ClientErrorException {
+        return webTarget
+                .path("joinTeam")
+                .queryParam("teamId", selectedTeam.getId())
+                .queryParam("userId", user.getId())
+                .request(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+                .put(javax.ws.rs.client.Entity.entity(selectedTeam, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
+    }
+
     public void close() {
         client.close();
     }
-    
+
 }

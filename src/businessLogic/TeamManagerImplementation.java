@@ -5,6 +5,7 @@
  */
 package businessLogic;
 
+import exceptions.BusinessLogicException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -91,8 +92,14 @@ public class TeamManagerImplementation implements TeamManager {
     }
 
     @Override
-    public void joinTeam() throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void joinTeam(Team selectedTeam, User player) throws BusinessLogicException {
+        try {
+            LOGGER.info("TeamManager: Modifying team.");
+            webClient.joinTeam_XML(selectedTeam, player, Team.class);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "TeanManager: Exception joining the team{0}", e.getMessage());
+            throw new BusinessLogicException("Error joining team\n" + e.getMessage());
+        }
     }
 
     @Override
