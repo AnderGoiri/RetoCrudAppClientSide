@@ -247,8 +247,9 @@ public class TeamWindowController extends GenericController {
             cleanFormItem.setOnAction(event -> handleCleanRequest(event));
             createTeamItem.setOnAction(event -> handleCreateTeam(event));
             modifyTeamItem.setOnAction(event -> handleModifyTeam(event));
-
+            
             // Add CRUD options to the context menu
+            contextMenu.getItems().addAll(cleanFormItem, createTeamItem, modifyTeamItem);
             root.setOnContextMenuRequested(event -> contextMenu.show(root, event.getScreenX(), event.getScreenY()));
 
             // Set handler for cleaning button
