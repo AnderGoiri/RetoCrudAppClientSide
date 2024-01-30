@@ -6,7 +6,6 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
-import extra.DatePickerCellEvent;
 import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.Collection;
@@ -282,7 +281,7 @@ public class EventsViewController extends GenericController {
                 selectedEvent.setName(tfNombre.getText());
                 selectedEvent.setLocation(tfLugar.getText());
                 selectedEvent.setOng(tfONG.getText());
-                selectedEvent.setParticipantNum(tfAforo.getAnchor());
+                selectedEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
                 selectedEvent.setDate(Date.from(dpFecha.getValue()
                         .atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 selectedEvent.setPrize(Float.parseFloat(tfPremio.getText()));
