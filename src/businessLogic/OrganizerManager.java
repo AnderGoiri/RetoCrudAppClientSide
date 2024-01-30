@@ -5,6 +5,7 @@
  */
 package businessLogic;
 
+import java.util.List;
 import model.Organizer;
 
 /**
@@ -14,5 +15,6 @@ import model.Organizer;
 public interface OrganizerManager {
 
     public Organizer find(String id);
+    public List<Organizer> findAll();
 
 }

@@ -25,7 +25,7 @@ public class GameManagerImplementation implements GameManager {
 
     //REST users web client
     private AdminRestClient webClient;
-    private static final Logger LOGGER = Logger.getLogger("GameManagerImplementation");
+    private static final Logger LOGGER = Logger.getLogger(GameManagerImplementation.class.getName());
 
     /**
      * Create a GameManagerImplementation object. It constructs a web client for

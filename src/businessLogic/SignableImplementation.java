@@ -17,7 +17,7 @@ import rest.UserRestClient;
 public class SignableImplementation implements Signable {
 
     private UserRestClient webClient;
-    private static final Logger LOGGER = Logger.getLogger("GameManagerImplementation");
+    private static final Logger LOGGER = Logger.getLogger(SignableImplementation.class.getName());
 
     public SignableImplementation() {
         webClient = new UserRestClient();
