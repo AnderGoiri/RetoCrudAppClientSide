@@ -10,6 +10,8 @@ import exceptions.NameException;
 import exceptions.WrongFormatException;
 import extra.DatePickerCellGame;
 import factory.GameFactory;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 //import static groovy.util.GroovyTestCase.assertEquals;
 import java.time.Instant;
 import java.util.Date;
@@ -49,12 +51,14 @@ import model.PVPType;
 import model.User;
 import java.lang.String;
 import java.util.List;
+import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import javax.naming.OperationNotSupportedException;
 
 public class GameWindowController extends GenericController {
 
     private final static Logger LOGGER = Logger.getLogger(GameWindowController.class.getName());
-    
+
     @FXML
     private HBox hBoxMenu;
 
@@ -124,6 +128,15 @@ public class GameWindowController extends GenericController {
      * User's table data model.
      */
     private ObservableList<Game> gamesData;
+
+    private MenuItem createItem;
+    private MenuItem readItem;
+    //MenuItem updateItem;
+    @FXML
+    private MenuItem deleteItem;
+    private MenuItem eventsItem;
+    private MenuItem teamsItem;
+    private MenuItem gamesItem;
 
     /**
      * Method for initializing GestionUsuarios Stage.
@@ -343,9 +356,9 @@ public class GameWindowController extends GenericController {
                             gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
 
                             //call the update method using the facotry 
-                             GameFactory.getGameManager().updateGame(tbGames.getSelectionModel().getSelectedItem());
+                            GameFactory.getGameManager().updateGame(tbGames.getSelectionModel().getSelectedItem());
 
-                        }catch (BusinessLogicException ex) {
+                        } catch (BusinessLogicException ex) {
                             Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -362,13 +375,13 @@ public class GameWindowController extends GenericController {
             ContextMenu contextMenu = new ContextMenu();
 
             // CRUD options
-            MenuItem createItem = new MenuItem("    Create Game");
-            MenuItem readItem = new MenuItem("    Read Game");
-            MenuItem updateItem = new MenuItem("    Update Game");
-            MenuItem deleteItem = new MenuItem("    Delete Game");
-            MenuItem eventsItem = new MenuItem("    Events");
-            MenuItem teamsItem = new MenuItem("    Teams");
-            MenuItem gamesItem = new MenuItem("    Games");
+            createItem = new MenuItem("    Create Game");
+            readItem = new MenuItem("    Read Game");
+            //updateItem = new MenuItem("    Update Game");
+            deleteItem = new MenuItem("    Delete Game");
+            eventsItem = new MenuItem("    Events");
+            teamsItem = new MenuItem("    Teams");
+            gamesItem = new MenuItem("    Games");
 
             // Separator
             SeparatorMenuItem separator = new SeparatorMenuItem();
@@ -387,6 +400,7 @@ public class GameWindowController extends GenericController {
             readItem.setOnAction(e -> handleSearchButton());
             //updateItem.setOnAction(e -> System.out.println("Update action"));
             deleteItem.setOnAction(e -> deleteSelectedItem());
+
             eventsItem.setOnAction(e -> System.out.println("Events action"));
             teamsItem.setOnAction(e -> System.out.println("Teams action"));
             gamesItem.setOnAction(e -> System.out.println("Games action"));
@@ -397,6 +411,12 @@ public class GameWindowController extends GenericController {
             // Attach the context menu to the root pane
             root.setOnContextMenuRequested(event
                     -> contextMenu.show(root, event.getScreenX(), event.getScreenY()));
+
+            scene.setOnKeyPressed(e -> {
+                if (e.getCode() == KeyCode.DELETE) {
+                    deleteSelectedItem();
+                }
+            });
 
             btnAddRow.setOnAction(event -> {
                 try {
@@ -461,10 +481,10 @@ public class GameWindowController extends GenericController {
     public void addEmptyGame() throws CreateException, EmptyGameAlreadyAddedException {
         try {
 
-            gamesData = FXCollections.observableArrayList( GameFactory.getGameManager().getAllGames());
+            gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
 
             // Create an empty game
-            Game newGame = new Game(); 
+            Game newGame = new Game();
             newGame.setName("Default");
             newGame.setGenre("Default");
             newGame.setPlatform("Default");
@@ -479,14 +499,16 @@ public class GameWindowController extends GenericController {
                     gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
                     tbGames.refresh();
                     tbGames.setItems(gamesData);
-                } else{
+                } else {
                     throw new EmptyGameAlreadyAddedException("Email alreaady added");
                 }
-            }else{
-                 GameFactory.getGameManager().createGame(newGame);
+            } else {
+                GameFactory.getGameManager().createGame(newGame);
+
             }
-        }  catch (BusinessLogicException ex) {
-            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BusinessLogicException ex) {
+            Logger.getLogger(GameWindowController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -503,7 +525,6 @@ public class GameWindowController extends GenericController {
                 // Refresh the TableView to reflect the changes
 
                 //tbGames.refresh();
-
             } catch (Exception e) {
                 // Manejar la excepción apropiadamente (por ejemplo, mostrar un mensaje de error)
                 e.printStackTrace();

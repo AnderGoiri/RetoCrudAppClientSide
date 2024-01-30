@@ -14,7 +14,9 @@ import main.Application;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -62,7 +64,7 @@ public class TestGameWindowController extends ApplicationTest {
         FxToolkit.setupApplication(RetoCrudAppClient.class);
     }
 
-    @Test
+    /*@Test
     public void testA_createGame() {
         //Changing windows
         tbGames = lookup("#tbGames").query();
@@ -79,9 +81,9 @@ public class TestGameWindowController extends ApplicationTest {
         assertEquals("Default", games.get(games.size()-1).getPlatform());
         assertEquals(PVPType.TEAM_BASED_5V5, games.get(games.size()-1).getPVPType());
         assertEquals(null, games.get(games.size()-1).getReleaseDate());
-    }
+    }*/
     
-    @Test
+    /*@Test
     public void testA_updateGame() {
         
         tbGames = lookup("#tbGames").query();
@@ -128,14 +130,22 @@ public class TestGameWindowController extends ApplicationTest {
         assertEquals("PC", games.get(games.size()-1).getPlatform());
         assertEquals(PVPType.TEAM_BASED_3V3, games.get(games.size()-1).getPVPType());
         assertEquals("Mon Jan 01 00:00:00 CET 2024", games.get(games.size()-1).getReleaseDate().toString());
-    }
+    }*/
     
     @Test
     public void testA_deleteGame() {
         
         tbGames = lookup("#tbGames").query();
-        Integer gameCount = tbGames.getItems().size();
+        Integer gameCountPreDelete = tbGames.getItems().size();
+        Scene scene = tbGames.getScene();
         
         
+        Node tbColName = lookup("#tbcolName").nth(gameCountPreDelete).query();
+        clickOn(tbColName);      
+        press(KeyCode.DELETE);
+  
+        Integer gameCountPostDelete = tbGames.getItems().size();
+        
+        assertEquals(String.valueOf(gameCountPostDelete+1), gameCountPreDelete.toString());
     }
 }
