@@ -5,10 +5,18 @@
  */
 package test;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
 /**
  *
  * @author Ander Goirigolzarri Iturburu
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    EventsViewControllerCrudTest.class,
+    EventsViewControllerLogicTest.class
+})
 public class EventsViewControllerSuiteTest {
-    
+
 }
