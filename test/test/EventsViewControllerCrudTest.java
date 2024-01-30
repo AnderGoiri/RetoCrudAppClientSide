@@ -2,6 +2,7 @@ package test;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -9,6 +10,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import model.Event;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -41,7 +43,6 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        Locale.setDefault(Locale.US);
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(RetoCrudAppClient.class);
     }
@@ -75,34 +76,28 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         clickOn("#tfONG");
         String ong = "ong" + String.valueOf(new Random().nextInt(99) + 1);
         write(ong);
+        clickOn("#dpFecha");
+        write(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         clickOn("#tfPremio");
         int premio = new Random().nextInt(1801) + 200;
         write(String.valueOf(premio));
         clickOn("#tfDonacion");
         double donacion = (new Random().nextInt(89) + 10) / 100.0;
-        DecimalFormat df = new DecimalFormat("#.##");
-        write(df.format(donacion));
+        write(String.format(Locale.US, "%.2f", donacion));
         clickOn("#tfAforo");
         int aforo = (new Random().nextInt(43) + 8) * 2;
         write(String.valueOf(aforo));
-        clickOn("#dpFecha");
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusYears(1);
-        long startEpochDay = startDate.toEpochDay();
-        long endEpochDay = endDate.toEpochDay();
-        long randomEpochDay = ThreadLocalRandom.current().nextLong(startEpochDay, endEpochDay);
-        LocalDate randomDate = LocalDate.ofEpochDay(randomEpochDay);
-        write(randomDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         clickOn("#btnCrear");
         assertEquals("The row has not been added!!!", rowCount + 1, tableViewEvents.getItems().size());
         List<Event> events = tableViewEvents.getItems();
         assertEquals("The event has been added!",
                 events.stream()
-                        .filter(e -> e.getName().equals(evento)).count(), 1);
+                        .filter(e -> e.getName().equals(evento) && e.getLocation().equals(lugar)).count(), 1);
     }
 
+    @Test
     public void test3_SearchEvent() {
-
+        
     }
 
     public void test4_ModifyEvent() {
