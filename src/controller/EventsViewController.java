@@ -292,7 +292,13 @@ public class EventsViewController extends GenericController {
                         .equals(cbJuego.getValue())))
                         .collect(Collectors.toList())
                         .get(0));
+
+                eventManager.modifyEvent(selectedEvent);
                 LOGGER.info("Event modified");
+                eventsData.clear();
+                eventsData.addAll(eventManager.findAllEvents());
+                tableViewEvents.refresh();
+                handleCleanRequest(null);
             } else {
                 LOGGER.warning("No Event selected");
                 lbError.setText("No Event selected");

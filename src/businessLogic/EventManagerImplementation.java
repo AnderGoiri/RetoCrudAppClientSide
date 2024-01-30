@@ -117,7 +117,13 @@ public class EventManagerImplementation implements EventManager {
 
     @Override
     public void modifyEvent(Event selectedEvent) throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            LOGGER.info("EventManager: Modifying Event.");
+            webclient.edit_XML(selectedEvent, String.valueOf(selectedEvent.getId()));
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "EventManager: exception modifying event{0}", e.getMessage());
+            throw new BusinessLogicException("Error modifying event\n" + e.getMessage());
+        }
     }
 
     @Override
