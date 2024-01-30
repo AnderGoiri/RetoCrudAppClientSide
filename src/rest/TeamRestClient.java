@@ -5,10 +5,13 @@
  */
 package rest;
 
+import static javafx.scene.input.KeyCode.T;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import model.Team;
 import model.User;
 
@@ -29,7 +32,7 @@ public class TeamRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/RetoAppCrud/webresources";
+    private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
 
     public TeamRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -146,7 +149,7 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
     }
 
-    public <T> T findMyTeams_XML(GenericType<T> responseType, String player_id) throws ClientErrorException {
+    public <T> T findMyTeams_XML(GenericType<T> responseType, Long player_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("MyTeams/{0}", new Object[]{player_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -210,22 +213,20 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T joinTeam_XML(Team selectedTeam, User user, Class<T> responseType) throws ClientErrorException {
-        return webTarget
-                .path("joinTeam")
-                .queryParam("teamId", selectedTeam.getId()) // Assuming Team has a method getId()
-                .queryParam("userId", user.getId()) // Assuming User has a method getId()
-                .request(javax.ws.rs.core.MediaType.APPLICATION_XML)
-                .put(javax.ws.rs.client.Entity.entity(selectedTeam, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    public void joinTeam_XML(Long teamId, Long playerId) throws ClientErrorException {
+        webTarget.path("joinTeam")
+                .queryParam("teamId", teamId)
+                .queryParam("playerId", playerId)
+                .request(MediaType.APPLICATION_XML)
+                .post(null);
     }
 
-    public <T> T joinTeam_JSON(Team selectedTeam, User user, Class<T> responseType) throws ClientErrorException {
-        return webTarget
-                .path("joinTeam")
-                .queryParam("teamId", selectedTeam.getId())
-                .queryParam("userId", user.getId())
-                .request(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-                .put(javax.ws.rs.client.Entity.entity(selectedTeam, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
+    public void joinTeam_JSON(Long teamId, Long playerId) throws ClientErrorException {
+        webTarget.path("joinTeam")
+                .queryParam("teamId", teamId)
+                .queryParam("playerId", playerId)
+                .request(MediaType.APPLICATION_XML)
+                .post(null);
     }
 
     public void close() {
@@ -233,3 +234,4 @@ public class TeamRestClient {
     }
 
 }
+    

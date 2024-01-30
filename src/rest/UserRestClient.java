@@ -73,7 +73,7 @@ public class UserRestClient {
     }
 
     public <T> T passwordRecovery_XML(Object requestEntity, GenericType<T> responseType) throws ClientErrorException {
-        return webTarget.path("passwordRecovery")
+        return webTarget.path("login")
                 .request(javax.ws.rs.core.MediaType.APPLICATION_XML)
                 .put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }

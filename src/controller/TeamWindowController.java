@@ -316,7 +316,7 @@ public class TeamWindowController extends GenericController {
 
         } catch (NoDataException e) {
             LOGGER.severe(e.getMessage());
-            lblError.setText(e.getMessage());
+            lblError.setText("No hay datos.");
             lblError.setVisible(true);
         }catch (Exception e) {
             LOGGER.severe(e.getMessage());
@@ -440,7 +440,7 @@ public class TeamWindowController extends GenericController {
                         public void handle(ActionEvent event) {
                             try {
                                 teamsData.clear();
-                                teamsData = FXCollections.observableArrayList(teamManager.findMyTeams(user));
+                                teamsData = FXCollections.observableArrayList(teamManager.findMyTeams((Player) user));
                                 tbTeam.setItems(teamsData);
                             } catch (BusinessLogicException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -540,7 +540,7 @@ public class TeamWindowController extends GenericController {
             lblError.setVisible(false);
         } catch (TextFormatException e) {
             LOGGER.warning(e.getMessage());
-            lblError.setText(e.getMessage());
+            lblError.setText("Formato de texto incorrecto.");
             lblError.setVisible(true);
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
@@ -674,7 +674,7 @@ public class TeamWindowController extends GenericController {
             // Check if there is a selected team
             if (selectedTeam != null) {
                 // Call the method to join the team in the database
-                teamManager.joinTeam(selectedTeam, user);
+                teamManager.joinTeam(selectedTeam, (Player) user);
 
                 // Refresh the table with the modified data
                 tbTeam.refresh();
@@ -687,7 +687,7 @@ public class TeamWindowController extends GenericController {
             }
         } catch (Exception e) {
             LOGGER.severe("Error joining the team: " + e.getMessage());
-            //lblError.setText("An error occurred while joining the team.");
+            lblError.setText("An error occurred while joining the team.");
             lblError.setVisible(true);
         }
     }

@@ -44,8 +44,8 @@ public class RetoCrudAppClient extends javafx.application.Application{
     public void start(Stage primaryStage) {    
         try {
             //Create Bussines Logic Controller to be passed to UI controllers
-            EventManager eventLogicController= new EventManagerImplementation();
-            GameManager gameLogicController = new GameManagerImplementation();
+            //EventManager eventLogicController= new EventManagerImplementation();
+            //GameManager gameLogicController = new GameManagerImplementation();
             TeamManager teamLogicController = new TeamManagerImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TeamView.fxml"));
             Parent root = loader.load();

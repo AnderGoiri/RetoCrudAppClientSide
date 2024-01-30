@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javafx.scene.input.KeyCode.T;
 import javax.ws.rs.core.GenericType;
+import model.Player;
+import model.PlayerTeam;
 import model.Team;
 import model.User;
 import rest.PlayerRestClient;
@@ -37,7 +39,7 @@ public class TeamManagerImplementation implements TeamManager {
             teams = webClient.findAllTeams_XML(new GenericType<List<Team>>() {});
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding all teams{0}", e.getMessage());
-            throw new BusinessLogicException("Error finding all teams\n" + e.getMessage());
+            throw new BusinessLogicException("Finding all teams\n" + e.getMessage());
         }
         return teams;
     }
@@ -87,25 +89,25 @@ public class TeamManagerImplementation implements TeamManager {
     }
 
     @Override
-    public List<Team> findMyTeams(User player) throws BusinessLogicException {
+    public List<Team> findMyTeams(Player player) throws BusinessLogicException {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding the player's teams.");
-            teams = webClient.findMyTeams_XML(new GenericType<List<Team>>() {}, player.getId().toString());
+            teams = webClient.findMyTeams_XML(new GenericType<List<Team>>() {}, player.getId());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding the player's teams{0}", e.getMessage());
             throw new BusinessLogicException("Error finding the player's teams\n" + e.getMessage());
         }
         return teams;
     }
-
+    
     @Override
-    public void joinTeam(Team selectedTeam, User player) throws BusinessLogicException {
+    public void joinTeam(Team selectedTeam, Player player) throws BusinessLogicException {
         try {
             LOGGER.info("TeamManager: Modifying team.");
-            webClient.joinTeam_XML(selectedTeam, player, Team.class);
+            webClient.joinTeam_XML(selectedTeam.getId(), player.getId());
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "TeanManager: Exception joining the team{0}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "TeamManager: Exception joining the team{0}", e.getMessage());
             throw new BusinessLogicException("Error joining team\n" + e.getMessage());
         }
     }
@@ -138,7 +140,7 @@ public class TeamManagerImplementation implements TeamManager {
             LOGGER.info("TeamManager: Creating team.");
             webClient.createTeam_XML(newTeam, Team.class);
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "TeanManager: Exception creating team{0}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "TeamManager: Exception creating team{0}", e.getMessage());
             throw new BusinessLogicException("Error creating team\n" + e.getMessage());
         }
     }
