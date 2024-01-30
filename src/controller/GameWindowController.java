@@ -3,11 +3,13 @@ package controller;
 import businessLogic.BusinessLogicException;
 import businessLogic.ESportsFactory;
 import businessLogic.GameManager;
+import exceptions.EmptyGameAlreadyAddedException;
 import exceptions.MaxCharException;
 import exceptions.NameAlreadyExistsException;
 import exceptions.NameException;
 import exceptions.WrongFormatException;
 import extra.DatePickerCellGame;
+import factory.GameFactory;
 //import static groovy.util.GroovyTestCase.assertEquals;
 import java.time.Instant;
 import java.util.Date;
@@ -51,6 +53,8 @@ import javax.naming.OperationNotSupportedException;
 
 public class GameWindowController extends GenericController {
 
+    private final static Logger LOGGER = Logger.getLogger(GameWindowController.class.getName());
+    
     @FXML
     private HBox hBoxMenu;
 
@@ -199,16 +203,16 @@ public class GameWindowController extends GenericController {
                         try {
                             String regexLetters = "^[a-zA-Z]+$";
                             if (t.getNewValue().matches(regexLetters)) {
-                                if (t.getNewValue().length() > 100) {
+                                if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
                                     .get(t.getTablePosition().getRow()))
                                     .setName(t.getNewValue());
 
                                     //change the old value for the new value
-                                    gamesData = FXCollections.observableArrayList(((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
+                                    gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
 
                                     //call the update method using the facotry 
-                                    ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).updateGame(tbGames.getSelectionModel().getSelectedItem());
+                                    GameFactory.getGameManager().updateGame(tbGames.getSelectionModel().getSelectedItem());
 
                                     for (Game game : gamesData) {
                                         if (game.getName() != null) {
@@ -224,8 +228,6 @@ public class GameWindowController extends GenericController {
                                 throw new WrongFormatException();
                             }
 
-                        } catch (OperationNotSupportedException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (BusinessLogicException ex) {
                             Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (WrongFormatException ex) {
@@ -246,16 +248,16 @@ public class GameWindowController extends GenericController {
                         try {
                             String regexLetters = "^[a-zA-Z]+$";
                             if (t.getNewValue().matches(regexLetters)) {
-                                if (t.getNewValue().length() > 100) {
+                                if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
                                     .get(t.getTablePosition().getRow()))
                                     .setGenre(t.getNewValue());
 
                                     //change the old value for the new value
-                                    gamesData = FXCollections.observableArrayList(((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
+                                    gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
 
                                     //call the update method using the facotry 
-                                    ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).updateGame(tbGames.getSelectionModel().getSelectedItem());
+                                    GameFactory.getGameManager().updateGame(tbGames.getSelectionModel().getSelectedItem());
 
                                 } else {
                                     throw new MaxCharException();
@@ -264,8 +266,6 @@ public class GameWindowController extends GenericController {
                                 throw new WrongFormatException();
                             }
 
-                        } catch (OperationNotSupportedException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (BusinessLogicException ex) {
                             Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (MaxCharException ex) {
@@ -285,16 +285,16 @@ public class GameWindowController extends GenericController {
                         try {
                             String regexLetters = "^[a-zA-Z0-9 ]+$";
                             if (t.getNewValue().matches(regexLetters)) {
-                                if (t.getNewValue().length() > 100) {
+                                if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
                                     .get(t.getTablePosition().getRow()))
                                     .setPlatform(t.getNewValue());
 
                                     //change the old value for the new value
-                                    gamesData = FXCollections.observableArrayList(((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
+                                    gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
 
                                     //call the update method using the facotry 
-                                    ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).updateGame(tbGames.getSelectionModel().getSelectedItem());
+                                    GameFactory.getGameManager().updateGame(tbGames.getSelectionModel().getSelectedItem());
 
                                 } else {
                                     throw new MaxCharException();
@@ -303,8 +303,6 @@ public class GameWindowController extends GenericController {
                                 throw new WrongFormatException();
                             }
 
-                        } catch (OperationNotSupportedException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (BusinessLogicException ex) {
                             Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (MaxCharException ex) {
@@ -324,10 +322,8 @@ public class GameWindowController extends GenericController {
                             ((Game) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPVPType(t.getNewValue());
                             Object selectedGame = tbGames.getSelectionModel().getSelectedItem();
                             //String gameID = String.valueOf(((Game)tbGames.getSelectionModel().getSelectedItem()).getId());
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).updateGame(selectedGame);
+                            GameFactory.getGameManager().updateGame(selectedGame);
                         } catch (BusinessLogicException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (OperationNotSupportedException ex) {
                             Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
@@ -344,21 +340,19 @@ public class GameWindowController extends GenericController {
                             .get(t.getTablePosition().getRow()))
                             .setReleaseDate(t.getNewValue());
 
-                            gamesData = FXCollections.observableArrayList(((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
+                            gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
 
                             //call the update method using the facotry 
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).updateGame(tbGames.getSelectionModel().getSelectedItem());
+                             GameFactory.getGameManager().updateGame(tbGames.getSelectionModel().getSelectedItem());
 
-                        } catch (OperationNotSupportedException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (BusinessLogicException ex) {
+                        }catch (BusinessLogicException ex) {
                             Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
             );
 
             //Create an obsrvable list for users table.
-            gamesData = FXCollections.observableArrayList(((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
+            gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
             //Set table model.            
             tbGames.setEditable(true);
 
@@ -386,6 +380,8 @@ public class GameWindowController extends GenericController {
                     addEmptyGame();
                 } catch (CreateException ex) {
                     Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (EmptyGameAlreadyAddedException ex) {
+                    Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
             readItem.setOnAction(e -> handleSearchButton());
@@ -404,9 +400,17 @@ public class GameWindowController extends GenericController {
 
             btnAddRow.setOnAction(event -> {
                 try {
+                    lblError.setVisible(false);
                     addEmptyGame();
                 } catch (CreateException ex) {
+                    LOGGER.log(Level.WARNING, "CreateException: ", ex.getMessage());
                     Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    lblError.setVisible(true);
+                    lblError.setText("Ocurrió un error al añadir un juego nuevo");
+                } catch (EmptyGameAlreadyAddedException ex) {
+                    LOGGER.log(Level.WARNING, "EmptyGameAlreadyAddedException: ", ex.getMessage());
+                    lblError.setVisible(true);
+                    lblError.setText("Un juego vacío ya ha sido añadido, modifiquelo para añadir otro");
                 }
 
             });
@@ -417,6 +421,8 @@ public class GameWindowController extends GenericController {
 
             lblError.setVisible(false);
 
+            loggedUser = new User();
+            loggedUser.setUser_type("Admin");
             if (!(loggedUser.getUser_type() == "Admin")) {
                 btnAddRow.setDisable(true);
                 deleteItem.setDisable(true);
@@ -452,33 +458,35 @@ public class GameWindowController extends GenericController {
         System.out.println("Salir button clicked!");
     }
 
-    public void addEmptyGame() throws CreateException {
+    public void addEmptyGame() throws CreateException, EmptyGameAlreadyAddedException {
         try {
 
-            gamesData = FXCollections.observableArrayList(((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
+            gamesData = FXCollections.observableArrayList( GameFactory.getGameManager().getAllGames());
 
             // Create an empty game
             Game newGame = new Game(); 
-            newGame.setName("Default Name");
-            newGame.setGenre("Default Genre");
-            newGame.setPlatform("Default Platform");
+            newGame.setName("Default");
+            newGame.setGenre("Default");
+            newGame.setPlatform("Default");
             newGame.setPVPType(PVPType.TEAM_BASED_5V5);
-            //newGame.setReleaseDate(null);
+            newGame.setReleaseDate(null);
             //check if there is any empty game already on the table
 
             if (!gamesData.isEmpty()) {
                 if (!gamesData.get(gamesData.size() - 1).equals(newGame)) {
 
-                    ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).createGame(newGame);
-                    gamesData.clear();
-                    gamesData = FXCollections.observableArrayList(gameManager.getAllGames());
+                    GameFactory.getGameManager().createGame(newGame);
+                    gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
+                    tbGames.refresh();
                     tbGames.setItems(gamesData);
+                } else{
+                    throw new EmptyGameAlreadyAddedException("Email alreaady added");
                 }
             }else{
-                ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).createGame(newGame);
+                 GameFactory.getGameManager().createGame(newGame);
             }
-        } catch (Exception e) {
-            throw new CreateException("Failed to add an empty game: " + e.getMessage());
+        }  catch (BusinessLogicException ex) {
+            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -494,7 +502,7 @@ public class GameWindowController extends GenericController {
                 gamesData.remove(selectedGame);
                 // Refresh the TableView to reflect the changes
 
-                tbGames.refresh();
+                //tbGames.refresh();
 
             } catch (Exception e) {
                 // Manejar la excepción apropiadamente (por ejemplo, mostrar un mensaje de error)
@@ -561,32 +569,32 @@ public class GameWindowController extends GenericController {
             switch (selectedNamedQuery) {
                 case "findGamesByName":
                     gamesData = FXCollections.observableArrayList(
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByName(tfSearchData.getText()));
+                            GameFactory.getGameManager().findByName(tfSearchData.getText()));
                     break;
                 case "findGamesByGenre":
                     gamesData = FXCollections.observableArrayList(
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByGenre(tfSearchData.getText()));
+                            GameFactory.getGameManager().findByGenre(tfSearchData.getText()));
                     break;
                 case "findGamesByPlatform":
                     gamesData = FXCollections.observableArrayList(
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByPlatform(tfSearchData.getText()));
+                            GameFactory.getGameManager().findByPlatform(tfSearchData.getText()));
                     break;
                 case "findGamesByPVPType":
                     String pvpTypeStr = cmbPVPType.getValue().toString();
                     gamesData = FXCollections.observableArrayList(
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByPVPType(pvpTypeStr));
+                            GameFactory.getGameManager().findByPVPType(pvpTypeStr));
                     break;
                 case "findGamesByReleaseDate":
                     gamesData = FXCollections.observableArrayList(
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findByReleaseDate(dpReleaseDate.getValue().toString()));
+                            GameFactory.getGameManager().findByReleaseDate(dpReleaseDate.getValue().toString()));
                     break;
                 case "findAllGamesCreatedByAdmin":
                     gamesData = FXCollections.observableArrayList(
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).findGamesCreatedByAdmin(tfSearchData.getText()));
+                            GameFactory.getGameManager().findGamesCreatedByAdmin(tfSearchData.getText()));
                     break;
                 case "findAllGames":
                     gamesData = FXCollections.observableArrayList(
-                            ((GameManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ADMIN)).getAllGames());
+                            GameFactory.getGameManager().getAllGames());
                     break;
                 default:
                     break;

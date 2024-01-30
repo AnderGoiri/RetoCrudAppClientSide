@@ -5,6 +5,9 @@
  */
 package controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import main.Application;
@@ -16,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -70,45 +74,68 @@ public class TestGameWindowController extends ApplicationTest {
         
         assertEquals((Object)(gameCount+1), (Object)games.size());
         
-        assertEquals(games.get(games.size()-1).getName(), "Default Name");
-        assertEquals(games.get(games.size()-1).getGenre(), "Default Genre");
-        assertEquals(games.get(games.size()-1).getPlatform(), "Default Platform");
-        assertEquals(games.get(games.size()-1).getPVPType(), PVPType.TEAM_BASED_5V5);
-        assertEquals(games.get(games.size()-1).getReleaseDate(), null);
-        
-        /*Node tbColName = lookup("#tbcolName").nth(2).query();
-
-        if (tbColName instanceof Label) {
-            String labelText = ((Label) tbColName).getText();
-            System.out.println("Text in the cell: " + labelText);
-        } else {
-            // Manejar otros tipos de nodos según sea necesario
-            System.out.println("Unexpected node type in the cell");
-        }
-
-        clickOn(tbColName);
-        verifyThat(".tbcolName", hasText("Default Name"));*/
+        assertEquals("Default", games.get(games.size()-1).getName());
+        assertEquals("Default", games.get(games.size()-1).getGenre());
+        assertEquals("Default", games.get(games.size()-1).getPlatform());
+        assertEquals(PVPType.TEAM_BASED_5V5, games.get(games.size()-1).getPVPType());
+        assertEquals(null, games.get(games.size()-1).getReleaseDate());
     }
     
     @Test
     public void testA_updateGame() {
         
-        Node tbColName = lookup("#tbcolName").nth(3).query();
-        Node tbColGenre = lookup("#tbcolGenre").nth(3).query();
-        Node tbColPlatform = lookup("#tbcolPlatform").nth(3).query();
-        Node tbColPVPType = lookup("#tbcolPVPType").nth(3).query();
-        Node tbColReleaseDate = lookup("#tbcolReleaseDate").nth(3).query();
+        tbGames = lookup("#tbGames").query();
+        Integer gameCount = tbGames.getItems().size();
+        
+        Node tbColName = lookup("#tbcolName").nth(gameCount).query();
+        Node tbColGenre = lookup("#tbcolGenre").nth(gameCount).query();
+        Node tbColPlatform = lookup("#tbcolPlatform").nth(gameCount).query();
+        Node tbColPVPType = lookup("#tbcolPVPType").nth(gameCount).query();
+        Node tbColReleaseDate = lookup("#tbcolReleaseDate").nth(gameCount).query();
         
         doubleClickOn(tbColName);
+        eraseText(10);
         write("Valorant");
+        press(KeyCode.ENTER);
+        
         doubleClickOn(tbColGenre);
+        eraseText(10);
         write("Shooter");
+        release(KeyCode.ENTER); //release key is used because the robot seems to bug when pressing it more than once
+        press(KeyCode.ENTER);
+        
         doubleClickOn(tbColPlatform);
+        eraseText(10);
         write("PC");
-        /*doubleClickOn(tbColPVPType);
-        write(PVPType.TEAM_BASED_5V5);*/
+        release(KeyCode.ENTER);
+        press(KeyCode.ENTER);
+        
+        doubleClickOn(tbColPVPType);
+        clickOn(tbColPVPType);
+        press(KeyCode.DOWN);
+        press(KeyCode.ENTER);
+        
         doubleClickOn(tbColReleaseDate);
+        clickOn(tbColReleaseDate);
         write("01/01/2024");
+        release(KeyCode.ENTER);
+        press(KeyCode.ENTER);
+        
+        
+        ObservableList<Game> games = tbGames.getItems();
+        assertEquals("Valorant", games.get(games.size()-1).getName());
+        assertEquals("Shooter", games.get(games.size()-1).getGenre());
+        assertEquals("PC", games.get(games.size()-1).getPlatform());
+        assertEquals(PVPType.TEAM_BASED_3V3, games.get(games.size()-1).getPVPType());
+        assertEquals("Mon Jan 01 00:00:00 CET 2024", games.get(games.size()-1).getReleaseDate().toString());
     }
     
+    @Test
+    public void testA_deleteGame() {
+        
+        tbGames = lookup("#tbGames").query();
+        Integer gameCount = tbGames.getItems().size();
+        
+        
+    }
 }
