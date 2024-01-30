@@ -20,13 +20,13 @@ public interface EventManager {
 
     public Collection<Event> findEventsByOrganizer() throws BusinessLogicException;
 
-    public Collection<Event> findEventsByGame() throws BusinessLogicException;
+    public Collection<Event> findEventsByGame(String gameName) throws BusinessLogicException;
+
+    public Collection<Event> findEventsByONG(String ongName) throws BusinessLogicException;
 
     public Collection<Event> findEventsWonByPlayer() throws BusinessLogicException;
 
     public Collection<Event> findEventsWonByTeam() throws BusinessLogicException;
-
-    public Collection<Event> findEventsByONG() throws BusinessLogicException;
 
     public void deletePlayerEventByEventId() throws BusinessLogicException;
 

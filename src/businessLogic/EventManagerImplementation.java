@@ -68,8 +68,17 @@ public class EventManagerImplementation implements EventManager {
     }
 
     @Override
-    public Collection<Event> findEventsByGame() throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<Event> findEventsByGame(String gameName) throws BusinessLogicException {
+        List<Event> events = null;
+        try {
+            LOGGER.info("EventManager: finding events by game.");
+            events = webclient.findEventsByGame_XML(new GenericType<List<Event>>() {
+            }, gameName);
+        } catch (Exception ex) {
+            LOGGER.severe("Error finding events by game: " + ex.getMessage());
+            throw new BusinessLogicException("Error finding events by game: " + ex.getMessage());
+        }
+        return events;
     }
 
     @Override
@@ -83,8 +92,17 @@ public class EventManagerImplementation implements EventManager {
     }
 
     @Override
-    public Collection<Event> findEventsByONG() throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<Event> findEventsByONG(String ongName) throws BusinessLogicException {
+        List<Event> events = null;
+        try {
+            LOGGER.info("EventManager: finding events by ONG.");
+            events = webclient.findEventsByONG_XML(new GenericType<List<Event>>() {
+            }, ongName);
+        } catch (Exception ex) {
+            LOGGER.severe("Error finding events by ONG: " + ex.getMessage());
+            throw new BusinessLogicException("Error finding events by ONG: " + ex.getMessage());
+        }
+        return events;
     }
 
     @Override

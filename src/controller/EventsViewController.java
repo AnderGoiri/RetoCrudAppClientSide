@@ -97,17 +97,21 @@ public class EventsViewController extends GenericController {
             cbEquipo.setDisable(true);
 
             ObservableList<String> namedQueriesList = FXCollections.observableArrayList(
-                    "findEventsByOrganizer",
-                    "findEventsByGame",
-                    "findEventsWonByPlayer",
-                    "findEventsWonByTeam",
-                    "findEventsByONG"
+                    //"findEventsByOrganizer",
+                    "Buscar eventos por Juego", //findEventsByGame
+                    //"findEventsWonByPlayer",
+                    //"findEventsWonByTeam",
+                    "Buscar eventos por ONG" //findEventsByONG
             );
             cbBusqueda.setItems(namedQueriesList);
             cbBusqueda.setValue("Elegir criterio de b\u00FAsqueda");
+            cbBusqueda.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    btnBuscar.setDisable(false);
+                }
+            });
 
             games = gameManager.getAllGames();
-
             ObservableList<String> gameNames = FXCollections.observableArrayList(
                     games.stream()
                             .map(Game::getName)
@@ -142,6 +146,7 @@ public class EventsViewController extends GenericController {
             // Set handlers
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
             btnSalir.setOnAction(event -> super.handleBtnClose(event));
+            btnBuscar.setOnAction(event -> handleSearchRequest(event));
             btnLimpiar.setOnAction(event -> handleCleanRequest(event));
             btnCrear.setOnAction(event -> handleCreateEvent(event));
             btnModificar.setOnAction(event -> handleModifyEvent(event));
@@ -182,7 +187,6 @@ public class EventsViewController extends GenericController {
                     btnEliminar.setDisable(true);
                 }
             });
-
             stage.show();
         } catch (Exception e) {
             //  e.printStackTrace();
@@ -205,6 +209,11 @@ public class EventsViewController extends GenericController {
             cbBusqueda.getSelectionModel().clearSelection();
             cbJuego.getSelectionModel().clearSelection();
             cbEquipo.getSelectionModel().clearSelection();
+            btnBuscar.setDisable(true);
+
+            eventsData.clear();
+            eventsData.addAll(eventManager.findAllEvents());
+            tableViewEvents.refresh();
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error cleaning the form", ex);
         }
@@ -276,12 +285,13 @@ public class EventsViewController extends GenericController {
                 selectedEvent.setParticipantNum(tfAforo.getAnchor());
                 selectedEvent.setDate(Date.from(dpFecha.getValue()
                         .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-                selectedEvent.setPrize(Float.NaN);
-                selectedEvent.setDonation(Float.NaN);
-                //newEvent.setGame(cbJuego.getValue());
-                //newEvent.setPlayerevents(playerevents);
-                //newEvent.setTeamevents(teamevents);
-
+                selectedEvent.setPrize(Float.parseFloat(tfPremio.getText()));
+                selectedEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
+                selectedEvent.setGame(games.stream()
+                        .filter((g -> g.getName()
+                        .equals(cbJuego.getValue())))
+                        .collect(Collectors.toList())
+                        .get(0));
                 LOGGER.info("Event modified");
             } else {
                 LOGGER.warning("No Event selected");
@@ -319,4 +329,33 @@ public class EventsViewController extends GenericController {
             lbError.setVisible(true);
         }
     }
+
+    private void handleSearchRequest(ActionEvent event) {
+        try {
+            String selectedCriteria = cbBusqueda.getValue();
+
+            Collection<Event> filteredEvents = null;
+            switch (selectedCriteria) {
+                case "Buscar eventos por Juego":
+                    filteredEvents = eventManager.findEventsByGame(cbJuego.getValue());
+                    break;
+                case "Buscar eventos por ONG":
+                    filteredEvents = eventManager.findEventsByONG(tfONG.getText());
+                    break;
+                default:
+                    // Criterio de búsqueda no válido
+                    break;
+            }
+
+            if (filteredEvents != null) {
+                // Limpiar la tabla y agregar los eventos filtrados
+                eventsData.clear();
+                eventsData.addAll(filteredEvents);
+                tableViewEvents.refresh();
+            }
+        } catch (Exception ex) {
+            LOGGER.severe("Error al buscar eventos: " + ex.getMessage());
+        }
+    }
+
 }
