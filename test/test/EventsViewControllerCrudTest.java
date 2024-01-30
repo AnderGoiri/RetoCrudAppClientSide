@@ -32,7 +32,7 @@ import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
  * @author Ander Goirigolzarri Iturburu
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class EventsViewControllerTest extends ApplicationTest {
+public class EventsViewControllerCrudTest extends ApplicationTest {
 
     private TextField tfNombre, tfLugar, tfONG, tfPremio, tfDonacion, tfAforo;
     private DatePicker dpFecha;
