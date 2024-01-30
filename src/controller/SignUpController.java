@@ -34,8 +34,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import factory.Signable;
-import model.User;
+import libraries.Signable;
+import libraries.User;
+
 /**
  *
  * @author Jagoba Bartolomé Barroso
@@ -191,7 +192,7 @@ public class SignUpController {
             LOGGER.info("Password confirmation validated.");
             //Creating a new User to send back to the Server with its proper attributes
             User newUser = new User(); 
-            newUser.setEmail(txtEmail.getText());          
+            newUser.setLogin(txtEmail.getText());          
             newUser.setName(txtNombreCompleto.getText());          
             newUser.setPassword(pwdConfirmar.getText());
             LOGGER.info("User created and set.");
@@ -209,7 +210,7 @@ public class SignUpController {
                     throw new NumericException("El código debe ser númerico.");
                 }
                 //Setting the postal code for the user
-                //newUser.setPostalCode(txtCodigoPostal.getText());
+                newUser.setPostalCode(txtCodigoPostal.getText());
             }
             LOGGER.info("Postal code format validated and set in the User.");
 
@@ -227,14 +228,14 @@ public class SignUpController {
                     throw new NumericException("El código debe ser numerico.");
                 }
                 //Setting the telephone number for the user
-                //newUser.setMobilePhone(txtTelefonoMovil.getText());
+                newUser.setMobilePhone(txtTelefonoMovil.getText());
             }
             LOGGER.info("Telephone number format validated and set in the User.");                
 
             //Validate if the TextField is empty
             if (!txtDireccion.getText().trim().isEmpty()){
                 //Setting the street address for the user
-                //newUser.setAddress(txtDireccion.getText());
+                newUser.setAddress(txtDireccion.getText());
             }
             LOGGER.info("Address set in the User.");
             //Register the user, if it already exists, it will throw an EmailAlreadyExistsException

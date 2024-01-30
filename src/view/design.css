@@ -1,11 +1,11 @@
 /* Set a dark background for the entire window */
 .root {
-    -fx-background-color: white; /* Dark gray or any color of your choice */
+    -fx-background-color: #333333; /* Dark gray or any color of your choice */
 }
 
 /* Set a lighter text color for labels and text fields */
 .label {
-    -fx-text-fill: #684378;
+    -fx-text-fill: white;
 }
 
 /* Customize the background of text fields to be darker */
