@@ -98,13 +98,13 @@ public class EventsViewController extends GenericController {
 
             ObservableList<String> namedQueriesList = FXCollections.observableArrayList(
                     //"findEventsByOrganizer",
+                    "Buscar todos los eventos", //findAllEvents
                     "Buscar eventos por Juego", //findEventsByGame
                     //"findEventsWonByPlayer",
                     //"findEventsWonByTeam",
                     "Buscar eventos por ONG" //findEventsByONG
             );
             cbBusqueda.setItems(namedQueriesList);
-            cbBusqueda.setValue("Elegir criterio de b\u00FAsqueda");
             cbBusqueda.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
                     btnBuscar.setDisable(false);
@@ -342,6 +342,9 @@ public class EventsViewController extends GenericController {
 
             Collection<Event> filteredEvents = null;
             switch (selectedCriteria) {
+                case "Buscar todos los eventos":
+                    filteredEvents = eventManager.findAllEvents();
+                    break;
                 case "Buscar eventos por Juego":
                     filteredEvents = eventManager.findEventsByGame(cbJuego.getValue());
                     break;
@@ -349,7 +352,6 @@ public class EventsViewController extends GenericController {
                     filteredEvents = eventManager.findEventsByONG(tfONG.getText());
                     break;
                 default:
-                    // Criterio de búsqueda no válido
                     break;
             }
 

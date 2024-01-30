@@ -128,7 +128,13 @@ public class EventManagerImplementation implements EventManager {
 
     @Override
     public void deleteEvent(Event selectedEvent) throws BusinessLogicException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            LOGGER.info("EventManager: Deleting Event.");
+            webclient.remove(String.valueOf(selectedEvent.getId()));
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "EventManager: exception deleting event{0}", e.getMessage());
+            throw new BusinessLogicException("Error deleting event\n" + e.getMessage());
+        }
     }
 
 }
