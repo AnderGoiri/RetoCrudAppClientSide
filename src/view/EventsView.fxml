@@ -28,7 +28,7 @@
                         <Font size="15.0" />
                     </font>
                 </Label>
-                <ComboBox fx:id="cbBusqueda" layoutX="29.0" layoutY="51.0" prefHeight="25.0" prefWidth="260.0" />
+                <ComboBox fx:id="cbBusqueda" layoutX="29.0" layoutY="51.0" prefHeight="25.0" prefWidth="260.0" promptText="Elegir criterio de búsqueda" />
                 <Label fx:id="lbNombre" layoutX="345.0" layoutY="27.0" text="Nombre">
                     <font>
                         <Font size="15.0" />

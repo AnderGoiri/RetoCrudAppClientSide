@@ -10,6 +10,7 @@ import businessLogic.GameManagerImplementation;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
+import factory.EventFactory;
 import factory.Signable;
 import factory.SignableFactory;
 import javafx.scene.shape.Rectangle;
@@ -189,17 +190,16 @@ public class LogInController {
             user.setPassword(new Encrypt()
                     .encrypt(new Hash()
                             .hashPassword(password)));
-            
+
             User appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
 
             //Create Bussines Logic Controller to be passed to UI controllers
-            EventManager eventLogicController = new EventManagerImplementation();
             GameManager gameLogicController = new GameManagerImplementation();
             //TeamManager teamLogicController = new TeamManagerImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
             EventsViewController controller = loader.getController();
-            controller.setEventManager(eventLogicController);
+            controller.setEventManager(EventFactory.getEventManager());
             controller.setGameManager(gameLogicController);
             //teamController.setTeamManager(teamLogicController);
             Stage applicationStage = new Stage();
