@@ -1,19 +1,14 @@
 package test;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import model.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -131,54 +126,65 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
 
-        // Seleccionar la última fila para modificar el evento
         Node row = lookup(".table-row-cell").nth(rowCount - 1).query();
         clickOn(row);
 
-        // Modificar los campos del evento
         String newEventName = "New Event Name";
-        clickOn("#tfNombre");
+        doubleClickOn("#tfNombre");
+        eraseText(1);
         write(newEventName);
 
         String newLocation = "New Location";
-        clickOn("#tfLugar");
+        doubleClickOn("#tfLugar");
+        eraseText(1);
         write(newLocation);
 
-        // Simular la selección de una nueva fecha
-        clickOn("#dpFecha");
+        doubleClickOn("#dpFecha");
+        eraseText(1);
         write(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
         String newOng = "New ONG";
-        clickOn("#tfONG");
+        doubleClickOn("#tfONG");
+        eraseText(1);
         write(newOng);
 
-        int newPrize = 1000; // Nuevo premio
-        clickOn("#tfPremio");
+        int newPrize = 1000;
+        doubleClickOn("#tfPremio");
+        eraseText(1);
         write(String.valueOf(newPrize));
 
-        double newDonation = 0.5; // Nueva donación
-        clickOn("#tfDonacion");
+        double newDonation = 0.5;
+        doubleClickOn("#tfDonacion");
+        eraseText(1);
         write(String.format(Locale.US, "%.2f", newDonation));
 
-        int newCapacity = 50; // Nueva capacidad
-        clickOn("#tfAforo");
+        int newCapacity = 50;
+        doubleClickOn("#tfAforo");
+        eraseText(1);
         write(String.valueOf(newCapacity));
 
-        // Guardar la modificación
         clickOn("#btnModificar");
 
-        // Comprobar que el evento se ha modificado correctamente
         List<Event> events = tableViewEvents.getItems();
         Event modifiedEvent = events.get(rowCount - 1);
-        /*
-        assertEquals("The event name has not been modified", newEventName, modifiedEvent.getName());
-        assertEquals("The event location has not been modified", newLocation, modifiedEvent.getLocation());
-        assertEquals("The event date has not been modified", LocalDate.now().plusDays(1), modifiedEvent.getDate());
-        assertEquals("The event ONG has not been modified", newOng, modifiedEvent.getOng());
-        assertEquals("The event prize has not been modified", newPrize, modifiedEvent.getPrize());
-        assertEquals("The event donation has not been modified", newDonation, modifiedEvent.getDonation(), 0.01);
-        assertEquals("The event capacity has not been modified", newCapacity, modifiedEvent.getCapacity());
-         */
+        assertEquals("El nombre del evento no se ha modificado correctamente",
+                newEventName, modifiedEvent.getName());
+
+        assertEquals("El lugar del evento no se ha modificado correctamente",
+                newLocation, modifiedEvent.getLocation());
+
+        assertEquals("La ONG del evento no se ha modificado correctamente",
+                newOng, modifiedEvent.getOng());
+
+        assertEquals("El premio del evento no se ha modificado correctamente",
+                newPrize, String.valueOf(modifiedEvent.getPrize()));
+
+        assertEquals("La donación del evento no se ha modificado correctamente",
+                newDonation, modifiedEvent.getDonation(), 0.01);
+
+        assertEquals("El aforo del evento no se ha modificado correctamente",
+                newCapacity, String.valueOf(modifiedEvent.getParticipantNum()));
+
     }
 
     @Test
