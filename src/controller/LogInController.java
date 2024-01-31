@@ -1,17 +1,17 @@
 package controller;
 
-import businessLogic.BusinessLogicException;
+import exceptions.BusinessLogicException;
 import businessLogic.ESportsFactory;
 import businessLogic.ESportsManager;
 import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
-import static controller.GenericController.LOGGER;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
 import factory.GameFactory;
+import factory.EventFactory;
 import factory.Signable;
 import factory.SignableFactory;
 import javafx.scene.shape.Rectangle;
@@ -188,24 +188,19 @@ public class LogInController {
             // Add the provided data to the User
             User user = new User();
             user.setEmail(email);
-            
-            System.out.println(password);
-            String hashedpassword = new Hash().hashPassword(password);
-            System.out.println(hashedpassword);
-            String encryptedpassword = new Encrypt().encrypt(hashedpassword);
-            System.out.println(encryptedpassword);
-            
-            user.setPassword(new Hash().hashPassword(password));        
+            user.setPassword(new Encrypt()
+                    .encrypt(new Hash()
+                            .hashPassword(password)));
+
             User appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
 
             //Create Bussines Logic Controller to be passed to UI controllers
-            EventManager eventLogicController = new EventManagerImplementation();
             GameManager gameLogicController = new GameManagerImplementation();
             //TeamManager teamLogicController = new TeamManagerImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
             EventsViewController controller = loader.getController();
-            controller.setEventManager(eventLogicController);
+            controller.setEventManager(EventFactory.getEventManager());
             controller.setGameManager(gameLogicController);
             //teamController.setTeamManager(teamLogicController);
             Stage applicationStage = new Stage();

@@ -1,6 +1,6 @@
 package controller;
 
-import businessLogic.BusinessLogicException;
+import exceptions.BusinessLogicException;
 import businessLogic.ESportsFactory;
 import businessLogic.GameManager;
 import exceptions.EmptyGameAlreadyAddedException;

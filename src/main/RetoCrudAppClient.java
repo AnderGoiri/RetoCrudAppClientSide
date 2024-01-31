@@ -9,6 +9,8 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
+import businessLogic.TeamManager;
+import businessLogic.TeamManagerImplementation;
 import controller.EventsViewController;
 import controller.GameWindowController;
 import controller.TeamWindowController;
@@ -20,6 +22,7 @@ import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import model.Admin;
 import model.Player;
 import model.User;
 
@@ -40,16 +43,21 @@ public class RetoCrudAppClient extends javafx.application.Application{
     @Override
     public void start(Stage primaryStage) {    
         try {
-            GameManager bussinessLogicController= new GameManagerImplementation();
-        
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
+
+            //Create Bussines Logic Controller to be passed to UI controllers
+            //EventManager eventLogicController= new EventManagerImplementation();
+            //GameManager gameLogicController = new GameManagerImplementation();
+            TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TeamView.fxml"));
             Parent root = loader.load();
-            GameWindowController controller = loader.getController();
-            controller.setGameManager(bussinessLogicController);
-            
-            controller.setStage(primaryStage);               
-                
-            controller.initStage(root);
+            TeamWindowController controller = loader.getController();                      
+            //controller.setEventManager(eventLogicController);
+            //controller.setGameManager(gameLogicController);
+            controller.setTeamManager(teamLogicController);
+            controller.setStage(primaryStage);
+            User user = new Player();
+            user.setId(Long.valueOf(3));
+            controller.initStage(root, user);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }

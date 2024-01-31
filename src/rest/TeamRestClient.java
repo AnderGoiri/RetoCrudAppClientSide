@@ -5,12 +5,19 @@
  */
 package rest;
 
+
 import java.util.ResourceBundle;
+
+import static javafx.scene.input.KeyCode.T;
+
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import model.Team;
+import model.User;
 
 /**
  * Jersey REST client generated for REST resource:TeamFacadeREST
@@ -54,17 +61,17 @@ public class TeamRestClient {
         return webTarget.path("createTeam").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(newTeam, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
     }
 
-    public void deleteTeam_XML(String id) throws ClientErrorException {
-       webTarget = client.target(BASE_URI).path("entity.team");
-        //Make request
-        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id}))
+    public void deleteTeam_XML(Team selectedTeam) throws ClientErrorException {
+        webTarget = client.target(BASE_URI).path("entity.team");
+        // Make request
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{selectedTeam.getId()}))
                 .request().delete(Team.class);
     }
 
-    public void deleteTeam_JSON(String id) throws ClientErrorException {
+    public void deleteTeam_JSON(Team selectedTeam) throws ClientErrorException {
         webTarget = client.target(BASE_URI).path("entity.team");
         //Make request
-        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id}))
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{selectedTeam.getId()}))
                 .request().delete(Team.class);
     }
 
@@ -130,7 +137,7 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findTeamsByCoach_XML(Class<T> responseType, String coach) throws ClientErrorException {
+    public <T> T findTeamsByCoach_XML(GenericType<T> responseType, String coach) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("byCoach/{0}", new Object[]{coach}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -148,13 +155,13 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.TEXT_PLAIN).get(String.class);
     }
 
-    public <T> T findMyTeams_XML(Class<T> responseType, String player_id) throws ClientErrorException {
+    public <T> T findMyTeams_XML(GenericType<T> responseType, Long player_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("MyTeams/{0}", new Object[]{player_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findMyTeams_JSON(Class<T> responseType, String player_id) throws ClientErrorException {
+    public <T> T findMyTeams_JSON(GenericType<T> responseType, String player_id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("MyTeams/{0}", new Object[]{player_id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -180,12 +187,12 @@ public class TeamRestClient {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T updateTeam_XML(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.path("updateTeam").request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
+    public <T> T updateTeam_XML(Team selectedTeam, Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("updateTeam").request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(selectedTeam, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
-    public <T> T updateTeam_JSON(Object requestEntity, Class<T> responseType) throws ClientErrorException {
-        return webTarget.path("updateTeam").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
+    public <T> T updateTeam_JSON(Team selectedTeam, Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("updateTeam").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(selectedTeam, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
     }
 
     public <T> T findTeamsByName_XML(GenericType<T> responseType, String name) throws ClientErrorException {
@@ -200,20 +207,37 @@ public class TeamRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T findTeamsByDate_XML(Class<T> responseType, String date) throws ClientErrorException {
+    public <T> T findTeamsByDate_XML(GenericType<T> responseType, String date) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("byDate/{0}", new Object[]{date}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findTeamsByDate_JSON(Class<T> responseType, String date) throws ClientErrorException {
+    public <T> T findTeamsByDate_JSON(GenericType<T> responseType, String date) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("byDate/{0}", new Object[]{date}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
+    public void joinTeam_XML(Long teamId, Long playerId) throws ClientErrorException {
+        webTarget.path("joinTeam")
+                .queryParam("teamId", teamId)
+                .queryParam("playerId", playerId)
+                .request(MediaType.APPLICATION_XML)
+                .post(null);
+    }
+
+    public void joinTeam_JSON(Long teamId, Long playerId) throws ClientErrorException {
+        webTarget.path("joinTeam")
+                .queryParam("teamId", teamId)
+                .queryParam("playerId", playerId)
+                .request(MediaType.APPLICATION_XML)
+                .post(null);
+    }
+
     public void close() {
         client.close();
     }
-    
+
 }
+    

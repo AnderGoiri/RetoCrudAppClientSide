@@ -15,7 +15,7 @@
 <!-- Import HBox -->
 <!-- Import FXMLLoader -->
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TeamWindowController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TeamWindowController">
    <children>
       <!-- Include the HBox with the menu -->
       <fx:include fx:id="hBoxMenu" source="Menu.fxml" />
@@ -81,7 +81,7 @@
       <Button fx:id="btnCrear" layoutX="1222.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="CREAR" />
       <Button fx:id="btnSalir" layoutX="1222.0" layoutY="689.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="SALIR" />
       <Button fx:id="btnUnirse" layoutX="1222.0" layoutY="320.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="UNIRSE" />
-      <Label fx:id="lblError" layoutX="233.0" layoutY="48.0" prefHeight="24.0" prefWidth="391.0" text="Error de ejemplo" textFill="RED">
+      <Label fx:id="lblError" layoutX="233.0" layoutY="48.0" prefHeight="24.0" prefWidth="754.0" text="Error de ejemplo" textFill="RED">
          <font>
             <Font size="15.0" />
          </font>

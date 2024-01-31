@@ -37,8 +37,7 @@ public class EventRestClient {
         webTarget = client.target(BASE_URI).path("entity.event");
     }
 
-
-    public <T> T findEventsByONG_XML(Class<T> responseType, String ongName) throws ClientErrorException {
+    public <T> T findEventsByONG_XML(GenericType<T> responseType, String ongName) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("findEventsByONG/{0}", new Object[]{ongName}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -134,7 +133,7 @@ public class EventRestClient {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 
-    public <T> T findEventsByGame_XML(Class<T> responseType, String gameName) throws ClientErrorException {
+    public <T> T findEventsByGame_XML(GenericType<T> responseType, String gameName) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("findEventsByGame/{0}", new Object[]{gameName}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
