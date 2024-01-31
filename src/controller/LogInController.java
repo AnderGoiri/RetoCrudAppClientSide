@@ -165,34 +165,43 @@ public class LogInController {
             // Handle the login button click event here.
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
-            /*
-            Validate the format of the email, it must have a text before an '@' and a text before and after '.'. 
-            Pattern that must be respected.
-             */
-            String regexEmail = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
-            Pattern patternEmail = Pattern.compile(regexEmail);
-            if (!patternEmail.matcher(txtEmail.getText()).matches()) {
-                LOGGER.severe("Wrong email format");
-                throw new EmailFormatException("El formato de las credenciales no es correcto");
-            }
-            /*
-            Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number.
-            Pattern that must be respected.
-             */
-            String regexPassword = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
-            Pattern patternPassword = Pattern.compile(regexPassword);
-            if (!patternPassword.matcher(pwdPassword.getText()).matches()) {
-                LOGGER.severe("Wrong password format");
-                throw new PasswordFormatException("El formato de las credenciales no es correcto");
-            }
-            // Add the provided data to the User
-            User user = new User();
-            user.setEmail(email);
-            user.setPassword(new Encrypt()
-                    .encrypt(new Hash()
-                            .hashPassword(password)));
+            //Backdoor
+            if (!(email.equals("andoni@mail.com") && password.equals("Abcd*1234"))
+                    && !(email.equals("jago@mail.com") && password.equals("Abcd*1234"))
+                    && !(email.equals("ander@mail.com") && password.equals("Abcd*1234"))
+                    && !(email.equals("pipo") && password.equals("abcd*1234"))
+                    ) {
+                /*
+                Validate the format of the email, it must have a text before 
+                an '@' and a text before and after '.'. 
+                Pattern that must be respected.
+                 */
+                String regexEmail = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
+                Pattern patternEmail = Pattern.compile(regexEmail);
+                if (!patternEmail.matcher(txtEmail.getText()).matches()) {
+                    LOGGER.severe("Wrong email format");
+                    throw new EmailFormatException("El formato de las credenciales no es correcto");
+                }
+                /*
+                Validate the format of the password, it must be 8 characters 
+                long at minimum and contain a capital letter and a number.
+                Pattern that must be respected.
+                 */
+                String regexPassword = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
+                Pattern patternPassword = Pattern.compile(regexPassword);
+                if (!patternPassword.matcher(pwdPassword.getText()).matches()) {
+                    LOGGER.severe("Wrong password format");
+                    throw new PasswordFormatException("El formato de las credenciales no es correcto");
+                }
+                // Add the provided data to the User
+                User user = new User();
+                user.setEmail(email);
+                user.setPassword(new Encrypt()
+                        .encrypt(new Hash()
+                                .hashPassword(password)));
 
-            User appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
+                User appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
+            }
 
             //Create Bussines Logic Controller to be passed to UI controllers
             GameManager gameLogicController = new GameManagerImplementation();
@@ -304,8 +313,10 @@ public class LogInController {
         } catch (EmailFormatException ex) {
             LOGGER.severe("Exception on Email: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
+
         } catch (BusinessLogicException ex) {
-            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LogInController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
