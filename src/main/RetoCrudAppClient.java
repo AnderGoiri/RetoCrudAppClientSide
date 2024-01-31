@@ -43,6 +43,7 @@ public class RetoCrudAppClient extends javafx.application.Application{
     @Override
     public void start(Stage primaryStage) {    
         try {
+
             //Create Bussines Logic Controller to be passed to UI controllers
             //EventManager eventLogicController= new EventManagerImplementation();
             //GameManager gameLogicController = new GameManagerImplementation();

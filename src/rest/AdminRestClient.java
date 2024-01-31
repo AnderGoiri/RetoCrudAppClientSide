@@ -5,6 +5,7 @@
  */
 package rest;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -29,7 +30,9 @@ public class AdminRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
+    private static final String BASE_URI = 
+            ResourceBundle.getBundle("config.parameters")
+                          .getString("RESTful.baseURI");
 
     public AdminRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -180,16 +183,20 @@ public class AdminRestClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public void createGame_XML(Object requestEntity) throws ClientErrorException {
+    /*public void createGame_XML(Object requestEntity) throws ClientErrorException {
         webTarget = client.target(BASE_URI).path("entity.game");
         //Make request
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    }*/
+
+    public <T> T createGame_XML(Object requestEntity, Class<T> responseType) throws ClientErrorException {
+        return webTarget.path("createGame").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), responseType);
     }
 
     public <T> T createGame_JSON(Object requestEntity, Class<T> responseType) throws ClientErrorException {
         return webTarget.path("createGame").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), responseType);
     }
-
+    
     public void create_XML(Object requestEntity) throws ClientErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }

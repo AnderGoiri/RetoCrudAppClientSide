@@ -10,6 +10,7 @@ import businessLogic.GameManagerImplementation;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
+import factory.GameFactory;
 import factory.EventFactory;
 import factory.Signable;
 import factory.SignableFactory;
@@ -296,15 +297,13 @@ public class LogInController {
             }
 
             String emailStr = txtEmail.getText();
-            ((ESportsManager) ESportsFactory.getManager(ESportsFactory.REST_WEB_ESPORTS)).passwordRecovery(emailStr);
+            GameFactory.getGameManager().passwordRecovery(emailStr);
 
             // Close this window
             stage.close();
         } catch (EmailFormatException ex) {
             LOGGER.severe("Exception on Email: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
-        } catch (OperationNotSupportedException ex) {
-            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BusinessLogicException ex) {
             Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, null, ex);
         }

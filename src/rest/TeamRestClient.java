@@ -5,7 +5,11 @@
  */
 package rest;
 
+
+import java.util.ResourceBundle;
+
 import static javafx.scene.input.KeyCode.T;
+
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -32,7 +36,9 @@ public class TeamRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
+    private static final String BASE_URI = 
+            ResourceBundle.getBundle("config.parameters")
+                          .getString("RESTful.baseURI");
 
     public TeamRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();

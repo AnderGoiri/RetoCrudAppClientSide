@@ -165,8 +165,9 @@ public class GameManagerImplementation implements GameManager {
         try {
             LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
-            webClient.createGame_XML(obj);
-        } catch (Exception ex) {
+            webClient.createGame_XML(obj, Game.class);
+        }catch(Exception ex){
+
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception Creating game}",
                     ex.getMessage());
