@@ -12,14 +12,14 @@
           <Menu fx:id="menuActions" mnemonicParsing="false" text="Acciones">
                <items>
                   <MenuItem fx:id="menuItemReport" mnemonicParsing="false" onAction="#handleImprimirAction" text="Report" />
-                  <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#handleImprimirAction" text="Salir" />
+                  <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#handleExitAction" text="Salir" />
                </items>
           </Menu>
           <Menu fx:id="menuNavigation" mnemonicParsing="false" text="Navegación">
                <items>
-                  <MenuItem fx:id="menuItemEvents" mnemonicParsing="false" onAction="#handleImprimirAction" text="Eventos" />
-                  <MenuItem fx:id="menuItemTeams" mnemonicParsing="false" onAction="#handleImprimirAction" text="Equipos" />
-                  <MenuItem fx:id="menuItemGames" mnemonicParsing="false" onAction="#handleImprimirAction" text="Juegos" />
+                  <MenuItem fx:id="menuItemEvents" mnemonicParsing="false" onAction="#handleEventsAction" text="Eventos" />
+                  <MenuItem fx:id="menuItemTeams" mnemonicParsing="false" onAction="#handleTeamAction" text="Equipos" />
+                  <MenuItem fx:id="menuItemGames" mnemonicParsing="false" onAction="#handleGameAction" text="Juegos" />
                </items>
           </Menu>
           <Menu fx:id="menuHelp" mnemonicParsing="false" text="Ayuda">

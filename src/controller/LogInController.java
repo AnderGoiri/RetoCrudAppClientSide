@@ -7,6 +7,8 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
+import businessLogic.TeamManager;
+import businessLogic.TeamManagerImplementation;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
@@ -36,10 +38,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import javax.naming.OperationNotSupportedException;
 import model.User;
 import security.Hash;
 import security.Encrypt;
@@ -54,7 +56,7 @@ public class LogInController {
 
     private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     private Stage stage;
-
+    private Scene scene;
     @FXML
     private Label lblError;
     @FXML
@@ -85,7 +87,8 @@ public class LogInController {
         try {
             initializeRectangleAnim(); // This creates the animation for the login windown
             LOGGER.info("Initializing stage...");
-            Scene scene = new Scene(root, 600, 400);
+            scene = new Scene(root, 1366, 768);
+            //stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.setTitle("eSportsHub - Iniciar sesión"); //Establish window title
             stage.setResizable(false); //Window is not resizable
@@ -196,17 +199,19 @@ public class LogInController {
 
             //Create Bussines Logic Controller to be passed to UI controllers
             GameManager gameLogicController = new GameManagerImplementation();
-            //TeamManager teamLogicController = new TeamManagerImplementation();
+            TeamManager teamLogicController = new TeamManagerImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
             EventsViewController controller = loader.getController();
+            controller.setUser(appUser);
             controller.setEventManager(EventFactory.getEventManager());
             controller.setGameManager(gameLogicController);
-            //teamController.setTeamManager(teamLogicController);
-            Stage applicationStage = new Stage();
-            controller.setStage(applicationStage);
+            controller.setTeamManager(teamLogicController);
+            //Stage applicationStage = new Stage();
+            controller.setStage(stage);
+            controller.setScene(scene);
             controller.initStage(root);
-            stage.close();
+            //stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());

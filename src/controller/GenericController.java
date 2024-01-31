@@ -6,20 +6,27 @@
 package controller;
 
 import businessLogic.EventManager;
+import businessLogic.EventManagerImplementation;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import businessLogic.GameManager;
+import businessLogic.GameManagerImplementation;
 import businessLogic.TeamManager;
+import businessLogic.TeamManagerImplementation;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar;
 import javafx.stage.WindowEvent;
+import model.Player;
+import model.User;
 
 /**
  * This is the base class for UI controllers in this application. It contains
@@ -52,6 +59,16 @@ public class GenericController {
      */
     protected EventManager eventManager;
 
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     /**
      * Sets the business logic object to be used by this UI controller.
      *
@@ -79,15 +96,25 @@ public class GenericController {
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
     }
-  
+
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
      * controller to the Stage object in order to make its initialization. Note
      * that this makes Application, Controller and Stage being tightly coupled.
      */
-    protected Stage stage;
+    protected static Stage stage;
+    protected static Scene scene;
 
+    public Scene getScene() {
+        return scene;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+    
+    
     /**
      * Gets the Stage object related to this controller.
      *
@@ -142,6 +169,78 @@ public class GenericController {
     @FXML
     private void handleImprimirAction(ActionEvent event) {
 
+    }
+
+    /**
+     * Action event handler for print button. It shows a JFrame containing a
+     * report. This JFrame allows to print the report.
+     *
+     * @param event The ActionEvent object for the event.
+     */
+    @FXML
+    private void handleExitAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void handleEventsAction(ActionEvent event) {
+        try {
+            //Create Bussines Logic Controller to be passed to UI controllers
+            EventManager eventLogicController= new EventManagerImplementation();
+            GameManager gameLogicController = new GameManagerImplementation();
+            TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
+            Parent root = loader.load();
+            EventsViewController controller = loader.getController();
+            controller.setEventManager(eventLogicController);
+            controller.setGameManager(gameLogicController);
+            controller.setTeamManager(teamLogicController);
+            //User user = new Player();
+            //user.setId(Long.valueOf(3));
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(GenericController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void handleTeamAction(ActionEvent event) {
+        try {
+            TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TeamView.fxml"));
+            Parent root = loader.load();
+            TeamWindowController controller = loader.getController();
+
+            controller.setTeamManager(teamLogicController);
+            controller.setStage(getStage());
+            controller.setScene(getScene());
+            User user = new Player();
+            //user.setId(Long.valueOf(3));
+            setUser(user);
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(GenericController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void handleGameAction(ActionEvent event) {
+        try {
+            //Create Bussines Logic Controller to be passed to UI controllers
+            GameManager bussinessLogicController = new GameManagerImplementation();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
+            Parent root = loader.load();
+            GameWindowController controller = loader.getController();
+            controller.setGameManager(bussinessLogicController);
+
+            /*controller.setStage(getStage());
+            controller.setScene(getScene());*/
+            controller.initStage(root);
+
+        } catch (IOException ex) {
+            Logger.getLogger(GenericController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

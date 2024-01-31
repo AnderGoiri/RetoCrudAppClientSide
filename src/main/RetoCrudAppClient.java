@@ -56,8 +56,8 @@ public class RetoCrudAppClient extends javafx.application.Application{
             controller.setTeamManager(teamLogicController);
             controller.setStage(primaryStage);
             User user = new Player();
-            user.setId(Long.valueOf(3));
-            controller.initStage(root, user);
+            
+            controller.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }

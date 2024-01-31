@@ -145,10 +145,10 @@ public class GameWindowController extends GenericController {
      */
     public void initStage(Parent root) {
         try {
-            Scene scene = new Scene(root);
-            stage = new Stage();
+            getScene().setRoot(root);
+            //stage = new Stage();
             //Set stage properties
-            stage.initModality(Modality.APPLICATION_MODAL);
+            //stage.initModality(Modality.APPLICATION_MODAL);
             //stage.setScene(scene);
             stage.setTitle("Gestion de Juegos");
             stage.setResizable(false);

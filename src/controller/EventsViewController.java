@@ -34,6 +34,7 @@ import model.Event;
 import model.Game;
 import java.util.Date;
 import java.util.Properties;
+import model.User;
 
 /**
  * FXML Controller class
@@ -70,7 +71,8 @@ public class EventsViewController extends GenericController {
     private String dateFormatPattern;
 
     private Collection<Game> games;
-
+    
+    
     /**
      * Initializes the controller class.
      *
@@ -78,14 +80,14 @@ public class EventsViewController extends GenericController {
      */
     public void initStage(Parent root) {
         try {
-            Scene scene = new Scene(root);
-            stage = new Stage();
+            getScene().setRoot(root);
+            //stage = new Stage();
 
             //Set stage properties
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
+            //stage.initModality(Modality.APPLICATION_MODAL);
+            //stage.setScene(scene);
             stage.setTitle("EVENTOS");
-            stage.setResizable(false);
+            //stage.setResizable(false);
 
             //Set properties on showing
             btnUnirse.setDisable(true);
@@ -186,7 +188,7 @@ public class EventsViewController extends GenericController {
                     btnEliminar.setDisable(true);
                 }
             });
-            stage.show();
+            //stage.show();
         } catch (Exception e) {
             //  e.printStackTrace();
             LOGGER.severe(e.getMessage());
