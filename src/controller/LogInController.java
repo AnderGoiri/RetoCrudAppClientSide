@@ -120,11 +120,11 @@ public class LogInController {
      */
     public void initializeRectangleAnim() {
         // Establish the animation
-        translateTransition = new TranslateTransition(Duration.seconds(1.8), rectangle);
+        translateTransition = new TranslateTransition(Duration.seconds(1), rectangle);
         translateTransition.setFromX(-450); // Final position outside the screen
         translateTransition.setToX(0); // Final position inside the screen
-        translateTransition2 = new TranslateTransition(Duration.seconds(3), odooIcon);
-        translateTransition2.setFromY(-600); // Final position outside the screen
+        translateTransition2 = new TranslateTransition(Duration.seconds(3.2), odooIcon);
+        translateTransition2.setFromY(-650); // Final position outside the screen
         translateTransition2.setToY(0); // Final position inside the screen
         // Starts the animation
         translateTransition.play();
