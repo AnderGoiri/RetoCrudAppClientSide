@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package businessLogic;
+package exceptions;
 
 /**
  * Exception associated to an error produced in the business logic tier.

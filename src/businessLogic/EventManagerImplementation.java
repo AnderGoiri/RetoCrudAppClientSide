@@ -5,6 +5,7 @@
  */
 package businessLogic;
 
+import exceptions.BusinessLogicException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
