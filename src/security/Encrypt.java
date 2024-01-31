@@ -2,6 +2,7 @@ package security;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -11,6 +12,7 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -44,13 +46,12 @@ public class Encrypt {
             Security.addProvider(new BouncyCastleProvider());
 
             byte[] publicKeyBytes;
-            try (FileInputStream fis = new FileInputStream(
-                    Paths.get(System.getProperty("user.home"),
-                            "\\esportshub\\security", "publicKey.der")
-                            .toString()
-            )) {
+            try {
+                InputStream fis = getClass().getClassLoader().getResourceAsStream("security/publicKey.der");
                 publicKeyBytes = new byte[fis.available()];
                 fis.read(publicKeyBytes);
+            } catch (Exception e) {
+                throw e;
             }
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
@@ -66,6 +67,8 @@ public class Encrypt {
             // Codifica los bytes encriptados a Base64
             encryptedPassword = Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
+            LOGGER.log(Level.SEVERE, "Error occurred while encrypting password", e);
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error occurred while encrypting password", e);
         }
         return encryptedPassword;

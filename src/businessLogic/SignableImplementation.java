@@ -33,6 +33,7 @@ public class SignableImplementation implements Signable {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Exception during login{0}", ex.getMessage());
             // Handle exception appropriately, or throw your custom exceptions
+            ex.printStackTrace();
             throw new ServerErrorException("Error during login\n" + ex.getMessage());
         }
         return user;

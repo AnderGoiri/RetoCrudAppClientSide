@@ -166,11 +166,10 @@ public class LogInController {
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
             //Backdoor
-            if (!(email.equals("andoni@mail.com") && password.equals("Abcd*1234"))
-                    && !(email.equals("jago@mail.com") && password.equals("Abcd*1234"))
-                    && !(email.equals("ander@mail.com") && password.equals("Abcd*1234"))
-                    && !(email.equals("pipo") && password.equals("abcd*1234"))
-                    ) {
+            if (!(email.equals("pipo") && password.equals("abcd*1234"))) //&& !(email.equals("jago@mail.com") && password.equals("Abcd*1234"))
+            //&& !(email.equals("ander@mail.com") && password.equals("Abcd*1234"))
+            //&& !(email.equals("andoni@mail.com") && password.equals("Abcd*1234"))) 
+            {
                 /*
                 Validate the format of the email, it must have a text before 
                 an '@' and a text before and after '.'. 
@@ -209,12 +208,16 @@ public class LogInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
             EventsViewController controller = loader.getController();
+
             controller.setEventManager(EventFactory.getEventManager());
             controller.setGameManager(gameLogicController);
             //teamController.setTeamManager(teamLogicController);
             Stage applicationStage = new Stage();
+
             controller.setStage(applicationStage);
+
             controller.initStage(root);
+
             stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
@@ -225,6 +228,7 @@ public class LogInController {
         } catch (Exception ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -243,7 +247,8 @@ public class LogInController {
      * text change.
      */
     @FXML
-    private void handleTextChange(Observable o) {
+    private void handleTextChange(Observable o
+    ) {
         try {
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
@@ -272,7 +277,8 @@ public class LogInController {
      * @param e The ActionEvent representing the 'Sign Up' hyperlink action.
      */
     @FXML
-    private void handleHrefSignupAction(ActionEvent e) {
+    private void handleHrefSignupAction(ActionEvent e
+    ) {
         try {
             LOGGER.info("Hyperlink 'Sign Up' clicked...");
             // Show the Sign Up window
@@ -288,7 +294,8 @@ public class LogInController {
     }
 
     @FXML
-    private void handleHrefPasswordRecovery(ActionEvent e) {
+    private void handleHrefPasswordRecovery(ActionEvent e
+    ) {
         try {
             LOGGER.info("Hyperlink Password Recovery clicked...");
             // Show the Sign Up window

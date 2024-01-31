@@ -11,12 +11,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.GenericType;
-import model.Admin;
 import model.Game;
-import model.User;
 import rest.AdminRestClient;
-import rest.GameRestClient;
-import rest.UserRestClient;
 
 /**
  *
@@ -166,7 +162,7 @@ public class GameManagerImplementation implements GameManager {
             LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
             webClient.createGame_XML(obj, Game.class);
-        }catch(Exception ex){
+        } catch (Exception ex) {
 
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception Creating game}",
