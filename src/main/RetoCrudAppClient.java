@@ -9,8 +9,6 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
-import businessLogic.TeamManager;
-import businessLogic.TeamManagerImplementation;
 import controller.EventsViewController;
 import controller.GameWindowController;
 import controller.TeamWindowController;
@@ -22,7 +20,6 @@ import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
-import model.Admin;
 import model.Player;
 import model.User;
 
@@ -30,34 +27,32 @@ import model.User;
  *
  * @author Andoni Sanz
  */
-public class RetoCrudAppClient extends javafx.application.Application{    
+public class RetoCrudAppClient extends javafx.application.Application {
+
     /**
      * This method is called when the JavaFX application is launched. It is used
      * to initialize the primary stage (the main window) and set up the user
      * interface of the application.
      *
      * @param primaryStage The primary stage for this application, where the
-     * application scene can be set. The first stage represents the Log In Window of the
-     * application.
+     * application scene can be set. The first stage represents the Log In
+     * Window of the application.
      */
     @Override
-    public void start(Stage primaryStage) {    
+    public void start(Stage primaryStage) {
         try {
-
             //Create Bussines Logic Controller to be passed to UI controllers
-            //EventManager eventLogicController= new EventManagerImplementation();
-            //GameManager gameLogicController = new GameManagerImplementation();
-            TeamManager teamLogicController = new TeamManagerImplementation();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TeamView.fxml"));
+            EventManager eventLogicController = new EventManagerImplementation();
+            GameManager gameLogicController = new GameManagerImplementation();
+            //TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
-            TeamWindowController controller = loader.getController();                      
-            //controller.setEventManager(eventLogicController);
-            //controller.setGameManager(gameLogicController);
-            controller.setTeamManager(teamLogicController);
+            EventsViewController controller = loader.getController();
+            controller.setEventManager(eventLogicController);
+            controller.setGameManager(gameLogicController);
+            //teamController.setTeamManager(teamLogicController);
             controller.setStage(primaryStage);
-            User user = new Player();
-            user.setId(Long.valueOf(3));
-            controller.initStage(root, user);
+            controller.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }

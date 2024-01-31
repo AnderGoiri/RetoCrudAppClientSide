@@ -14,7 +14,6 @@ import businessLogic.SignableImplementation;
 public class SignableFactory {
 
     public static Signable getSignable() {
-        //return the Implementation of Signable interface
         return new SignableImplementation();
     }
 }
