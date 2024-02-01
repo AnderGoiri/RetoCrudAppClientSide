@@ -1,49 +1,131 @@
 package test;
-import businessLogic.TeamManager;
-import businessLogic.TeamManagerImplementation;
-import controller.TeamWindowController;
-import java.util.concurrent.TimeoutException;
-import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import model.Event;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseButton;
-import main.Application;
-import model.Player;
-import model.Team;
-import model.User;
-import org.junit.After;
-import org.junit.Before;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
+import main.RetoCrudAppClient;
+import model.Team;
+import org.junit.BeforeClass;
 import static org.testfx.api.FxAssert.verifyThat;
-import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import static org.testfx.matcher.control.TableViewMatchers.containsRow;
-import static org.testfx.matcher.control.TableViewMatchers.hasNumRows;
+import static org.testfx.matcher.base.NodeMatchers.isDisabled;
+import static org.testfx.matcher.base.NodeMatchers.isEnabled;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
-public class TeamWindowTest {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class TeamWindowTest extends ApplicationTest{
 
-    @Before
-    public void setUpClass() throws TimeoutException {
+    @FXML
+    private Label titulo;
+
+    @FXML
+    private HBox hBoxMenu;
+
+    @FXML
+    private TableView<Team> tbTeam;
+
+    @FXML
+    private TableColumn<Team, String> tbcolNombre;
+
+    @FXML
+    private TableColumn<Team, Date> tbcolFundacion;
+
+    @FXML
+    private TableColumn<Team, String> tbcolEntrenador;
+
+    @FXML
+    private Label lblNombre;
+
+    @FXML
+    private TextField tfNombre;
+
+    @FXML
+    private Label lblFundacion;
+
+    @FXML
+    private Label lblCoach;
+
+    @FXML
+    private TextField tfCoach;
+
+    @FXML
+    private DatePicker dpFundacion;
+
+    @FXML
+    private Button btnBuscar;
+
+    @FXML
+    private Label lblBusqueda;
+
+    @FXML
+    private ComboBox<String> cmbBusqueda;
+
+    @FXML
+    private Button btnLimpiar;
+
+    @FXML
+    private Button btnModificar;
+
+    @FXML
+    private Button btnCrear;
+
+    @FXML
+    private Button btnSalir;
+
+    @FXML
+    private Button btnUnirse;
+
+    @FXML
+    private Label lblError;
+
+    @FXML
+    private Button btnEliminar;
+    
+    @BeforeClass
+    public static void setUpClass() throws Exception {
         FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(Application.class);
-    }
-
-    @After
-    public void tearDown() {
-        // Close the application after each test
-        Platform.exit();
+        FxToolkit.setupApplication(RetoCrudAppClient.class);
     }
 
     @Test
-    public void testCreateTeam(FxRobot robot) {
-        // Perform UI interactions using the robot
-        robot.clickOn("#tfNombre").write("New Team");
-        robot.clickOn("#tfCoach").write("New Coach");
+    public void test1InitStage(){
+        verifyThat("#hBoxMenu", isVisible());
+        verifyThat("#tfNombre", hasText(""));
+        verifyThat("#tfFundacion", hasText(""));
+        verifyThat("#tfCoach", hasText(""));
+        verifyThat("#btnCrear", isDisabled());
+        verifyThat("#btnModificar", isDisabled());
+        verifyThat("#btnEliminar", isDisabled());
+        verifyThat("#btnSalir", isEnabled());
+        verifyThat("#tbTeam", isVisible());
+    }
+    
+    @Test
+    public void test2CreateTeam() {  
+        tbTeam = lookup("#tableViewEvents").queryTableView();
+        int rowCount = tbTeam.getItems().size();
+        clickOn("#tfNombre");
         robot.clickOn("#dpFundacion").type(KeyCode.ENTER);
         robot.clickOn("#btnCrear");
 
