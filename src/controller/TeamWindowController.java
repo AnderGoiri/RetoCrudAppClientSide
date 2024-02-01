@@ -210,7 +210,7 @@ public class TeamWindowController extends GenericController {
             btnBuscar.setDefaultButton(true);
 
             //Obtains the layout containing the menu bar from the scene node graph
-            HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
+            /*HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
             //Get the menu bar from the children of the layout got before
             MenuBar menuBar = (MenuBar) hBoxMenu.getChildren().get(0);
             //Get the second menu from the menu bar
@@ -223,7 +223,7 @@ public class TeamWindowController extends GenericController {
                             menuHelp.getItems().get(0).fire();
                         }
                     }
-            );
+            );*/
             // Added a handler for the Search combo
             cmbBusqueda.setOnAction((event) -> {
                 try {

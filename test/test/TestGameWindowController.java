@@ -5,6 +5,8 @@
  */
 package test;
 
+import static java.lang.Math.random;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -26,6 +28,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import javafx.stage.Stage;
+import main.GameStart;
 import org.junit.BeforeClass;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
@@ -61,91 +64,111 @@ public class TestGameWindowController extends ApplicationTest {
     @BeforeClass
     public static void setUpClass() throws TimeoutException {
         FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(RetoCrudAppClient.class);
+        FxToolkit.setupApplication(GameStart.class);
     }
 
-    /*@Test
+    @Test
     public void testA_createGame() {
         //Changing windows
         tbGames = lookup("#tbGames").query();
-        
-        Integer gameCount = tbGames.getItems().size();
+
+        Integer gameCount = 0;
+
+        if (tbGames != null) {
+            gameCount = tbGames.getItems().size();
+        }
+
         clickOn("#btnAddRow");
-        
+
         ObservableList<Game> games = tbGames.getItems();
-        
-        assertEquals((Object)(gameCount+1), (Object)games.size());
-        
-        assertEquals("Default", games.get(games.size()-1).getName());
-        assertEquals("Default", games.get(games.size()-1).getGenre());
-        assertEquals("Default", games.get(games.size()-1).getPlatform());
-        assertEquals(PVPType.TEAM_BASED_5V5, games.get(games.size()-1).getPVPType());
-        assertEquals(null, games.get(games.size()-1).getReleaseDate());
-    }*/
-    
-    /*@Test
-    public void testA_updateGame() {
-        
+
+        assertEquals((Object) (gameCount + 1), (Object) games.size());
+
+        assertEquals("Default", games.get(games.size() - 1).getName());
+        assertEquals("Default", games.get(games.size() - 1).getGenre());
+        assertEquals("Default", games.get(games.size() - 1).getPlatform());
+        assertEquals(PVPType.TEAM_BASED_5V5, games.get(games.size() - 1).getPVPType());
+        assertEquals(null, games.get(games.size() - 1).getReleaseDate());
+    }
+
+    @Test
+    public void testB_updateGame() {
+
         tbGames = lookup("#tbGames").query();
         Integer gameCount = tbGames.getItems().size();
-        
+
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        String generatedName = buffer.toString();
+
         Node tbColName = lookup("#tbcolName").nth(gameCount).query();
         Node tbColGenre = lookup("#tbcolGenre").nth(gameCount).query();
         Node tbColPlatform = lookup("#tbcolPlatform").nth(gameCount).query();
         Node tbColPVPType = lookup("#tbcolPVPType").nth(gameCount).query();
         Node tbColReleaseDate = lookup("#tbcolReleaseDate").nth(gameCount).query();
-        
+
         doubleClickOn(tbColName);
         eraseText(10);
-        write("Valorant");
+
+        write(generatedName);
         press(KeyCode.ENTER);
-        
+
         doubleClickOn(tbColGenre);
         eraseText(10);
         write("Shooter");
         release(KeyCode.ENTER); //release key is used because the robot seems to bug when pressing it more than once
         press(KeyCode.ENTER);
-        
+
         doubleClickOn(tbColPlatform);
         eraseText(10);
         write("PC");
         release(KeyCode.ENTER);
         press(KeyCode.ENTER);
-        
+
         doubleClickOn(tbColPVPType);
         clickOn(tbColPVPType);
         press(KeyCode.DOWN);
         press(KeyCode.ENTER);
-        
+
         doubleClickOn(tbColReleaseDate);
         clickOn(tbColReleaseDate);
         write("01/01/2024");
         release(KeyCode.ENTER);
         press(KeyCode.ENTER);
-        
-        
+
         ObservableList<Game> games = tbGames.getItems();
-        assertEquals("Valorant", games.get(games.size()-1).getName());
-        assertEquals("Shooter", games.get(games.size()-1).getGenre());
-        assertEquals("PC", games.get(games.size()-1).getPlatform());
-        assertEquals(PVPType.TEAM_BASED_3V3, games.get(games.size()-1).getPVPType());
-        assertEquals("Mon Jan 01 00:00:00 CET 2024", games.get(games.size()-1).getReleaseDate().toString());
-    }*/
-    
+        assertEquals(generatedName, games.get(games.size() - 1).getName());
+        assertEquals("Shooter", games.get(games.size() - 1).getGenre());
+        assertEquals("PC", games.get(games.size() - 1).getPlatform());
+        assertEquals(PVPType.TEAM_BASED_3V3, games.get(games.size() - 1).getPVPType());
+        assertEquals("Mon Jan 01 00:00:00 CET 2024", games.get(games.size() - 1).getReleaseDate().toString());
+    }
+
     @Test
-    public void testA_deleteGame() {
-        
+    public void testC_deleteGame() {
+
         tbGames = lookup("#tbGames").query();
         Integer gameCountPreDelete = tbGames.getItems().size();
-        Scene scene = tbGames.getScene();
         
+
+        Node tbColDeselect = lookup("#tbcolId").nth(gameCountPreDelete-1).query();
+        clickOn(tbColDeselect);
+        Node tbCol = lookup("#tbcolId").nth(gameCountPreDelete).query();
+        clickOn(tbCol);
         
-        Node tbColName = lookup("#tbcolName").nth(gameCountPreDelete).query();
-        clickOn(tbColName);      
         press(KeyCode.DELETE);
-  
-        Integer gameCountPostDelete = tbGames.getItems().size();
+
+        sleep(20);
         
-        assertEquals(String.valueOf(gameCountPostDelete+1), gameCountPreDelete.toString());
+        Integer gameCountPostDelete = tbGames.getItems().size();
+
+        assertEquals(gameCountPreDelete.toString(), String.valueOf(gameCountPostDelete + 1));
     }
 }

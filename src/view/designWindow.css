@@ -33,6 +33,6 @@
 
 /* Set a dark background for menus and menu items */
 .menu-bar, .menu, .menu-item {
-    -fx-background-color: #d56e29;
+    -fx-background-color: #333333;
     -fx-text-fill: white;
 }
