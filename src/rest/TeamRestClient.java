@@ -32,7 +32,7 @@ public class TeamRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/RetoCrudApp/webresources";
+    private static final String BASE_URI = "http://localhost:8080/RetoAppCrud/webresources";
 
     public TeamRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
