@@ -90,7 +90,6 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         sleep(500);
     }
 
-    @Ignore
     @Test
     public void test3_SearchAllEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
@@ -101,22 +100,23 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         clickOn("#btnBuscar");
         assertEquals("All Events searched succedfully",
                 rowCount, tableViewEvents.getItems().size());
+        // filtrar que este todo con un stream
     }
 
-    @Ignore
     @Test
     public void test4_SearchByONG() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
         Node row = lookup(".table-row-cell").nth(0).query();
         clickOn(row);
-        Event selectedEvent = (Event) tableViewEvents.getSelectionModel()
-                .getSelectedItem();
         clickOn("#btnLimpiar");
         clickOn("#cbBusqueda");
         clickOn("Buscar eventos por ONG");
         clickOn("#tfONG");
-        String selectedONG = selectedEvent.getOng();
+        sleep(5000);
+        Event selectedEventONG = (Event) tableViewEvents.getSelectionModel()
+                .getSelectedItem();
+        String selectedONG = selectedEventONG.getOng();
         write(selectedONG);
         clickOn("#btnBuscar");
         rowCount = tableViewEvents.getItems().size();
@@ -124,7 +124,7 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         assertEquals("The search was successful",
                 rowCount,
                 events.stream()
-                        .filter(event -> event.getOng().equals(selectedEvent.getOng()))
+                        .filter(event -> event.getOng().equals(selectedEventONG.getOng()))
                         .count());
     }
 
@@ -199,7 +199,6 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
 
     }
 
-    @Ignore
     @Test
     public void test6_DeleteEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
@@ -208,6 +207,8 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         Event eventToDelete = (Event) tableViewEvents.getItems().get(rowCount - 1);
         clickOn(row);
         clickOn("#btnEliminar");
+        sleep(500);
+        clickOn("Confirmar");
         assertFalse("El evento no se ha eliminado correctamente",
                 tableViewEvents.getItems().contains(eventToDelete));
     }
