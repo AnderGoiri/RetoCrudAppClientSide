@@ -6,6 +6,7 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
+import exceptions.EmptyGameAlreadyAddedException;
 import exceptions.EventAlreadyExistsException;
 import exceptions.NumericFormatException;
 import java.io.InputStream;
@@ -38,7 +39,12 @@ import model.Game;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.logging.Logger;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javax.ejb.CreateException;
 import model.User;
 
 /**
@@ -76,6 +82,13 @@ public class EventsViewController extends GenericController {
     private String dateFormatPattern;
 
     private Collection<Game> games;
+
+    private MenuItem createItem;
+    private MenuItem readItem;
+    private MenuItem updateItem;
+    private MenuItem deleteItem;
+    private MenuItem teamsItem;
+    private MenuItem gamesItem;
 
     /**
      * Initializes the controller class.
@@ -193,13 +206,13 @@ public class EventsViewController extends GenericController {
             tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
 
             tableViewEvents.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
+                Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
+                if (selectedEvent != null) {
                     tfNombre.setText(selectedEvent.getName());
                     tfLugar.setText(selectedEvent.getLocation());
                     dpFecha.setValue(selectedEvent.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                     cbJuego.setValue(selectedEvent.getGame().getName());
-                    tfONG.setText(selectedEvent.getName());
+                    tfONG.setText(selectedEvent.getOng());
                     tfPremio.setText(String.valueOf(selectedEvent.getPrize()));
                     tfDonacion.setText(String.valueOf(selectedEvent.getDonation()));
                     tfAforo.setText(String.valueOf(selectedEvent.getParticipantNum()));
@@ -215,6 +228,36 @@ public class EventsViewController extends GenericController {
                     btnEliminar.setDisable(true);
                 }
             });
+            /*
+            // Create a context menu
+            ContextMenu contextMenu = new ContextMenu();
+
+            // CRUD options
+            createItem = new MenuItem("    Crear Evento");
+            updateItem = new MenuItem("    Modificar Evento");
+            deleteItem = new MenuItem("    Eliminar Evento");
+            teamsItem = new MenuItem("    Ir a Equipos");
+            gamesItem = new MenuItem("    Ir a Juegos");
+
+            // Separator
+            SeparatorMenuItem separator = new SeparatorMenuItem();
+
+            // Add actions to CRUD options
+            createItem.setOnAction(event -> handleCreateEvent(event));
+            updateItem.setOnAction(event -> handleModifyEvent(event));
+            deleteItem.setOnAction(event -> handleDeleteEvent(event));
+
+            // Add Navigation
+            teamsItem.setOnAction(e -> System.out.println("Teams action"));
+            gamesItem.setOnAction(e -> System.out.println("Games action"));
+
+            // Add CRUD options to the context menu
+            contextMenu.getItems().addAll(createItem, readItem, deleteItem, separator, teamsItem, gamesItem);
+
+            // Attach the context menu to the root pane
+            root.setOnContextMenuRequested(event
+                    -> contextMenu.show(root, event.getScreenX(), event.getScreenY()));
+             */
             stage.show();
         } catch (Exception e) {
             //  e.printStackTrace();
@@ -263,6 +306,12 @@ public class EventsViewController extends GenericController {
         } else {
             btnCrear.setDisable(true); // Disable the button for non-organizer users
         }
+        /*
+        // Enable or disable the corresponding context menu items based on the validation result
+        createItem.setDisable(!btnCrear.isDisabled());
+        updateItem.setDisable(!btnModificar.isDisabled());
+        deleteItem.setDisable(!btnEliminar.isDisabled());
+         */
     }
 
     private void handleCreateEvent(ActionEvent event) {
@@ -308,19 +357,13 @@ public class EventsViewController extends GenericController {
                     .collect(Collectors.toList())
                     .get(0));
 
-            // Check if newEvent already exists in eventsData
-            if (!eventsData.contains(newEvent)) {
-                // Create the event in the database
-                eventManager.createEvent(newEvent);
-                eventsData.clear();
-                eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
-                tableViewEvents.setItems(eventsData);
-                tableViewEvents.refresh();
-                lbError.setVisible(false);
-            } else {
-                // Handle case where newEvent already exists in eventsData
-                throw new EventAlreadyExistsException();
-            }
+            eventManager.createEvent(newEvent);
+            eventsData.clear();
+            eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+            tableViewEvents.setItems(eventsData);
+            tableViewEvents.refresh();
+
+            lbError.setVisible(false);
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             lbError.setText("Ha ocurrido un error al crear un evento");
@@ -351,18 +394,12 @@ public class EventsViewController extends GenericController {
                         .collect(Collectors.toList())
                         .get(0));
 
-                // Check if newEvent already exists in eventsData
-                if (!eventsData.contains(selectedEvent)) {
-                    eventManager.modifyEvent(selectedEvent);
-                    LOGGER.info("Event modified");
-                    eventsData.clear();
-                    eventsData.addAll(eventManager.findAllEvents());
-                    tableViewEvents.refresh();
-                    handleCleanRequest(null);
-                } else {
-                    // Handle case where newEvent already exists in eventsData
-                    throw new EventAlreadyExistsException();
-                }
+                eventManager.modifyEvent(selectedEvent);
+                LOGGER.info("Event modified");
+                eventsData.clear();
+                eventsData.addAll(eventManager.findAllEvents());
+                tableViewEvents.refresh();
+                handleCleanRequest(null);
             } else {
                 LOGGER.warning("No Event selected");
                 lbError.setText("No Event selected");

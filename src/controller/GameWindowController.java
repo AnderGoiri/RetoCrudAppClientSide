@@ -12,7 +12,6 @@ import extra.DatePickerCellGame;
 import factory.GameFactory;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-//import static groovy.util.GroovyTestCase.assertEquals;
 import java.time.Instant;
 import java.util.Date;
 import java.util.logging.Level;
@@ -218,8 +217,8 @@ public class GameWindowController extends GenericController {
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
-                                    .get(t.getTablePosition().getRow()))
-                                    .setName(t.getNewValue());
+                                            .get(t.getTablePosition().getRow()))
+                                            .setName(t.getNewValue());
 
                                     //change the old value for the new value
                                     gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
@@ -263,8 +262,8 @@ public class GameWindowController extends GenericController {
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
-                                    .get(t.getTablePosition().getRow()))
-                                    .setGenre(t.getNewValue());
+                                            .get(t.getTablePosition().getRow()))
+                                            .setGenre(t.getNewValue());
 
                                     //change the old value for the new value
                                     gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
@@ -300,8 +299,8 @@ public class GameWindowController extends GenericController {
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
-                                    .get(t.getTablePosition().getRow()))
-                                    .setPlatform(t.getNewValue());
+                                            .get(t.getTablePosition().getRow()))
+                                            .setPlatform(t.getNewValue());
 
                                     //change the old value for the new value
                                     gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
@@ -350,8 +349,8 @@ public class GameWindowController extends GenericController {
                         try {
                             //change the old value for the new value
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setReleaseDate(t.getNewValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setReleaseDate(t.getNewValue());
 
                             gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
 
