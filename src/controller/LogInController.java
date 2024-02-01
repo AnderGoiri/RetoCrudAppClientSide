@@ -300,8 +300,7 @@ public class LogInController {
     }
 
     @FXML
-    private void handleHrefPasswordRecovery(ActionEvent e
-    ) {
+    private void handleHrefPasswordRecovery(ActionEvent e) {
         try {
             LOGGER.info("Hyperlink Password Recovery clicked...");
             // Show the Sign Up window

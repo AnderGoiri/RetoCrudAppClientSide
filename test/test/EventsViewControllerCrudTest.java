@@ -113,7 +113,7 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         clickOn("#cbBusqueda");
         clickOn("Buscar eventos por ONG");
         clickOn("#tfONG");
-        sleep(5000);
+        sleep(500);
         Event selectedEventONG = (Event) tableViewEvents.getSelectionModel()
                 .getSelectedItem();
         String selectedONG = selectedEventONG.getOng();

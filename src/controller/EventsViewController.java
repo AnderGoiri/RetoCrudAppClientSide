@@ -181,14 +181,14 @@ public class EventsViewController extends GenericController {
             * oldValue: It is the old value before the change occurred.
             * newValue: It is the new value after the change occurred.
              */
-            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfLugar.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            dpFecha.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            cbJuego.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfONG.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfPremio.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfDonacion.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
+            tfLugar.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
+            dpFecha.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
+            cbJuego.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
+            tfONG.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
+            tfPremio.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
+            tfDonacion.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
+            tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
 
             tableViewEvents.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
@@ -204,8 +204,10 @@ public class EventsViewController extends GenericController {
                     if (appUser.getUser_type().equals("player")) {
                         btnUnirse.setDisable(false);
                     }
-                    btnModificar.setDisable(false);
-                    btnEliminar.setDisable(false);
+                    if (appUser.getUser_type().equals("organizer")) {
+                        btnModificar.setDisable(false);
+                        btnEliminar.setDisable(false);
+                    }
                 } else {
                     btnModificar.setDisable(true);
                     btnEliminar.setDisable(true);
@@ -243,16 +245,22 @@ public class EventsViewController extends GenericController {
         }
     }
 
-    private void checkFormFields() {
-        boolean allFieldsFilled = !tfNombre.getText().isEmpty()
-                && !tfLugar.getText().isEmpty()
-                && dpFecha.getValue() != null
-                && cbJuego.getValue() != null
-                && !tfONG.getText().isEmpty()
-                && !tfPremio.getText().isEmpty()
-                && !tfDonacion.getText().isEmpty()
-                && !tfAforo.getText().isEmpty();
-        btnCrear.setDisable(!allFieldsFilled);
+    private void checkFormFields(User appUser) {
+        // Check if all input fields are filled
+        boolean allFieldsFilled = !tfNombre.getText().isEmpty() // Check if the name field is not empty
+                && !tfLugar.getText().isEmpty() // Check if the location field is not empty
+                && dpFecha.getValue() != null // Check if a date is selected
+                && cbJuego.getValue() != null // Check if a game is selected
+                && !tfONG.getText().isEmpty() // Check if the NGO field is not empty
+                && !tfPremio.getText().isEmpty() // Check if the prize field is not empty
+                && !tfDonacion.getText().isEmpty() // Check if the donation field is not empty
+                && !tfAforo.getText().isEmpty(); // Check if the participant number field is not empty
+        // Enable or disable the create button based on the validation result
+        if (appUser.getUser_type().equals("organizer")) {
+            btnCrear.setDisable(!allFieldsFilled);
+        } else {
+            btnCrear.setDisable(true); // Disable the button for non-organizer users
+        }
     }
 
     private void handleCreateEvent(ActionEvent event) {
@@ -339,7 +347,6 @@ public class EventsViewController extends GenericController {
         try {
             lbError.setVisible(false);
             Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
-
             if (selectedEvent != null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Eliminar Evento");
