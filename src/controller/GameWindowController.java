@@ -198,6 +198,7 @@ public class GameWindowController extends GenericController {
             tbcolName.setOnEditCommit(
                     (TableColumn.CellEditEvent<Game, String> t) -> {
                         try {
+                            lblError.setVisible(false);
                             String regexLetters = "^[a-zA-Z]+$";
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
@@ -226,13 +227,21 @@ public class GameWindowController extends GenericController {
                             }
 
                         } catch (BusinessLogicException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("Ocurrió algun error en la capa de lógica");
                         } catch (WrongFormatException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "WrongFormatException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("En el género solo se perimiten escribir letras");
                         } catch (MaxCharException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "MaxCharException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("LLegaste al máximo de carácteres");
                         } catch (NameAlreadyExistsException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "NameAlreadyExistsException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("El nombre de este juego ya está registrado");
                         }
                     }
             );
@@ -243,6 +252,7 @@ public class GameWindowController extends GenericController {
             tbcolGenre.setOnEditCommit(
                     (TableColumn.CellEditEvent<Game, String> t) -> {
                         try {
+                            lblError.setVisible(false);
                             String regexLetters = "^[a-zA-Z]+$";
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
@@ -264,11 +274,17 @@ public class GameWindowController extends GenericController {
                             }
 
                         } catch (BusinessLogicException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("Ocurrió algun error en la capa de lógica");
                         } catch (MaxCharException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "MaxCharException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("LLegaste al máximo de carácteres");
                         } catch (WrongFormatException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "WrongFormatException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("En el género solo se perimiten escribir letras");
                         }
                     }
             );
@@ -280,6 +296,7 @@ public class GameWindowController extends GenericController {
             tbcolPlatform.setOnEditCommit(
                     (TableColumn.CellEditEvent<Game, String> t) -> {
                         try {
+                            lblError.setVisible(false);
                             String regexLetters = "^[a-zA-Z0-9 ]+$";
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
@@ -301,11 +318,17 @@ public class GameWindowController extends GenericController {
                             }
 
                         } catch (BusinessLogicException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("Ocurrió algun error en la capa de lógica");
                         } catch (MaxCharException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "MaxCharException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("LLegaste al máximo de carácteres");
                         } catch (WrongFormatException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "WrongFormatException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("En la plataforma solo se perimite escribir letras y números");
                         }
                     }
             );
@@ -315,13 +338,14 @@ public class GameWindowController extends GenericController {
             tbcolPVPType.setOnEditCommit(
                     (TableColumn.CellEditEvent<Game, PVPType> t) -> {
                         try {
-
+                            lblError.setVisible(false);
                             ((Game) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPVPType(t.getNewValue());
                             Object selectedGame = tbGames.getSelectionModel().getSelectedItem();
-                            //String gameID = String.valueOf(((Game)tbGames.getSelectionModel().getSelectedItem()).getId());
                             GameFactory.getGameManager().updateGame(selectedGame);
                         } catch (BusinessLogicException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("Ocurrió algun error en la capa de lógica");
                         }
 
                     });
@@ -332,6 +356,7 @@ public class GameWindowController extends GenericController {
             tbcolReleaseDate.setOnEditCommit(
                     (TableColumn.CellEditEvent<Game, Date> t) -> {
                         try {
+                            lblError.setVisible(false);
                             //change the old value for the new value
                             ((Game) t.getTableView().getItems()
                                     .get(t.getTablePosition().getRow()))
@@ -343,7 +368,9 @@ public class GameWindowController extends GenericController {
                             GameFactory.getGameManager().updateGame(tbGames.getSelectionModel().getSelectedItem());
 
                         } catch (BusinessLogicException ex) {
-                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                            LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
+                            lblError.setVisible(true);
+                            lblError.setText("Ocurrió algun error en la capa de lógica");
                         }
                     }
             );
@@ -374,11 +401,16 @@ public class GameWindowController extends GenericController {
             // Add actions to CRUD options (you can customize these actions)
             createItem.setOnAction(e -> {
                 try {
+                    lblError.setVisible(false);
                     addEmptyGame();
                 } catch (CreateException ex) {
-                    Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.WARNING, "CreateException: ", ex.getMessage());
+                    lblError.setVisible(true);
+                    lblError.setText("Ocurrió un error al añadir un juego nuevo");
                 } catch (EmptyGameAlreadyAddedException ex) {
-                    Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    LOGGER.log(Level.WARNING, "EmptyGameAlreadyAddedException: ", ex.getMessage());
+                    lblError.setVisible(true);
+                    lblError.setText("Un juego vacío ya ha sido añadido, modifiquelo para añadir otro");
                 }
             });
             readItem.setOnAction(e -> handleSearchButton());
@@ -408,7 +440,6 @@ public class GameWindowController extends GenericController {
                     addEmptyGame();
                 } catch (CreateException ex) {
                     LOGGER.log(Level.WARNING, "CreateException: ", ex.getMessage());
-                    Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                     lblError.setVisible(true);
                     lblError.setText("Ocurrió un error al añadir un juego nuevo");
                 } catch (EmptyGameAlreadyAddedException ex) {
