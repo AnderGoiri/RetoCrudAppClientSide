@@ -6,6 +6,7 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
+import exceptions.EventAlreadyExistsException;
 import exceptions.NumericFormatException;
 import java.io.InputStream;
 import java.time.ZoneId;
@@ -306,13 +307,20 @@ public class EventsViewController extends GenericController {
                     .equals(cbJuego.getValue())))
                     .collect(Collectors.toList())
                     .get(0));
-            eventManager.createEvent(newEvent);
-            eventsData.clear();
-            eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
-            tableViewEvents.setItems(eventsData);
-            tableViewEvents.refresh();
 
-            lbError.setVisible(false);
+            // Check if newEvent already exists in eventsData
+            if (!eventsData.contains(newEvent)) {
+                // Create the event in the database
+                eventManager.createEvent(newEvent);
+                eventsData.clear();
+                eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                tableViewEvents.setItems(eventsData);
+                tableViewEvents.refresh();
+                lbError.setVisible(false);
+            } else {
+                // Handle case where newEvent already exists in eventsData
+                throw new EventAlreadyExistsException();
+            }
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             lbError.setText("Ha ocurrido un error al crear un evento");
@@ -343,12 +351,18 @@ public class EventsViewController extends GenericController {
                         .collect(Collectors.toList())
                         .get(0));
 
-                eventManager.modifyEvent(selectedEvent);
-                LOGGER.info("Event modified");
-                eventsData.clear();
-                eventsData.addAll(eventManager.findAllEvents());
-                tableViewEvents.refresh();
-                handleCleanRequest(null);
+                // Check if newEvent already exists in eventsData
+                if (!eventsData.contains(selectedEvent)) {
+                    eventManager.modifyEvent(selectedEvent);
+                    LOGGER.info("Event modified");
+                    eventsData.clear();
+                    eventsData.addAll(eventManager.findAllEvents());
+                    tableViewEvents.refresh();
+                    handleCleanRequest(null);
+                } else {
+                    // Handle case where newEvent already exists in eventsData
+                    throw new EventAlreadyExistsException();
+                }
             } else {
                 LOGGER.warning("No Event selected");
                 lbError.setText("No Event selected");

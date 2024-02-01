@@ -38,4 +38,6 @@ public interface EventManager {
     public void modifyEvent(Event selectedEvent) throws BusinessLogicException;
 
     public void deleteEvent(Event selectedEvent) throws BusinessLogicException;
+
+    public void checkIfEventExist(Event selectedEvent) throws BusinessLogicException;
 }
