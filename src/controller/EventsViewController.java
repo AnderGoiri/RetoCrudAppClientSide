@@ -34,7 +34,9 @@ import javafx.stage.Stage;
 import model.Event;
 import model.Game;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Properties;
+import javafx.scene.control.ButtonBar;
 import model.User;
 
 /**
@@ -339,16 +341,27 @@ public class EventsViewController extends GenericController {
             Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
 
             if (selectedEvent != null) {
-                // Call the method to delete the event in the database
-                eventManager.deleteEvent(selectedEvent);
-
-                // Deleting the event from the TableView list
-                int selectedIndex = tableViewEvents.getSelectionModel().getSelectedIndex();
-                eventsData.remove(selectedIndex);
-
-                // Refresh the table with the modified data
-                tableViewEvents.refresh();
-
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Eliminar Evento");
+                alert.setHeaderText("¿Estas seguro de que quieres borrar este evento?");
+                // Add confirmation and cancel buttons to the dialog
+                ButtonType confirmButton = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
+                ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+                alert.getButtonTypes().setAll(confirmButton, cancelButton);
+                // Show the dialog and wait for user response
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == confirmButton) {
+                    // Call the method to delete the event in the database
+                    eventManager.deleteEvent(selectedEvent);
+                    // Deleting the event from the TableView list
+                    int selectedIndex = tableViewEvents.getSelectionModel().getSelectedIndex();
+                    eventsData.remove(selectedIndex);
+                    // Refresh the table with the modified data
+                    tableViewEvents.refresh();
+                    LOGGER.info("Event deleted by user confirmation.");
+                } else {
+                    LOGGER.info("Event deletion canceled by user.");
+                }
                 LOGGER.info("Event deleted");
             }
         } catch (Exception e) {

@@ -12,7 +12,6 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import businessLogic.GameManager;
 import businessLogic.TeamManager;
-import factory.SignableFactory;
 import java.util.Optional;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
@@ -117,8 +116,6 @@ public class GenericController {
         Alert alert = new Alert(Alert.AlertType.ERROR,
                 errorMsg,
                 ButtonType.OK);
-        /*alert.getDialogPane().getStylesheets().add(
-              getClass().getResource("/view/customCascadeStyleSheet.css").toExternalForm());*/
         alert.showAndWait();
 
     }
@@ -194,17 +191,34 @@ public class GenericController {
     public void handleBtnClose(ActionEvent event) {
         try {
             LOGGER.info("Salir button clicked.");
-            // Load the LoginFXML.fxml file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
-            Parent root = loader.load();
 
-            // Get the controller of the login window
-            LogInController controller = loader.getController();
+            // Create a confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Cerrar sesión");
+            alert.setHeaderText("¿Desea cerrar su sesión actual?");
 
-            // Set the primary stage (main window) to display the login window
-            controller.setStage(stage);
-            controller.initStage(root);
+            // Add confirmation and cancel buttons to the dialog
+            ButtonType confirmButton = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(confirmButton, cancelButton);
 
+            // Show the dialog and wait for user response
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == confirmButton) {
+
+                // Load the LoginFXML.fxml file
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+                Parent root = loader.load();
+
+                // Get the controller of the login window
+                LogInController controller = loader.getController();
+
+                // Set the primary stage (main window) to display the login window
+                controller.setStage(stage);
+                controller.initStage(root);
+            } else {
+                LOGGER.info("Window closure canceled by user.");
+            }
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error handling Salir button click", ex);
         }

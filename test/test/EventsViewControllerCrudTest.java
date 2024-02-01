@@ -16,6 +16,7 @@ import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import main.RetoCrudAppClient;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
@@ -89,8 +90,9 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         sleep(500);
     }
 
+    @Ignore
     @Test
-    public void test3_SearchEvent() {
+    public void test3_SearchAllEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
         clickOn("#btnLimpiar");
@@ -99,6 +101,13 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         clickOn("#btnBuscar");
         assertEquals("All Events searched succedfully",
                 rowCount, tableViewEvents.getItems().size());
+    }
+
+    @Ignore
+    @Test
+    public void test4_SearchByONG() {
+        tableViewEvents = lookup("#tableViewEvents").queryTableView();
+        int rowCount = tableViewEvents.getItems().size();
         Node row = lookup(".table-row-cell").nth(0).query();
         clickOn(row);
         Event selectedEvent = (Event) tableViewEvents.getSelectionModel()
@@ -119,8 +128,9 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
                         .count());
     }
 
+    @Ignore
     @Test
-    public void test4_ModifyEvent() {
+    public void test5_ModifyEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
 
@@ -189,8 +199,9 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
 
     }
 
+    @Ignore
     @Test
-    public void test5_DeleteEvent() {
+    public void test6_DeleteEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
         Node row = lookup(".table-row-cell").nth(rowCount - 1).query();

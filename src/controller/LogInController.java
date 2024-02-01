@@ -7,6 +7,8 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
+import businessLogic.TeamManager;
+import businessLogic.TeamManagerImplementation;
 import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
@@ -209,14 +211,14 @@ public class LogInController {
 
             //Create Bussines Logic Controller to be passed to UI controllers
             GameManager gameLogicController = new GameManagerImplementation();
-            //TeamManager teamLogicController = new TeamManagerImplementation();
+            TeamManager teamLogicController = new TeamManagerImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
             EventsViewController controller = loader.getController();
 
             controller.setEventManager(EventFactory.getEventManager());
             controller.setGameManager(gameLogicController);
-            //teamController.setTeamManager(teamLogicController);
+            controller.setTeamManager(teamLogicController);
             Stage applicationStage = new Stage();
 
             controller.setStage(applicationStage);
@@ -282,8 +284,7 @@ public class LogInController {
      * @param e The ActionEvent representing the 'Sign Up' hyperlink action.
      */
     @FXML
-    private void handleHrefSignupAction(ActionEvent e
-    ) {
+    private void handleHrefSignupAction(ActionEvent e) {
         try {
             LOGGER.info("Hyperlink 'Sign Up' clicked...");
             // Show the Sign Up window
