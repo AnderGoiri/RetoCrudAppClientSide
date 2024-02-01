@@ -234,8 +234,6 @@ public class GenericController {
             GameWindowController controller = loader.getController();
             controller.setGameManager(bussinessLogicController);
 
-            /*controller.setStage(getStage());
-            controller.setScene(getScene());*/
             controller.initStage(root);
 
         } catch (IOException ex) {
