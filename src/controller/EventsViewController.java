@@ -6,6 +6,7 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
+import exceptions.NumericFormatException;
 import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.Collection;
@@ -265,16 +266,33 @@ public class EventsViewController extends GenericController {
 
     private void handleCreateEvent(ActionEvent event) {
         try {
+            String patternNaturalPositiveNumber = "\\d+";
+            // Regular expression to validate that the value is a number between 0 and 1, with two decimal places maximum
+            String donationFormat = "^(0(?:\\.\\d{1,2})?|1(?:\\.0{1,2})?)$";
             Event newEvent = new Event();
 
             // Create the event with the info from the table
             newEvent.setName(tfNombre.getText());
             newEvent.setLocation(tfLugar.getText());
             newEvent.setOng(tfONG.getText());
-            newEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
+            if (tfAforo.getText().matches(patternNaturalPositiveNumber)) {
+                newEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
+            } else {
+                throw new NumericFormatException();
+            }
             newEvent.setDate(Date.from(dpFecha.getValue()
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
+            if (tfPremio.getText().matches(patternNaturalPositiveNumber)) {
+                newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
+            } else {
+                throw new NumericFormatException();
+            }
+            // Check if the Donation value matches the regular expression
+            if (tfDonacion.getText().matches(donationFormat)) {
+                newEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
+            } else {
+                throw new NumericFormatException();
+            }
             newEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
             /*
             To establish a Game for the event, we take the game collection declared in this controller.
