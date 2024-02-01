@@ -53,8 +53,7 @@ public class TeamStart extends javafx.application.Application{
             controller.setTeamManager(bussinessLogicController);
             User u = new User();
             u.setUser_type("player");
-            
-            
+
             controller.setStage(primaryStage);               
             
             
@@ -62,7 +61,6 @@ public class TeamStart extends javafx.application.Application{
 
             controller.setScene(scene);
             controller.initStage(root);
-            
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }

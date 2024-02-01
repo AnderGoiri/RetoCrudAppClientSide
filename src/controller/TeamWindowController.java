@@ -677,7 +677,7 @@ public class TeamWindowController extends GenericController {
             // Check if there is a selected team
             if (selectedTeam != null) {
                 // Call the method to join the team in the database
-                teamManager.joinTeam(selectedTeam, (Player) user);
+                //teamManager.joinTeam(selectedTeam, (Player) user);
 
                 // Refresh the table with the modified data
                 tbTeam.refresh();
