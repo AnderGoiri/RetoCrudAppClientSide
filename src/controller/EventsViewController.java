@@ -9,6 +9,7 @@ import static controller.GenericController.LOGGER;
 import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
@@ -85,7 +86,7 @@ public class EventsViewController extends GenericController {
             //Set stage properties
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
-            stage.setTitle("EVENTOS");
+            stage.setTitle("eSportsHub - EVENTOS");
             stage.setResizable(false);
 
             //Set properties on showing
@@ -139,9 +140,28 @@ public class EventsViewController extends GenericController {
             columnDonacion.setCellValueFactory(new PropertyValueFactory<>("donation"));
             columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
 
-            //columnFecha.setCellFactory(DatePickerCellEvent.forTableColumn(dateFormatPattern));
-            eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
-            tableViewEvents.setItems(eventsData);
+            switch (appUser.getUser_type()) {
+                case "organizer":
+                    eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                    //eventsData = FXCollections.observableArrayList(eventManager.findEventsByOrganizer(appUser.getName()));
+                    tableViewEvents.setItems(eventsData);
+                    break;
+                case "admin":
+                    //mostrar los eventos de los juegos creados por él
+                    eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                    tableViewEvents.setItems(eventsData);
+                    break;
+                case "player":
+                    eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                    // Sort eventsData by date in descending order
+                    eventsData.sort(Comparator.comparing(Event::getDate).reversed());
+                    tableViewEvents.setItems(eventsData);
+                    break;
+                default:
+                    eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                    tableViewEvents.setItems(eventsData);
+                    break;
+            }
 
             // Set handlers
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
@@ -179,7 +199,9 @@ public class EventsViewController extends GenericController {
                     tfPremio.setText(String.valueOf(selectedEvent.getPrize()));
                     tfDonacion.setText(String.valueOf(selectedEvent.getDonation()));
                     tfAforo.setText(String.valueOf(selectedEvent.getParticipantNum()));
-
+                    if (appUser.getUser_type().equals("player")) {
+                        btnUnirse.setDisable(false);
+                    }
                     btnModificar.setDisable(false);
                     btnEliminar.setDisable(false);
                 } else {
