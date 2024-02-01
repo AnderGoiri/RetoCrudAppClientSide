@@ -34,6 +34,7 @@ import model.Event;
 import model.Game;
 import java.util.Date;
 import java.util.Properties;
+import model.User;
 
 /**
  * FXML Controller class
@@ -76,7 +77,7 @@ public class EventsViewController extends GenericController {
      *
      * @param root
      */
-    public void initStage(Parent root) {
+    public void initStage(Parent root, User appUser) {
         try {
             Scene scene = new Scene(root);
             stage = new Stage();

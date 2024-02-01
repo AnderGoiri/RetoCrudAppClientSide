@@ -39,7 +39,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import javax.naming.OperationNotSupportedException;
 import model.User;
 import security.Hash;
 import security.Encrypt;
@@ -165,11 +164,11 @@ public class LogInController {
             // Handle the login button click event here.
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
+            User appUser = new User();
             //Backdoor
-            if (!(email.equals("pipo") && password.equals("abcd*1234"))) //&& !(email.equals("jago@mail.com") && password.equals("Abcd*1234"))
-            //&& !(email.equals("ander@mail.com") && password.equals("Abcd*1234"))
-            //&& !(email.equals("andoni@mail.com") && password.equals("Abcd*1234"))) 
-            {
+            if (!(email.equals("organizer") && password.equals("Abcd*1234"))
+                    && !(email.equals("admin") && password.equals("Abcd*1234"))
+                    && !(email.equals("player") && password.equals("Abcd*1234"))) {
                 /*
                 Validate the format of the email, it must have a text before 
                 an '@' and a text before and after '.'. 
@@ -199,7 +198,13 @@ public class LogInController {
                         .encrypt(new Hash()
                                 .hashPassword(password)));
 
-                User appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
+                appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
+            } else if (email.equals("organizer")) {
+                appUser.setUser_type(email);
+            } else if (email.equals("admin")) {
+                appUser.setUser_type(email);
+            } else if (email.equals("player")) {
+                appUser.setUser_type(email);
             }
 
             //Create Bussines Logic Controller to be passed to UI controllers
@@ -216,7 +221,7 @@ public class LogInController {
 
             controller.setStage(applicationStage);
 
-            controller.initStage(root);
+            controller.initStage(root, appUser);
 
             stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {

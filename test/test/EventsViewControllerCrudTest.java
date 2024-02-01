@@ -99,7 +99,6 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         clickOn("#btnBuscar");
         assertEquals("All Events searched succedfully",
                 rowCount, tableViewEvents.getItems().size());
-        /*
         Node row = lookup(".table-row-cell").nth(0).query();
         clickOn(row);
         Event selectedEvent = (Event) tableViewEvents.getSelectionModel()
@@ -109,7 +108,7 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         clickOn("Buscar eventos por ONG");
         clickOn("#tfONG");
         String selectedONG = selectedEvent.getOng();
-        write(String.valueOf(selectedONG));
+        write(selectedONG);
         clickOn("#btnBuscar");
         rowCount = tableViewEvents.getItems().size();
         List<Event> events = tableViewEvents.getItems();
@@ -118,7 +117,6 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
                 events.stream()
                         .filter(event -> event.getOng().equals(selectedEvent.getOng()))
                         .count());
-         */
     }
 
     @Test
@@ -139,6 +137,10 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         eraseText(1);
         write(newLocation);
 
+        doubleClickOn("#dpFecha");
+        eraseText(1);
+        doubleClickOn("#dpFecha");
+        eraseText(1);
         doubleClickOn("#dpFecha");
         eraseText(1);
         write(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));

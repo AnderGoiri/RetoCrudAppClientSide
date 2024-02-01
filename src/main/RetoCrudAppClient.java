@@ -51,8 +51,10 @@ public class RetoCrudAppClient extends javafx.application.Application {
             controller.setEventManager(eventLogicController);
             controller.setGameManager(gameLogicController);
             //teamController.setTeamManager(teamLogicController);
+            User appUser = new User();
+            appUser.setUser_type("organizer");
             controller.setStage(primaryStage);
-            controller.initStage(root);
+            controller.initStage(root, appUser);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
