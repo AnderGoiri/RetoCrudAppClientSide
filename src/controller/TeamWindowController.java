@@ -46,6 +46,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Player;
 import model.Team;
@@ -130,14 +131,16 @@ public class TeamWindowController extends GenericController {
 
     ObservableList<Team> teamsData;
 
-    public void initStage(Parent root, User user) {
+    public void initStage(Parent root) {
         try {
             // Window setters
-            Scene scene = new Scene(root);
-            stage = new Stage();
-            stage.setScene(scene);
+            getScene().setRoot(root);
+            //stage = new Stage();
+            
+            //stage.initModality(Modality.APPLICATION_MODAL);
+            //stage.setScene(scene);
             stage.setTitle("Equipos");
-            stage.setResizable(false);
+            //stage.setResizable(false);
 
             // Disabling Buttons and Textfields
             btnUnirse.setDisable(true);
@@ -224,7 +227,7 @@ public class TeamWindowController extends GenericController {
             // Added a handler for the Search combo
             cmbBusqueda.setOnAction((event) -> {
                 try {
-                    this.handleComboBoxSelection(event, user);
+                    this.handleComboBoxSelection(event, getUser());
                 } catch (BusinessLogicException ex) {
                     Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
                     showErrorAlert("No se ha podido abrir la ventana.");
@@ -256,13 +259,13 @@ public class TeamWindowController extends GenericController {
             btnLimpiar.setOnAction(event -> handleCleanRequest(event));
 
             // Set listeners for handlers of empty text
-            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(user));
-            tfCoach.textProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(user));
-            dpFundacion.valueProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(user));
+            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(getUser()));
+            tfCoach.textProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(getUser()));
+            dpFundacion.valueProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(getUser()));
 
             // Selecting info from the table into the form
             tbTeam.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue.intValue() >= 0 && user instanceof Player) {
+                if (newValue.intValue() >= 0 && getUser().getUser_type().equalsIgnoreCase("player")) {
                     LOGGER.info("Selected a table row.");
                     btnModificar.setDisable(false);
                     btnUnirse.setDisable(false);
@@ -281,7 +284,7 @@ public class TeamWindowController extends GenericController {
                     btnUnirse.setDisable(true);
                     btnEliminar.setDisable(true);
                 }
-                 handleTextNotEmpty(user);
+                 handleTextNotEmpty(getUser());
             });
 
             // Creating a team
@@ -294,7 +297,7 @@ public class TeamWindowController extends GenericController {
             btnEliminar.setOnAction(event -> handleDeleteTeam(event));
             
             // Joining a team
-            btnUnirse.setOnAction(event -> handleJoinTeam(event, user));
+            btnUnirse.setOnAction(event -> handleJoinTeam(event, getUser()));
             
             // Check if any of the buttons is pressed
             boolean buttonPressed = btnCrear.isPressed() || btnModificar.isPressed() || btnEliminar.isPressed() || btnUnirse.isPressed();
@@ -479,7 +482,7 @@ public class TeamWindowController extends GenericController {
     public void handleTextNotEmpty(User user) {
         try {
             if (!tfNombre.getText().isEmpty() && !tfCoach.getText().isEmpty() && dpFundacion.getValue() != null) {
-                if (user instanceof Player) {
+                if (getUser().getUser_type().equalsIgnoreCase("player")) {
                     if (tfNombre.getText().length() > 60 || tfCoach.getText().length() > 60) {
                         throw new MaxCharException();
                     } else {
