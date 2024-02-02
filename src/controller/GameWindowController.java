@@ -1,20 +1,12 @@
 package controller;
 
 import exceptions.BusinessLogicException;
-import businessLogic.ESportsFactory;
-import businessLogic.GameManager;
-import static controller.GenericController.LOGGER;
 import exceptions.EmptyGameAlreadyAddedException;
 import exceptions.MaxCharException;
 import exceptions.NameAlreadyExistsException;
-import exceptions.NameException;
 import exceptions.WrongFormatException;
 import extra.DatePickerCellGame;
 import factory.GameFactory;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-//import static groovy.util.GroovyTestCase.assertEquals;
-import java.time.Instant;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,53 +14,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 import javax.ejb.CreateException;
-import model.Admin;
 import model.Game;
 import model.PVPType;
 import model.User;
-import java.lang.String;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
-import javax.naming.OperationNotSupportedException;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
 
 public class GameWindowController extends GenericController {
 
@@ -146,7 +110,6 @@ public class GameWindowController extends GenericController {
 
     private MenuItem createItem;
     private MenuItem readItem;
-    //MenuItem updateItem;
     @FXML
     private MenuItem deleteItem;
     private MenuItem eventsItem;
@@ -161,10 +124,7 @@ public class GameWindowController extends GenericController {
     public void initStage(Parent root) {
         try {
             getScene().setRoot(root);
-            //stage = new Stage();
-            //Set stage properties
-            //stage.initModality(Modality.APPLICATION_MODAL);
-            //stage.setScene(scene);
+
             stage.setTitle("Gestion de Juegos");
             stage.setResizable(false);
 
@@ -174,7 +134,6 @@ public class GameWindowController extends GenericController {
                 String selectedNamedQuery = (String) cmbSearch.getSelectionModel().getSelectedItem();
 
                 handleComboBoxSelection(selectedNamedQuery);
-                //handleComboBoxSelection();
             });
 
             // Add named queries to the combo box
@@ -184,8 +143,6 @@ public class GameWindowController extends GenericController {
                     "findGamesByGenre",
                     "findGamesByPlatform",
                     "findGamesByPVPType"
-                    /*"findGamesByReleaseDate",
-                    "findAllGamesCreatedByAdmin"*/
             );
 
             cmbSearch.setItems(namedQueriesList);
@@ -196,10 +153,10 @@ public class GameWindowController extends GenericController {
             // Asigna la lista de valores al ComboBox
             cmbPVPType.setItems(pvpTypes);
 
-            // Puedes establecer un valor predeterminado si es necesario
+            //establecer un valor predeterminado
             cmbPVPType.setValue(PVPType.TEAM_BASED_5V5);
 
-            // Puedes manejar eventos de selección si es necesario
+            //manejar eventos de selección si es necesario
             cmbPVPType.setOnAction(event -> handlePVPTypeSelection());
             btnSearch.setOnAction(event -> handleSearchButton());
 
@@ -218,8 +175,8 @@ public class GameWindowController extends GenericController {
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
-                                    .get(t.getTablePosition().getRow()))
-                                    .setName(t.getNewValue());
+                                            .get(t.getTablePosition().getRow()))
+                                            .setName(t.getNewValue());
                                     //change the old value for the new value
                                     gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
                                     //call the update method using the facotry 
@@ -241,32 +198,32 @@ public class GameWindowController extends GenericController {
                             }
                         } catch (BusinessLogicException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setName(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setName(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("Ocurrió algun error en la capa de lógica");
                         } catch (WrongFormatException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setName(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setName(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "WrongFormatException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("En el nombre solo se permiten escribir letras");
                         } catch (MaxCharException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setName(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setName(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "MaxCharException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("LLegaste al máximo de carácteres");
                         } catch (NameAlreadyExistsException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setName(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setName(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "NameAlreadyExistsException: ", ex.getMessage());
                             lblError.setVisible(true);
@@ -286,8 +243,8 @@ public class GameWindowController extends GenericController {
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
-                                    .get(t.getTablePosition().getRow()))
-                                    .setGenre(t.getNewValue());
+                                            .get(t.getTablePosition().getRow()))
+                                            .setGenre(t.getNewValue());
 
                                     //change the old value for the new value
                                     gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
@@ -304,24 +261,24 @@ public class GameWindowController extends GenericController {
 
                         } catch (BusinessLogicException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setGenre(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setGenre(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("Ocurrió algun error en la capa de lógica");
                         } catch (MaxCharException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setGenre(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setGenre(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "MaxCharException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("LLegaste al máximo de carácteres");
                         } catch (WrongFormatException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setGenre(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setGenre(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "WrongFormatException: ", ex.getMessage());
                             lblError.setVisible(true);
@@ -342,8 +299,8 @@ public class GameWindowController extends GenericController {
                             if (t.getNewValue().matches(regexLetters)) {
                                 if (t.getNewValue().length() < 100) {
                                     ((Game) t.getTableView().getItems()
-                                    .get(t.getTablePosition().getRow()))
-                                    .setPlatform(t.getNewValue());
+                                            .get(t.getTablePosition().getRow()))
+                                            .setPlatform(t.getNewValue());
 
                                     //change the old value for the new value
                                     gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
@@ -360,24 +317,24 @@ public class GameWindowController extends GenericController {
 
                         } catch (BusinessLogicException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setPlatform(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setPlatform(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("Ocurrió algun error en la capa de lógica");
                         } catch (MaxCharException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setPlatform(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setPlatform(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "MaxCharException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("LLegaste al máximo de carácteres");
                         } catch (WrongFormatException ex) {
                             ((Game) t.getTableView().getItems()
-                            .get(t.getTablePosition().getRow()))
-                            .setPlatform(t.getOldValue());
+                                    .get(t.getTablePosition().getRow()))
+                                    .setPlatform(t.getOldValue());
                             tbGames.refresh();
                             LOGGER.log(Level.WARNING, "WrongFormatException: ", ex.getMessage());
                             lblError.setVisible(true);
@@ -409,7 +366,6 @@ public class GameWindowController extends GenericController {
             tbcolReleaseDate.setOnEditCommit((TableColumn.CellEditEvent<Game, Date> t) -> {
                 try {
                     lblError.setVisible(false);
-
                     // Set the parsed date as the new value
                     ((Game) t.getTableView().getItems().get(t.getTablePosition().getRow())).setReleaseDate(t.getNewValue());
 
@@ -439,7 +395,6 @@ public class GameWindowController extends GenericController {
             // CRUD options
             createItem = new MenuItem("    Crear juego");
             readItem = new MenuItem("    Read Game");
-            //updateItem = new MenuItem("    Update Game");
             deleteItem = new MenuItem("    Delete Game");
             eventsItem = new MenuItem("    Events");
             teamsItem = new MenuItem("    Teams");
@@ -465,15 +420,10 @@ public class GameWindowController extends GenericController {
                 }
             });
             readItem.setOnAction(e -> handleSearchButton());
-            //updateItem.setOnAction(e -> System.out.println("Update action"));
             deleteItem.setOnAction(e -> deleteSelectedItem());
 
-            eventsItem.setOnAction(e -> System.out.println("Events action"));
-            teamsItem.setOnAction(e -> System.out.println("Teams action"));
-            gamesItem.setOnAction(e -> System.out.println("Games action"));
-
             // Add CRUD options to the context menu
-            contextMenu.getItems().addAll(createItem, readItem, deleteItem, separator, eventsItem, teamsItem, gamesItem);
+            contextMenu.getItems().addAll(createItem, readItem, deleteItem);
 
             // Attach the context menu to the root pane
             root.setOnContextMenuRequested(event
@@ -509,7 +459,7 @@ public class GameWindowController extends GenericController {
 
             loggedUser = new User();
             loggedUser.setUser_type("Admin");
-            if (!(loggedUser.getUser_type() == "Admin")) {
+            if (!(loggedUser.getUser_type().equalsIgnoreCase("Admin"))) {
                 btnAddRow.setDisable(true);
                 deleteItem.setDisable(true);
                 createItem.setDisable(true);
@@ -523,7 +473,6 @@ public class GameWindowController extends GenericController {
             //TODO Change it to go back to login
             btnExit.setOnAction(event -> super.handleBtnClose(event));
 
-            
             setTbGames(tbGames);
             stage.setScene(scene);
             //Show window.
@@ -534,18 +483,12 @@ public class GameWindowController extends GenericController {
         }
     }
 
-    @FXML
-    private void handleImprimirButton() {
-        // Example method for handling the "Imprimir" button click
-        System.out.println("Imprimir button clicked!");
-    }
-
-    @FXML
-    private void handleSalirButton() {
-        // Example method for handling the "Salir" button click
-        System.out.println("Salir button clicked!");
-    }
-
+    /**
+     * Method to add an empty game to the table.
+     *
+     * @throws CreateException If an error occurs during game creation.
+     * @throws EmptyGameAlreadyAddedException If an empty game is already added.
+     */
     public void addEmptyGame() throws CreateException, EmptyGameAlreadyAddedException {
         try {
 
@@ -570,30 +513,38 @@ public class GameWindowController extends GenericController {
             }
 
         } catch (BusinessLogicException ex) {
-            Logger.getLogger(GameWindowController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
+            lblError.setVisible(true);
+            lblError.setText("Ocurrió algún error en la capa de lógica");
         }
     }
 
+    /**
+     * Deletes the selected item from the table and the database.
+     */
     private void deleteSelectedItem() {
         Game selectedGame = (Game) tbGames.getSelectionModel().getSelectedItem();
 
         if (selectedGame != null) {
             try {
-                // Eliminar el juego de la base de datos
+                // Delete game from database
                 gameManager.deleteGame(selectedGame.getId());
 
-                // Eliminar el juego de la lista observable y la tabla
+                // Get games to an onservable list, refresh and set items to the table
                 gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
                 tbGames.refresh();
                 tbGames.setItems(gamesData);
-            } catch (Exception e) {
-                // Manejar la excepción apropiadamente (por ejemplo, mostrar un mensaje de error)
-                e.printStackTrace();
+            } catch (BusinessLogicException ex) {
+                Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
+    /**
+     * Handles the selection of the named query in the combo box.
+     *
+     * @param selectedNamedQuery The selected named query.
+     */
     private void handleComboBoxSelection(String selectedNamedQuery) {
         //String selectedNamedQuery = (String) cmbSearch.getSelectionModel().getSelectedItem();
         // Hide all text fields initially      
@@ -623,26 +574,22 @@ public class GameWindowController extends GenericController {
                 lblData.setVisible(true);
                 cmbPVPType.setVisible(true);
                 break;
-            case "findGamesByReleaseDate":
-                lblData.setText("Fecha de Lanzamiento");
-                lblData.setVisible(true);
-                dpReleaseDate.setVisible(true);
-                break;
-            case "findAllGamesCreatedByAdmin":
-                lblData.setText("Nombre de usuario de Admin");
-                lblData.setVisible(true);
-                tfSearchData.setVisible(true);
-                break;
             default:
                 break;
         }
     }
 
+    /**
+     * Handles the selection of PVPType in the combo box.
+     */
     private void handlePVPTypeSelection() {
         //set combo box PVPType
         PVPType selectedPVPType = cmbPVPType.getValue();
     }
 
+    /**
+     * Handles the search button click event.
+     */
     @FXML
     private void handleSearchButton() {
         try {
@@ -667,14 +614,6 @@ public class GameWindowController extends GenericController {
                     gamesData = FXCollections.observableArrayList(
                             GameFactory.getGameManager().findByPVPType(pvpTypeStr));
                     break;
-                case "findGamesByReleaseDate":
-                    gamesData = FXCollections.observableArrayList(
-                            GameFactory.getGameManager().findByReleaseDate(dpReleaseDate.getValue().toString()));
-                    break;
-                case "findAllGamesCreatedByAdmin":
-                    gamesData = FXCollections.observableArrayList(
-                            GameFactory.getGameManager().findGamesCreatedByAdmin(tfSearchData.getText()));
-                    break;
                 case "findAllGames":
                     gamesData = FXCollections.observableArrayList(
                             GameFactory.getGameManager().getAllGames());
@@ -689,42 +628,6 @@ public class GameWindowController extends GenericController {
         } catch (Exception e) {
             // Maneja la excepción apropiadamente (por ejemplo, muestra un mensaje de error)
             e.printStackTrace();
-        }
-    }
-    
-    /**
-     * Action event handler for print button. It shows a JFrame containing a
-     * report. This JFrame allows to print the report.
-     *
-     * @param event The ActionEvent object for the event.
-     */
-    @FXML
-    @Override
-    void handleImprimirAction(ActionEvent event) {
-        try {
-            LOGGER.info("Beginning printing action...");
-            JasperReport report;
-            if (getUser().getUser_type().equals("admin")) {
-                report = JasperCompileManager.compileReport(getClass()
-                        .getResourceAsStream("/reports/reportTest.jrxml"));
-            } else {
-                report
-                        = JasperCompileManager.compileReport(getClass()
-                                .getResourceAsStream("/reports/reportTest.jrxml"));
-            }
-
-            //Get the games
-            JRBeanCollectionDataSource dataItems
-                    = new JRBeanCollectionDataSource((Collection<Game>) this.tbGames.getItems());
-            //Get parameters
-            Map<String, Object> parameters = new HashMap<>();
-            //Fill with data
-            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);
-            //show the report window.
-            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
-            jasperViewer.setVisible(true);
-        } catch (JRException ex) {
-            showErrorAlert("Error printing the report");
         }
     }
 }

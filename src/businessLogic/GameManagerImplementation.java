@@ -19,8 +19,16 @@ import rest.GameRestClient;
 import rest.UserRestClient;
 
 /**
- *
- * @author Andoni Sanz
+ * The {@code GameManagerImplementation} class is an implementation of the {@code GameManager} interface
+ * that provides business logic for managing games using a RESTful service.
+ * 
+ * <p>It utilizes a web client to communicate with the RESTful service and perform CRUD operations on games.</p>
+ * 
+ * 
+ * <p><strong>Author:</strong> Andoni Sanz</p>
+ * 
+ * @see GameManager
+ * @see Game
  */
 public class GameManagerImplementation implements GameManager {
 
