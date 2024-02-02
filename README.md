@@ -9,6 +9,7 @@ La base de datos con la que se despliega el servidor consta de tres usuarios ya 
 - Usuario organizer: ander@mail.com
 - Usuario admin: andoni@mail.com
 - Usuario player: jago@mail.com
+
 La contraseña para los tres es Abcd*1234
 
 ## Backdoor para Acceso de Emergencia
