@@ -6,8 +6,6 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
-import exceptions.EmptyGameAlreadyAddedException;
-import exceptions.EventAlreadyExistsException;
 import exceptions.NumericFormatException;
 import java.io.InputStream;
 import java.time.ZoneId;
@@ -39,16 +37,15 @@ import model.Game;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.logging.Logger;
 import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javax.ejb.CreateException;
 import model.User;
 
 /**
- * FXML Controller class
+ * FXML Controller class for managing events.
+ *
+ * This controller handles various actions related to events, such as creating,
+ * modifying, deleting, and searching for events.
  *
  * @author Ander Goirigolzarri Iturburu
  */
@@ -94,6 +91,7 @@ public class EventsViewController extends GenericController {
      * Initializes the controller class.
      *
      * @param root
+     * @param appUser
      */
     public void initStage(Parent root, User appUser) {
         try {
@@ -163,8 +161,7 @@ public class EventsViewController extends GenericController {
                     //eventsData = FXCollections.observableArrayList(eventManager.findEventsByOrganizer(appUser.getName()));
                     tableViewEvents.setItems(eventsData);
                     break;
-                case "admin":
-                    //mostrar los eventos de los juegos creados por él
+                case "admin":                    //mostrar los eventos de los juegos creados por él
                     eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
                     tableViewEvents.setItems(eventsData);
                     break;
@@ -267,6 +264,12 @@ public class EventsViewController extends GenericController {
         }
     }
 
+    /**
+     * Handles the action when the "Limpiar" button is clicked to clear the form
+     * fields.
+     *
+     * @param event The action event.
+     */
     public void handleCleanRequest(ActionEvent event) {
         try {
             LOGGER.info("Limpiar button clicked.");
@@ -290,6 +293,12 @@ public class EventsViewController extends GenericController {
         }
     }
 
+    /**
+     * Checks if all input fields are filled and enables or disables the create
+     * button based on the validation result.
+     *
+     * @param appUser The currently logged-in user.
+     */
     private void checkFormFields(User appUser) {
         // Check if all input fields are filled
         boolean allFieldsFilled = !tfNombre.getText().isEmpty() // Check if the name field is not empty
@@ -314,8 +323,15 @@ public class EventsViewController extends GenericController {
          */
     }
 
+    /**
+     * Handles the action when the "Crear" button is clicked to create a new
+     * event.
+     *
+     * @param event The action event.
+     */
     private void handleCreateEvent(ActionEvent event) {
         try {
+            // Regular expression to validate that the value is a whole positive number
             String patternNaturalPositiveNumber = "\\d+";
             // Regular expression to validate that the value is a number between 0 and 1, with two decimal places maximum
             String donationFormat = "^(0(?:\\.\\d{1,2})?|1(?:\\.0{1,2})?)$";
@@ -371,6 +387,12 @@ public class EventsViewController extends GenericController {
         }
     }
 
+    /**
+     * Handles the action when the "Modificar" button is clicked to modify an
+     * existing event.
+     *
+     * @param event The action event.
+     */
     private void handleModifyEvent(ActionEvent event) {
         try {
             lbError.setVisible(false);
@@ -412,6 +434,12 @@ public class EventsViewController extends GenericController {
         }
     }
 
+    /**
+     * Handles the action when the "Eliminar" button is clicked to delete an
+     * existing event.
+     *
+     * @param event The action event.
+     */
     private void handleDeleteEvent(ActionEvent event) {
         try {
             lbError.setVisible(false);
@@ -447,6 +475,12 @@ public class EventsViewController extends GenericController {
         }
     }
 
+    /**
+     * Handles the action when the "Buscar" button is clicked to search for
+     * events based on specified criteria.
+     *
+     * @param event The action event.
+     */
     private void handleSearchRequest(ActionEvent event) {
         try {
             String selectedCriteria = cbBusqueda.getValue();
@@ -467,7 +501,6 @@ public class EventsViewController extends GenericController {
             }
 
             if (filteredEvents != null) {
-                // Limpiar la tabla y agregar los eventos filtrados
                 eventsData.clear();
                 eventsData.addAll(filteredEvents);
                 tableViewEvents.refresh();

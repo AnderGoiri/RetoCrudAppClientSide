@@ -29,6 +29,13 @@ public class EventManagerImplementation implements EventManager {
         webclient = new EventRestClient();
     }
 
+    /**
+     * Creates a new event.
+     *
+     * @param newEvent The event to be created.
+     * @throws BusinessLogicException If an error occurs during the creation
+     * process.
+     */
     @Override
     public void createEvent(Event newEvent) throws BusinessLogicException {
         try {
@@ -40,6 +47,13 @@ public class EventManagerImplementation implements EventManager {
         }
     }
 
+    /**
+     * Retrieves all events.
+     *
+     * @return A collection of all events.
+     * @throws BusinessLogicException If an error occurs during the retrieval
+     * process.
+     */
     @Override
     public Collection<Event> findAllEvents() throws BusinessLogicException {
         List<Event> events = null;
@@ -54,6 +68,13 @@ public class EventManagerImplementation implements EventManager {
         return events;
     }
 
+    /**
+     * Retrieves events by organizer.
+     *
+     * @return A collection of events organized by the logged-in user.
+     * @throws BusinessLogicException If an error occurs during the retrieval
+     * process.
+     */
     @Override
     public Collection<Event> findEventsByOrganizer() throws BusinessLogicException {
         List<Event> events = null;
@@ -68,6 +89,14 @@ public class EventManagerImplementation implements EventManager {
         return events;
     }
 
+    /**
+     * Retrieves events by game name.
+     *
+     * @param gameName The name of the game.
+     * @return A collection of events associated with the specified game.
+     * @throws BusinessLogicException If an error occurs during the retrieval
+     * process.
+     */
     @Override
     public Collection<Event> findEventsByGame(String gameName) throws BusinessLogicException {
         List<Event> events = null;
@@ -92,6 +121,14 @@ public class EventManagerImplementation implements EventManager {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Retrieves events by ONG name.
+     *
+     * @param ongName The name of the ONG.
+     * @return A collection of events associated with the specified ONG.
+     * @throws BusinessLogicException If an error occurs during the retrieval
+     * process.
+     */
     @Override
     public Collection<Event> findEventsByONG(String ongName) throws BusinessLogicException {
         List<Event> events = null;
@@ -116,6 +153,13 @@ public class EventManagerImplementation implements EventManager {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Modifies an existing event.
+     *
+     * @param selectedEvent The event to be modified.
+     * @throws BusinessLogicException If an error occurs during the modification
+     * process.
+     */
     @Override
     public void modifyEvent(Event selectedEvent) throws BusinessLogicException {
         try {
@@ -127,6 +171,13 @@ public class EventManagerImplementation implements EventManager {
         }
     }
 
+    /**
+     * Deletes an existing event.
+     *
+     * @param selectedEvent The event to be deleted.
+     * @throws BusinessLogicException If an error occurs during the deletion
+     * process.
+     */
     @Override
     public void deleteEvent(Event selectedEvent) throws BusinessLogicException {
         try {

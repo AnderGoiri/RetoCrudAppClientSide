@@ -33,7 +33,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-import main.RetoCrudAppClient;
+import main.RetoCrudAppEventTest;
 import model.Game;
 import model.PVPType;
 import static org.junit.Assert.assertEquals;
@@ -61,7 +61,7 @@ public class TestGameWindowController extends ApplicationTest {
     @BeforeClass
     public static void setUpClass() throws TimeoutException {
         FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(RetoCrudAppClient.class);
+        FxToolkit.setupApplication(RetoCrudAppEventTest.class);
     }
 
     /*@Test

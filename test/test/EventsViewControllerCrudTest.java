@@ -16,7 +16,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-import main.RetoCrudAppClient;
+import main.RetoCrudAppEventTest;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -44,7 +44,7 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(RetoCrudAppClient.class);
+        FxToolkit.setupApplication(RetoCrudAppEventTest.class);
     }
 
     @Test

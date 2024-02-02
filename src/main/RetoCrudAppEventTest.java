@@ -26,7 +26,7 @@ import model.User;
  *
  * @author Andoni Sanz
  */
-public class RetoCrudAppClient extends javafx.application.Application {
+public class RetoCrudAppEventTest extends javafx.application.Application {
 
     /**
      * This method is called when the JavaFX application is launched. It is used
