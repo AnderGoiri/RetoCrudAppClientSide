@@ -12,6 +12,9 @@ La base de datos con la que se despliega el servidor consta de tres usuarios ya 
 
 La contraseña para los tres es Abcd*1234
 
+## BouncyCastle
+Para que la encriptación funcione es necesario que el servidor tenga la librería "BouncyCastle", la cual se encuentra en la entrega de libreías adicionales.
+
 ## Backdoor para Acceso de Emergencia
 
 En situaciones excepcionales donde la verificación de credenciales o la encriptación fallen, esta aplicación cuenta con un backdoor para permitir el acceso de emergencia. Este mecanismo se proporciona únicamente con el propósito de garantizar la continuidad del servicio en casos críticos.
