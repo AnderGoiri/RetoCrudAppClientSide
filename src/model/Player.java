@@ -11,7 +11,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleSetProperty;
 
 /**
- *
+ * Entity JPA class for Player data. This class inherits from User class.
+ * Player own attribute is level.
+ * 
  * @author Jagoba Bartolomé Barroso
  */
 

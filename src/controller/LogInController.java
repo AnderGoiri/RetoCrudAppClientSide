@@ -38,6 +38,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -55,7 +56,7 @@ public class LogInController {
 
     private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     private Stage stage;
-
+    private Scene scene;
     @FXML
     private Label lblError;
     @FXML
@@ -86,7 +87,8 @@ public class LogInController {
         try {
             initializeRectangleAnim(); // This creates the animation for the login windown
             LOGGER.info("Initializing stage...");
-            Scene scene = new Scene(root, 600, 400);
+            scene = new Scene(root, 1366, 768);
+            //stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.setTitle("eSportsHub - Iniciar sesión"); //Establish window title
             stage.setResizable(false); //Window is not resizable
@@ -118,11 +120,11 @@ public class LogInController {
      */
     public void initializeRectangleAnim() {
         // Establish the animation
-        translateTransition = new TranslateTransition(Duration.seconds(1.8), rectangle);
+        translateTransition = new TranslateTransition(Duration.seconds(1), rectangle);
         translateTransition.setFromX(-450); // Final position outside the screen
         translateTransition.setToX(0); // Final position inside the screen
-        translateTransition2 = new TranslateTransition(Duration.seconds(3), odooIcon);
-        translateTransition2.setFromY(-600); // Final position outside the screen
+        translateTransition2 = new TranslateTransition(Duration.seconds(3.2), odooIcon);
+        translateTransition2.setFromY(-650); // Final position outside the screen
         translateTransition2.setToY(0); // Final position inside the screen
         // Starts the animation
         translateTransition.play();
@@ -208,6 +210,24 @@ public class LogInController {
             } else if (email.equals("player")) {
                 appUser.setUser_type(email);
             }
+            /*
+            Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number.
+            Pattern that must be respected.
+             */
+            String regexPassword = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
+            Pattern patternPassword = Pattern.compile(regexPassword);
+            if (!patternPassword.matcher(pwdPassword.getText()).matches()) {
+                LOGGER.severe("Wrong password format");
+                throw new PasswordFormatException("El formato de las credenciales no es correcto");
+            }
+            // Add the provided data to the User
+            User user = new User();
+            user.setEmail(email);
+            user.setPassword(new Encrypt()
+                    .encrypt(new Hash()
+                            .hashPassword(password)));
+
+            appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
 
             //Create Bussines Logic Controller to be passed to UI controllers
             GameManager gameLogicController = new GameManagerImplementation();
@@ -216,16 +236,16 @@ public class LogInController {
             Parent root = loader.load();
             EventsViewController controller = loader.getController();
 
+            controller.setUser(appUser);
             controller.setEventManager(EventFactory.getEventManager());
             controller.setGameManager(gameLogicController);
             controller.setTeamManager(teamLogicController);
-            Stage applicationStage = new Stage();
+            //Stage applicationStage = new Stage();
+            controller.setStage(stage);
+            controller.setScene(scene);
+            controller.initStage(root);
+            //stage.close();
 
-            controller.setStage(applicationStage);
-
-            controller.initStage(root, appUser);
-
-            stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
@@ -325,10 +345,8 @@ public class LogInController {
         } catch (EmailFormatException ex) {
             LOGGER.severe("Exception on Email: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
-
         } catch (BusinessLogicException ex) {
-            Logger.getLogger(LogInController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -12,7 +12,7 @@ import rest.UserRestClient;
 
 /**
  *
- * @author Jagoba Bartolomé Barroso
+ * @author Andoni Sanz Alcalde
  */
 public class SignableImplementation implements Signable {
 

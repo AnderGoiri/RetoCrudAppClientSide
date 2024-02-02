@@ -56,7 +56,7 @@
                <graphic>
                   <ImageView fitHeight="27.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../Desktop/Icono%20lupa.png" />
+                        <Image url="@../../resources/Icono%20lupa.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
@@ -70,7 +70,7 @@
                <graphic>
                   <ImageView fitHeight="27.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../Desktop/Icono%20limpiar.png" />
+                        <Image url="@../../resources/Icono%20limpiar.png" />
                      </image>
                   </ImageView>
                </graphic>

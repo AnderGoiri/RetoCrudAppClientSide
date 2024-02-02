@@ -93,10 +93,10 @@ public class EventsViewController extends GenericController {
      * @param root
      * @param appUser
      */
-    public void initStage(Parent root, User appUser) {
+    public void initStage(Parent root) {
         try {
-            Scene scene = new Scene(root);
-            stage = new Stage();
+            getScene().setRoot(root);
+            //stage = new Stage();
 
             //Set stage properties
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -155,7 +155,7 @@ public class EventsViewController extends GenericController {
             columnDonacion.setCellValueFactory(new PropertyValueFactory<>("donation"));
             columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
 
-            switch (appUser.getUser_type()) {
+            switch (getUser().getUser_type()) {
                 case "organizer":
                     eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
                     //eventsData = FXCollections.observableArrayList(eventManager.findEventsByOrganizer(appUser.getName()));
@@ -193,14 +193,14 @@ public class EventsViewController extends GenericController {
             * oldValue: It is the old value before the change occurred.
             * newValue: It is the new value after the change occurred.
              */
-            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
-            tfLugar.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
-            dpFecha.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
-            cbJuego.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
-            tfONG.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
-            tfPremio.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
-            tfDonacion.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
-            tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(appUser));
+            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfLugar.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            dpFecha.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            cbJuego.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfONG.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfPremio.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfDonacion.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
 
             tableViewEvents.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
                 Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
@@ -213,10 +213,10 @@ public class EventsViewController extends GenericController {
                     tfPremio.setText(String.valueOf(selectedEvent.getPrize()));
                     tfDonacion.setText(String.valueOf(selectedEvent.getDonation()));
                     tfAforo.setText(String.valueOf(selectedEvent.getParticipantNum()));
-                    if (appUser.getUser_type().equals("player")) {
+                    if (getUser().getUser_type().equals("player")) {
                         btnUnirse.setDisable(false);
                     }
-                    if (appUser.getUser_type().equals("organizer")) {
+                    if (getUser().getUser_type().equals("organizer")) {
                         btnModificar.setDisable(false);
                         btnEliminar.setDisable(false);
                     }
@@ -225,6 +225,7 @@ public class EventsViewController extends GenericController {
                     btnEliminar.setDisable(true);
                 }
             });
+
             /*
             // Create a context menu
             ContextMenu contextMenu = new ContextMenu();
@@ -256,6 +257,7 @@ public class EventsViewController extends GenericController {
                     -> contextMenu.show(root, event.getScreenX(), event.getScreenY()));
              */
             stage.show();
+
         } catch (Exception e) {
             //  e.printStackTrace();
             LOGGER.severe(e.getMessage());

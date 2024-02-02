@@ -6,20 +6,27 @@
 package controller;
 
 import businessLogic.EventManager;
+import businessLogic.EventManagerImplementation;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import businessLogic.GameManager;
+import businessLogic.GameManagerImplementation;
 import businessLogic.TeamManager;
+import businessLogic.TeamManagerImplementation;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar;
 import javafx.stage.WindowEvent;
+import model.Player;
+import model.User;
 
 /**
  * This is the base class for UI controllers in this application. It contains
@@ -51,6 +58,16 @@ public class GenericController {
      * The business logic EventManager object containing all business methods.
      */
     protected EventManager eventManager;
+
+    protected static User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     /**
      * Sets the business logic object to be used by this UI controller.
@@ -86,8 +103,18 @@ public class GenericController {
      * controller to the Stage object in order to make its initialization. Note
      * that this makes Application, Controller and Stage being tightly coupled.
      */
-    protected Stage stage;
+    protected static Stage stage;
+    protected static Scene scene;
 
+    public Scene getScene() {
+        return scene;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+    
+    
     /**
      * Gets the Stage object related to this controller.
      *
@@ -143,6 +170,78 @@ public class GenericController {
     }
 
     /**
+     * Action event handler for print button. It shows a JFrame containing a
+     * report. This JFrame allows to print the report.
+     *
+     * @param event The ActionEvent object for the event.
+     */
+    @FXML
+    private void handleExitAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void handleEventsAction(ActionEvent event) {
+        try {
+            //Create Bussines Logic Controller to be passed to UI controllers
+            EventManager eventLogicController= new EventManagerImplementation();
+            GameManager gameLogicController = new GameManagerImplementation();
+            TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
+            Parent root = loader.load();
+            EventsViewController controller = loader.getController();
+            controller.setEventManager(eventLogicController);
+            controller.setGameManager(gameLogicController);
+            controller.setTeamManager(teamLogicController);
+            //User user = new Player();
+            //user.setId(Long.valueOf(3));
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(GenericController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void handleTeamAction(ActionEvent event) {
+        try {
+            TeamManager teamLogicController = new TeamManagerImplementation();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TeamView.fxml"));
+            Parent root = loader.load();
+            TeamWindowController controller = loader.getController();
+
+            controller.setTeamManager(teamLogicController);
+            controller.setStage(getStage());
+            controller.setScene(getScene());
+            //User user = new Player();
+            //user.setId(Long.valueOf(3));
+            setUser(user);
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(GenericController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void handleGameAction(ActionEvent event) {
+        try {
+            //Create Bussines Logic Controller to be passed to UI controllers
+            GameManager bussinessLogicController = new GameManagerImplementation();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
+            Parent root = loader.load();
+            GameWindowController controller = loader.getController();
+            controller.setGameManager(bussinessLogicController);
+
+            /*controller.setStage(getStage());
+            controller.setScene(getScene());*/
+            controller.initStage(root);
+
+        } catch (IOException ex) {
+            Logger.getLogger(GenericController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
      * Event handler for the window close request.
      *
      * This method is triggered when a user attempts to close the window. It
@@ -191,7 +290,6 @@ public class GenericController {
     public void handleBtnClose(ActionEvent event) {
         try {
             LOGGER.info("Salir button clicked.");
-
             // Create a confirmation dialog
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Cerrar sesión");
@@ -201,6 +299,7 @@ public class GenericController {
             ButtonType confirmButton = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
             ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(confirmButton, cancelButton);
+
 
             // Show the dialog and wait for user response
             Optional<ButtonType> result = alert.showAndWait();

@@ -144,32 +144,16 @@ public class GameWindowController extends GenericController {
      */
     public void initStage(Parent root) {
         try {
-            Scene scene = new Scene(root);
-            stage = new Stage();
+            getScene().setRoot(root);
+            //stage = new Stage();
             //Set stage properties
-            stage.initModality(Modality.APPLICATION_MODAL);
+            //stage.initModality(Modality.APPLICATION_MODAL);
             //stage.setScene(scene);
             stage.setTitle("Gestion de Juegos");
             stage.setResizable(false);
 
-            //Obtains the layout containing the menu bar from the scene node graph
-            HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
-            //Get the menu bar from the children of the layout got before
-            MenuBar menuBar = (MenuBar) hBoxMenu.getChildren().get(0);
-            //Get the second menu from the menu bar
-            Menu menuHelp = menuBar.getMenus().get(1);
-            //Add a listener for the showing property that fires the action event
-            //on the first menu item of that menu
-            menuHelp.showingProperty().addListener(
-                    (observableValue, oldValue, newValue) -> {
-                        if (newValue) {
-                            menuHelp.getItems().get(0).fire();
-                        }
-                    }
-            );
             //Set department combo data model.
             // Create a combo box
-
             cmbSearch.setOnAction(event -> {
                 String selectedNamedQuery = (String) cmbSearch.getSelectionModel().getSelectedItem();
 
@@ -481,7 +465,6 @@ public class GameWindowController extends GenericController {
         try {
 
             gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
-
             // Create an empty game
             Game newGame = new Game();
             newGame.setName("Default");
@@ -491,20 +474,16 @@ public class GameWindowController extends GenericController {
             newGame.setReleaseDate(null);
             //check if there is any empty game already on the table
 
-            if (!gamesData.isEmpty()) {
-                if (!gamesData.get(gamesData.size() - 1).equals(newGame)) {
+            if (!gamesData.get(gamesData.size() - 1).equals(newGame) || gamesData.isEmpty()) {
 
-                    GameFactory.getGameManager().createGame(newGame);
-                    gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
-                    tbGames.refresh();
-                    tbGames.setItems(gamesData);
-                } else {
-                    throw new EmptyGameAlreadyAddedException("Email alreaady added");
-                }
-            } else {
                 GameFactory.getGameManager().createGame(newGame);
-
+                gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
+                tbGames.refresh();
+                tbGames.setItems(gamesData);
+            } else {
+                throw new EmptyGameAlreadyAddedException("Email alreaady added");
             }
+
         } catch (BusinessLogicException ex) {
             Logger.getLogger(GameWindowController.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -520,10 +499,9 @@ public class GameWindowController extends GenericController {
                 gameManager.deleteGame(selectedGame.getId());
 
                 // Eliminar el juego de la lista observable y la tabla
-                gamesData.remove(selectedGame);
-                // Refresh the TableView to reflect the changes
-
-                //tbGames.refresh();
+                gamesData = FXCollections.observableArrayList(GameFactory.getGameManager().getAllGames());
+                tbGames.refresh();
+                tbGames.setItems(gamesData);
             } catch (Exception e) {
                 // Manejar la excepción apropiadamente (por ejemplo, mostrar un mensaje de error)
                 e.printStackTrace();
