@@ -13,7 +13,7 @@ A continuación se especifica las credenciales para el backdoor en función del 
 - **Admin:**
   - **Email:** admin
   - **Contraseña:** Abcd*1234
-  - 
+  
 - **Player:**
   - **Email:** player
   - **Contraseña:** Abcd*1234
