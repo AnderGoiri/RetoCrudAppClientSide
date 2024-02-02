@@ -31,38 +31,37 @@ import model.User;
  *
  * @author Andoni Sanz
  */
-public class GameStart extends javafx.application.Application{    
+public class GameStart extends javafx.application.Application {
+
     /**
      * This method is called when the JavaFX application is launched. It is used
      * to initialize the primary stage (the main window) and set up the user
      * interface of the application.
      *
      * @param primaryStage The primary stage for this application, where the
-     * application scene can be set. The first stage represents the Log In Window of the
-     * application.
+     * application scene can be set. The first stage represents the Log In
+     * Window of the application.
      */
     @Override
-    public void start(Stage primaryStage) {    
+    public void start(Stage primaryStage) {
         try {
 
-            GameManager bussinessLogicController= new GameManagerImplementation();
-        
+            GameManager bussinessLogicController = new GameManagerImplementation();
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gameWindow.fxml"));
             Parent root = loader.load();
             GameWindowController controller = loader.getController();
             controller.setGameManager(bussinessLogicController);
             User u = new User();
             u.setUser_type("player");
-            
-            
-            controller.setStage(primaryStage);               
-            
-            
+
+            controller.setStage(primaryStage);
+
             Scene scene = new Scene(root, 1366, 768);
 
             controller.setScene(scene);
             controller.initStage(root);
-            
+
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
