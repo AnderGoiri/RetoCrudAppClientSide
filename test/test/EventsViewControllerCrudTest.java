@@ -102,15 +102,15 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
     @Test
     public void test3_SearchEventByGame() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
+        cbJuego = lookup("#cbJuego").query();
         clickOn("#btnLimpiar");
         clickOn("#cbBusqueda");
         clickOn("Buscar eventos por Juego");
         clickOn("#cbJuego");
         press(KeyCode.DOWN);
         press(KeyCode.ENTER);
-        String selectedGame = cbJuego.getValue();
+        String selectedGame = cbJuego.getSelectionModel().getSelectedItem();
         clickOn("#btnBuscar");
-        sleep(1000);
         List<Event> events = tableViewEvents.getItems();
         // Filtrar la lista de eventos para incluir solo aquellos con el juego seleccionado
         List<Event> filteredEvents = events.stream()
@@ -122,13 +122,14 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         for (Event event : filteredEvents) {
             assertEquals(selectedGame, event.getGame().getName());
         }
+
     }
 
     @Test
     public void test4_SearchAllEvent() {
+        clickOn("#btnLimpiar");
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
-        clickOn("#btnLimpiar");
         clickOn("#cbBusqueda");
         clickOn("Buscar todos los eventos");
         clickOn("#btnBuscar");
