@@ -167,7 +167,7 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
 
         List<Event> events = tableViewEvents.getItems();
         Event modifiedEvent = events.get(rowCount - 1);
-        assertEquals("El nombre del evento no se ha modificado correctamente",
+        assertEquals("El nombre del evento se ha modificado correctamente",
                 newEventName, modifiedEvent.getName());
 
         assertEquals("El lugar del evento no se ha modificado correctamente",

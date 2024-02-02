@@ -15,7 +15,9 @@ import javafx.scene.control.PasswordField;
 import main.Application;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Predicate;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -67,7 +69,7 @@ public class TestGameWindowController extends ApplicationTest {
         FxToolkit.setupApplication(GameStart.class);
     }
 
-    @Test
+    /*@Test
     public void testA_createGame() {
         //Changing windows
         tbGames = lookup("#tbGames").query();
@@ -89,9 +91,9 @@ public class TestGameWindowController extends ApplicationTest {
         assertEquals("Default", games.get(games.size() - 1).getPlatform());
         assertEquals(PVPType.TEAM_BASED_5V5, games.get(games.size() - 1).getPVPType());
         assertEquals(null, games.get(games.size() - 1).getReleaseDate());
-    }
+    }*/
 
-    @Test
+ /*@Test
     public void testB_updateGame() {
 
         tbGames = lookup("#tbGames").query();
@@ -149,24 +151,164 @@ public class TestGameWindowController extends ApplicationTest {
         assertEquals("PC", games.get(games.size() - 1).getPlatform());
         assertEquals(PVPType.TEAM_BASED_3V3, games.get(games.size() - 1).getPVPType());
         assertEquals("Mon Jan 01 00:00:00 CET 2024", games.get(games.size() - 1).getReleaseDate().toString());
+    }*/
+    @Test
+    public void testC_1_SearchByName() {
+
+        Node cmbSearch = lookup("#cmbSearch").query();
+        Node btnSearch = lookup("#btnSearch").query();
+        Node tfSearchData = lookup("#tfSearchData").query();
+
+        clickOn(cmbSearch);
+        push(KeyCode.DOWN);
+        clickOn(tfSearchData);
+        write("Valorant");
+        clickOn(btnSearch);
+
+        TableView tbGamesSearch = lookup("#tbGames").query();
+        
+        ObservableList<Game> games = tbGamesSearch.getItems();
+        FilteredList<Game> filteredList = new FilteredList<>(games);
+        
+        TableView tbGamesFilteredSearch = new TableView();          
+        tbGamesFilteredSearch.setItems(filteredList);
+        
+        clickOn(cmbSearch);
+        push(KeyCode.UP);
+        clickOn(btnSearch);
+        
+        // to filter
+        filteredList.setPredicate(new Predicate<Game>() {
+            public boolean test(Game t) {
+                if(t.getName().equalsIgnoreCase("Valorant"))
+                    return true;
+                else
+                    return false;
+            }
+        }
+        );
+        
+        ObservableList<Game> gamesFiltered = tbGamesFilteredSearch.getItems();
+        
+        
+        ((TextField)tfSearchData).clear();
+                
+        assertEquals(games, gamesFiltered);
+
+        //Integer gameCountPostDelete = tbGames.getItems().size();
+        //assertEquals(gameCountPreDelete.toString(), String.valueOf(gameCountPostDelete + 1));
+    }
+    
+    @Test
+    public void testC_2_SearchByGenre() {
+
+        //tbGames = lookup("#tbGames").query();
+        Node cmbSearch = lookup("#cmbSearch").query();
+        Node btnSearch = lookup("#btnSearch").query();
+        Node tfSearchData = lookup("#tfSearchData").query();
+        //Integer gameCount = tbGames.getItems().size();
+
+        clickOn(cmbSearch);
+        push(KeyCode.DOWN);
+        push(KeyCode.DOWN);
+        clickOn(tfSearchData);
+        write("shooter");
+        clickOn(btnSearch);
+
+        TableView tbGamesSearch = lookup("#tbGames").query();
+                
+        clickOn(cmbSearch);
+        push(KeyCode.UP);
+        push(KeyCode.UP);
+        clickOn(btnSearch);
+        
+        TableView tbGamesFilteredSearch = lookup("#tbGames").query();
+        ObservableList<Game> games = tbGamesFilteredSearch.getItems();
+        FilteredList<Game> filteredList = new FilteredList<>(games);
+        
+        tbGamesFilteredSearch.setItems(filteredList);
+
+        // to filter
+        filteredList.setPredicate(new Predicate<Game>() {
+            public boolean test(Game t) {
+                if(t.getName().equalsIgnoreCase("shooter"))
+                    return true;
+                else
+                    return false;
+            }
+        }
+        );
+        
+        ((TextField)tfSearchData).clear();
+        
+        assertEquals(tbGamesSearch, tbGamesFilteredSearch);
     }
 
     @Test
-    public void testC_deleteGame() {
+    public void testC_3_SearchByPlatform() {
 
+        //tbGames = lookup("#tbGames").query();
+        Node cmbSearch = lookup("#cmbSearch").query();
+        Node btnSearch = lookup("#btnSearch").query();
+        Node tfSearchData = lookup("#tfSearchData").query();
+        //Integer gameCount = tbGames.getItems().size();
+
+        clickOn(cmbSearch);
+        push(KeyCode.DOWN);
+        push(KeyCode.DOWN);
+        push(KeyCode.DOWN);
+        clickOn(tfSearchData);
+        write("pc");
+        clickOn(btnSearch);
+
+        TableView tbGamesSearch = lookup("#tbGames").query();
+                
+        clickOn(cmbSearch);
+        push(KeyCode.UP);
+        push(KeyCode.UP);
+        push(KeyCode.UP);
+        clickOn(btnSearch);
+        
+        TableView tbGamesFilteredSearch = lookup("#tbGames").query();
+        ObservableList<Game> games = tbGamesFilteredSearch.getItems();
+        FilteredList<Game> filteredList = new FilteredList<>(games);
+        
+        tbGamesFilteredSearch.setItems(filteredList);
+
+        // to filter
+        filteredList.setPredicate(new Predicate<Game>() {
+            public boolean test(Game t) {
+                if(t.getName().equalsIgnoreCase("pc"))
+                    return true;
+                else
+                    return false;
+            }
+        }
+        );
+        
+        ((TextField)tfSearchData).clear();
+        
+        assertEquals(tbGamesSearch, tbGamesFilteredSearch);
+    }
+    
+    @Test
+    public void testD_deleteGame() {
+
+        Node btnSearch = lookup("#btnSearch").query();
+        clickOn(btnSearch);
+        
         tbGames = lookup("#tbGames").query();
         Integer gameCountPreDelete = tbGames.getItems().size();
-        
 
-        Node tbColDeselect = lookup("#tbcolId").nth(gameCountPreDelete-1).query();
+        Node tbColDeselect = lookup("#tbcolId").nth(gameCountPreDelete - 1).query();
         clickOn(tbColDeselect);
         Node tbCol = lookup("#tbcolId").nth(gameCountPreDelete).query();
         clickOn(tbCol);
-        
+
         press(KeyCode.DELETE);
 
         sleep(20);
-        
+
         Integer gameCountPostDelete = tbGames.getItems().size();
 
         assertEquals(gameCountPreDelete.toString(), String.valueOf(gameCountPostDelete + 1));

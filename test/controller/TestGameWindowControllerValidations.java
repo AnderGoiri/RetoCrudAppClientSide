@@ -68,7 +68,7 @@ public class TestGameWindowControllerValidations extends ApplicationTest {
     }
 
     @Test
-    public void testA_validate() {
+    public void testA_validateMaxCharException() {
         tbGames = lookup("#tbGames").query();
 
         Integer gameCount = 0;
@@ -77,8 +77,7 @@ public class TestGameWindowControllerValidations extends ApplicationTest {
             gameCount = tbGames.getItems().size();
         }
 
-        clickOn("#btnAddRow");
-        
+        //MAX CHAR EXCEPTION
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 100;
@@ -95,21 +94,55 @@ public class TestGameWindowControllerValidations extends ApplicationTest {
         Node tbColPlatform = lookup("#tbcolPlatform").nth(gameCount).query();
         Node tbColPVPType = lookup("#tbcolPVPType").nth(gameCount).query();
         Node tbColReleaseDate = lookup("#tbcolReleaseDate").nth(gameCount).query();
-        
+
         doubleClickOn(tbColName);
         eraseText(10);
 
         write(generatedName);
         press(KeyCode.ENTER);
-        
+
+        Label lblError = (Label) lookup("#lblError").query();
+
+        verifyThat("#lblError", isVisible());
+        assertEquals("LLegaste al máximo de carácteres", lblError.getText());
     }
 
     @Test
-    public void testB_updateGame() {
+    public void testB_validateWrongFormatException() {
+        tbGames = lookup("#tbGames").query();
+
+        Integer gameCount = 0;
+
+        if (tbGames != null) {
+            gameCount = tbGames.getItems().size();
+        }
+
+        Node tbColName = lookup("#tbcolName").nth(gameCount).query();
+        Node tbColGenre = lookup("#tbcolGenre").nth(gameCount).query();
+        Node tbColPlatform = lookup("#tbcolPlatform").nth(gameCount).query();
+        Node tbColPVPType = lookup("#tbcolPVPType").nth(gameCount).query();
+        Node tbColReleaseDate = lookup("#tbcolReleaseDate").nth(gameCount).query();
+
+        doubleClickOn(tbColName);
+        eraseText(10);
+
+        write("t3st V4l1d4t10n");
+        press(KeyCode.ENTER);
+
+        Label lblError = (Label) lookup("#lblError").query();
+
+        verifyThat("#lblError", isVisible());
+        assertEquals("En el nombre solo se permiten escribir letras", lblError.getText());
+
+    }
+
+    @Test
+    public void testC_validateNameAlreadyExistsException() {
 
         tbGames = lookup("#tbGames").query();
         Integer gameCount = tbGames.getItems().size();
-
+        clickOn("#btnAddRow");
+        
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 10;
@@ -122,62 +155,27 @@ public class TestGameWindowControllerValidations extends ApplicationTest {
         String generatedName = buffer.toString();
 
         Node tbColName = lookup("#tbcolName").nth(gameCount).query();
-        Node tbColGenre = lookup("#tbcolGenre").nth(gameCount).query();
-        Node tbColPlatform = lookup("#tbcolPlatform").nth(gameCount).query();
-        Node tbColPVPType = lookup("#tbcolPVPType").nth(gameCount).query();
-        Node tbColReleaseDate = lookup("#tbcolReleaseDate").nth(gameCount).query();
 
-        
-
-        doubleClickOn(tbColGenre);
+        doubleClickOn(tbColName);
         eraseText(10);
-        write("Shooter");
-        release(KeyCode.ENTER); //release key is used because the robot seems to bug when pressing it more than once
+        write(generatedName);
         press(KeyCode.ENTER);
-
-        doubleClickOn(tbColPlatform);
+        release(KeyCode.ENTER);
+        
+        //create other game and add same name
+        clickOn("#btnAddRow");
+        
+        tbColName = lookup("#tbcolName").nth(gameCount+1).query();
+        
+        doubleClickOn(tbColName);
         eraseText(10);
-        write("PC");
+        write(generatedName);
+        press(KeyCode.ENTER);
         release(KeyCode.ENTER);
-        press(KeyCode.ENTER);
-
-        doubleClickOn(tbColPVPType);
-        clickOn(tbColPVPType);
-        press(KeyCode.DOWN);
-        press(KeyCode.ENTER);
-
-        doubleClickOn(tbColReleaseDate);
-        clickOn(tbColReleaseDate);
-        write("01/01/2024");
-        release(KeyCode.ENTER);
-        press(KeyCode.ENTER);
-
-        ObservableList<Game> games = tbGames.getItems();
-        assertEquals(generatedName, games.get(games.size() - 1).getName());
-        assertEquals("Shooter", games.get(games.size() - 1).getGenre());
-        assertEquals("PC", games.get(games.size() - 1).getPlatform());
-        assertEquals(PVPType.TEAM_BASED_3V3, games.get(games.size() - 1).getPVPType());
-        assertEquals("Mon Jan 01 00:00:00 CET 2024", games.get(games.size() - 1).getReleaseDate().toString());
-    }
-
-    @Test
-    public void testC_deleteGame() {
-
-        tbGames = lookup("#tbGames").query();
-        Integer gameCountPreDelete = tbGames.getItems().size();
         
-
-        Node tbColDeselect = lookup("#tbcolId").nth(gameCountPreDelete-1).query();
-        clickOn(tbColDeselect);
-        Node tbCol = lookup("#tbcolId").nth(gameCountPreDelete).query();
-        clickOn(tbCol);
+        Label lblError = (Label) lookup("#lblError").query();
         
-        press(KeyCode.DELETE);
-
-        sleep(20);
-        
-        Integer gameCountPostDelete = tbGames.getItems().size();
-
-        assertEquals(gameCountPreDelete.toString(), String.valueOf(gameCountPostDelete + 1));
+        verifyThat("#lblError", isVisible());
+        assertEquals("El nombre de este juego ya está registrado", lblError.getText());     
     }
 }

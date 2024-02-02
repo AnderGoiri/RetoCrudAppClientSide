@@ -16,6 +16,9 @@ import businessLogic.GameManagerImplementation;
 import businessLogic.TeamManager;
 import businessLogic.TeamManagerImplementation;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
@@ -24,9 +27,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.TableView;
 import javafx.stage.WindowEvent;
+import model.Game;
 import model.Player;
 import model.User;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  * This is the base class for UI controllers in this application. It contains
@@ -59,8 +71,18 @@ public class GenericController {
      */
     protected EventManager eventManager;
 
-    private User user;
+    protected static User user;
 
+    protected static TableView<Game> tbGames;
+
+    public static TableView<Game> getTbGames() {
+        return tbGames;
+    }
+
+    public static void setTbGames(TableView<Game> tbGames) {
+        GenericController.tbGames = tbGames;
+    }
+    
     public User getUser() {
         return user;
     }
@@ -113,8 +135,7 @@ public class GenericController {
     public void setScene(Scene scene) {
         this.scene = scene;
     }
-    
-    
+
     /**
      * Gets the Stage object related to this controller.
      *
@@ -167,8 +188,30 @@ public class GenericController {
      * @param event The ActionEvent object for the event.
      */
     @FXML
-    private void handleImprimirAction(ActionEvent event) {
-
+    void handleImprimirAction(ActionEvent event) {
+        try {
+            LOGGER.info("Printing Button On Menu Bar Pressed");
+            JasperReport report;
+            if (getUser().getUser_type().equals("admin")) {
+                report = JasperCompileManager.compileReport(getClass()
+                            .getResourceAsStream("/reports/reportGames.jrxml"));
+            } else {
+                report = JasperCompileManager.compileReport(getClass()
+                            .getResourceAsStream("/reports/reportGames.jrxml"));
+            }
+            //Get the games
+            JRBeanCollectionDataSource dataItems
+                    = new JRBeanCollectionDataSource((Collection<Game>) this.tbGames.getItems());
+            //Get parameters
+            Map<String, Object> parameters = new HashMap<>();
+            //Fill with data
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);
+            //show the report window.
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            jasperViewer.setVisible(true);
+        } catch (JRException ex) {
+            showErrorAlert("An error ocurred during the report printing: "+ ex.getMessage());
+        }
     }
 
     /**
@@ -186,7 +229,7 @@ public class GenericController {
     private void handleEventsAction(ActionEvent event) {
         try {
             //Create Bussines Logic Controller to be passed to UI controllers
-            EventManager eventLogicController= new EventManagerImplementation();
+            EventManager eventLogicController = new EventManagerImplementation();
             GameManager gameLogicController = new GameManagerImplementation();
             TeamManager teamLogicController = new TeamManagerImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));

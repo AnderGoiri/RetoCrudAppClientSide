@@ -5,10 +5,18 @@
  */
 package controller;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
 /**
  *
  * @author Andoni Sanz
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+    TestGameWindowController.class,
+    TestGameWindowControllerValidations.class
+})
 public class TestGameWindowControllerSuite {
     
 }
