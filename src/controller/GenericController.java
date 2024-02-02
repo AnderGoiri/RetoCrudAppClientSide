@@ -59,7 +59,7 @@ public class GenericController {
      */
     protected EventManager eventManager;
 
-    private User user;
+    protected static User user;
 
     public User getUser() {
         return user;
@@ -214,7 +214,7 @@ public class GenericController {
             controller.setTeamManager(teamLogicController);
             controller.setStage(getStage());
             controller.setScene(getScene());
-            User user = new Player();
+            //User user = new Player();
             //user.setId(Long.valueOf(3));
             setUser(user);
             controller.initStage(root);

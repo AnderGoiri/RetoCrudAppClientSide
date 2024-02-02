@@ -54,7 +54,7 @@ import model.User;
 
 public class TeamWindowController extends GenericController {
 
-    private Stage stage;
+    //private Stage stage;
     private final static Logger LOGGER = Logger.getLogger(TeamWindowController.class.getName());
 
     @FXML
@@ -134,11 +134,11 @@ public class TeamWindowController extends GenericController {
     public void initStage(Parent root) {
         try {
             // Window setters
-            getScene().setRoot(root);
+            Scene uwu = new Scene(root);
             //stage = new Stage();
             
             //stage.initModality(Modality.APPLICATION_MODAL);
-            //stage.setScene(scene);
+            stage.setScene(uwu);
             stage.setTitle("Equipos");
             //stage.setResizable(false);
 
@@ -318,10 +318,12 @@ public class TeamWindowController extends GenericController {
             
 
         } catch (NoDataException e) {
+            e.printStackTrace();
             LOGGER.severe(e.getMessage());
             lblError.setText("No hay datos.");
             lblError.setVisible(true);
         }catch (Exception e) {
+            e.printStackTrace();
             LOGGER.severe(e.getMessage());
             lblError.setText("Ha ocurrido un error inesperado.");
             lblError.setVisible(true);
@@ -482,7 +484,7 @@ public class TeamWindowController extends GenericController {
     public void handleTextNotEmpty(User user) {
         try {
             if (!tfNombre.getText().isEmpty() && !tfCoach.getText().isEmpty() && dpFundacion.getValue() != null) {
-                if (getUser().getUser_type().equalsIgnoreCase("player")) {
+                if (user.getUser_type().equalsIgnoreCase("player")) {
                     if (tfNombre.getText().length() > 60 || tfCoach.getText().length() > 60) {
                         throw new MaxCharException();
                     } else {

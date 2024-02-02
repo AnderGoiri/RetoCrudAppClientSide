@@ -51,18 +51,13 @@ public class TeamStart extends javafx.application.Application{
             Parent root = loader.load();
             TeamWindowController controller = loader.getController();
             controller.setTeamManager(bussinessLogicController);
-            User u = new User();
+            User u = new User(); 
             u.setUser_type("player");
-
-            controller.setStage(primaryStage);               
-            
-            
-            Scene scene = new Scene(root, 1366, 768);
-
-            controller.setScene(scene);
+            controller.setUser(u);
+            controller.setStage(primaryStage);       
             controller.initStage(root);
         } catch (IOException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex.getMessage());
         }
     }
 
