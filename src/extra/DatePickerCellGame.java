@@ -8,6 +8,7 @@ package extra;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.ResourceBundle;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import model.Game;
@@ -40,7 +41,9 @@ public class DatePickerCellGame extends TableCell<Game, Date> {
     public void updateItem(Date item, boolean empty) {
         super.updateItem(item, empty);
         //The pattern for the date format should be read from a properties´ file
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");     
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(ResourceBundle.getBundle("config.parameters")
+                          .getString("dateFormatPattern"));  
+        
         
         if (empty) {
             setText(null);

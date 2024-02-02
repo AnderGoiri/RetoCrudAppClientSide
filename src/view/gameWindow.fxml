@@ -17,33 +17,38 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameWindowController">
    <children>
+      <ImageView fx:id="background" fitHeight="803.0" fitWidth="1375.0" layoutX="-8.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/zelda-waterfall-stream-pixel-thumb.jpg" />
+         </image>
+      </ImageView>
       <!-- Include the HBox with the menu -->
       <fx:include fx:id="hBoxMenu" source="Menu.fxml" />
       
-      <TableView fx:id="tbGames" layoutX="32.0" layoutY="230.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1302.0">
+      <TableView fx:id="tbGames" layoutX="32.0" layoutY="254.0" minHeight="-Infinity" minWidth="-Infinity" opacity="0.95" prefHeight="476.0" prefWidth="1018.0">
         <columns>
           <TableColumn fx:id="tbcolId" prefWidth="30.933265686035156" text="ID" />
-          <TableColumn fx:id="tbcolName" maxWidth="1000.0" prefWidth="345.06668853759766" text="NAME" />
-          <TableColumn fx:id="tbcolGenre" minWidth="0.0" prefWidth="256.2666931152344" text="GENRE" />
-          <TableColumn fx:id="tbcolPlatform" minWidth="0.0" prefWidth="249.0667724609375" text="PLATFORM" />
-          <TableColumn fx:id="tbcolPVPType" maxWidth="217.33319091796875" prefWidth="173.8668212890625" text="PVPTYPE" />
-          <TableColumn fx:id="tbcolReleaseDate" maxWidth="500.0" prefWidth="250.1331787109375" text="RELEASE DATE" />
+          <TableColumn fx:id="tbcolName" maxWidth="1000.0" prefWidth="282.0" text="NOMBRE" />
+          <TableColumn fx:id="tbcolGenre" minWidth="0.0" prefWidth="173.33331298828125" text="GÉNERO" />
+          <TableColumn fx:id="tbcolPlatform" minWidth="0.0" prefWidth="155.3333740234375" text="PLATAFORMA" />
+          <TableColumn fx:id="tbcolPVPType" maxWidth="362.6666259765625" prefWidth="214.99993896484375" text="TIPO DE PVP" />
+          <TableColumn fx:id="tbcolReleaseDate" maxWidth="500.0" prefWidth="157.333251953125" text="FECHA DE LANZAMIENTO" />
         </columns>
       </TableView>
-      <Label fx:id="lblTitle" layoutX="23.0" layoutY="45.0" prefHeight="40.0" prefWidth="97.0" text="GAMES">
+      <Label fx:id="lblTitle" layoutX="23.0" layoutY="45.0" prefHeight="40.0" prefWidth="137.0" text="JUEGOS" textFill="WHITE">
          <font>
             <Font name="Consolas Bold" size="30.0" />
          </font>
       </Label>
       <Button fx:id="btnExit" layoutX="1220.0" layoutY="49.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="107.0" text="Salir" />
-      <Label fx:id="lblSearch" layoutX="45.0" layoutY="89.0" text="Buscar">
+      <Label fx:id="lblSearch" layoutX="45.0" layoutY="89.0" text="Buscar" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <ComboBox fx:id="cmbSearch" layoutX="46.0" layoutY="112.0" prefHeight="25.0" prefWidth="232.0" />
-      <ComboBox fx:id="cmbPVPType" layoutX="290.0" layoutY="112.0" prefWidth="200.0" />
-      <Label fx:id="lblData" layoutX="291.0" layoutY="89.0" text="Nombre">
+      <ComboBox fx:id="cmbSearch" layoutX="46.0" layoutY="112.0" prefHeight="25.0" prefWidth="195.0" />
+      <ComboBox fx:id="cmbPVPType" layoutX="46.0" layoutY="186.0" prefWidth="200.0" />
+      <Label fx:id="lblData" layoutX="47.0" layoutY="157.0" text="Nombre" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
@@ -53,8 +58,8 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <DatePicker fx:id="dpReleaseDate" layoutX="290.0" layoutY="112.0" />
-      <Button fx:id="btnSearch" layoutX="500.0" layoutY="110.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0">
+      <DatePicker fx:id="dpReleaseDate" layoutX="46.0" layoutY="186.0" />
+      <Button fx:id="btnSearch" layoutX="253.0" layoutY="107.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -62,8 +67,8 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <TextField fx:id="tfSearchData" layoutX="291.0" layoutY="112.0" />
-      <Button fx:id="btnAddRow" layoutX="1297.0" layoutY="186.0" mnemonicParsing="false" text="+">
+      <TextField fx:id="tfSearchData" layoutX="47.0" layoutY="186.0" prefHeight="25.0" prefWidth="174.0" />
+      <Button fx:id="btnAddRow" layoutX="1013.0" layoutY="180.0" mnemonicParsing="false" text="+">
          <font>
             <Font name="System Bold" size="17.0" />
          </font>
