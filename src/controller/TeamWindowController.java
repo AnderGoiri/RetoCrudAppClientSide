@@ -9,6 +9,7 @@ import exceptions.TeamAlreadyExistsException;
 import exceptions.TextFormatException;
 import exceptions.WrongCriteriaException;
 import extra.DatePickerCellTeam;
+import factory.TeamFactory;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -185,7 +186,7 @@ public class TeamWindowController extends GenericController {
             dateFormatPattern = configFile.getProperty("dateFormatPattern");
             tbcolFundacion.setCellFactory(DatePickerCellTeam.forTableColumn(dateFormatPattern));
             // Setting all info from the server into the TableView
-            teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
+            teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findAllTeams());
             tbTeam.setItems(teamsData);
 
             // All combo options
@@ -364,7 +365,7 @@ public class TeamWindowController extends GenericController {
                         public void handle(ActionEvent event) {
                             try {
                                 teamsData.clear();
-                                teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
+                                teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findAllTeams());
                                 tbTeam.setItems(teamsData);
                             } catch (BusinessLogicException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -381,7 +382,7 @@ public class TeamWindowController extends GenericController {
                         public void handle(ActionEvent event) {
                             try {
                                 teamsData.clear();
-                                teamsData = FXCollections.observableArrayList(teamManager.findTeamsByName(tfNombre.getText()));
+                                teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findTeamsByName(tfNombre.getText()));
                                 tbTeam.setItems(teamsData);
                             } catch (BusinessLogicException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -404,7 +405,7 @@ public class TeamWindowController extends GenericController {
                                 LocalDate selectedDate = dpFundacion.getValue();
                                 if (selectedDate != null) {
                                     teamsData.clear();
-                                    teamsData.addAll(teamManager.findTeamsByDate(selectedDate.toString()));
+                                    teamsData.addAll(TeamFactory.getTeamManager().findTeamsByDate(selectedDate.toString()));
                                     tbTeam.setItems(teamsData);
 
                                     if (teamsData.isEmpty()) {
@@ -437,7 +438,7 @@ public class TeamWindowController extends GenericController {
                         public void handle(ActionEvent event) {
                             try {
                                 teamsData.clear();
-                                teamsData = FXCollections.observableArrayList(teamManager.findTeamsByCoach(tfCoach.getText()));
+                                teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findTeamsByCoach(tfCoach.getText()));
                                 tbTeam.setItems(teamsData);
                             } catch (BusinessLogicException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -455,7 +456,7 @@ public class TeamWindowController extends GenericController {
                     btnBuscar.setDisable(false);
                     if (btnBuscar.isPressed()) {
                         teamsData.clear();
-                        teamsData = FXCollections.observableArrayList(teamManager.findTeamsWithWins());
+                        teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findTeamsWithWins());
                         tbTeam.setItems(teamsData);
                     }
                     handleEmptyTable();
@@ -467,7 +468,7 @@ public class TeamWindowController extends GenericController {
                         public void handle(ActionEvent event) {
                             try {
                                 teamsData.clear();
-                                teamsData = FXCollections.observableArrayList(teamManager.findMyTeams((Player) user));
+                                teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findMyTeams((Player) user));
                                 tbTeam.setItems(teamsData);
                             } catch (BusinessLogicException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -579,9 +580,9 @@ public class TeamWindowController extends GenericController {
             newTeam.setFoundation(date);
 
             // Creating the previously set Team in the server side
-            teamManager.createTeam(newTeam);
+            TeamFactory.getTeamManager().createTeam(newTeam);
             teamsData.clear();
-            teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
+            teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findAllTeams());
             tbTeam.setItems(teamsData);
             tbTeam.refresh();
 
@@ -670,7 +671,7 @@ public class TeamWindowController extends GenericController {
                     selectedTeam.setCoach(tfCoach.getText());
                     selectedTeam.setFoundation(newDate);
 
-                    teamManager.modifyTeam(selectedTeam);
+                    TeamFactory.getTeamManager().modifyTeam(selectedTeam);
                 } else {
                     throw new TeamAlreadyExistsException("El equipo no ha sido modificado.");
                 }
@@ -720,7 +721,7 @@ public class TeamWindowController extends GenericController {
             // Check if there is a selected team
             if (selectedTeam != null) {
                 // Call the method to delete the team in the database
-                teamManager.deleteTeam(selectedTeam);
+                TeamFactory.getTeamManager().deleteTeam(selectedTeam);
 
                 // Deleting the team from the TableView list
                 int selectedIndex = tbTeam.getSelectionModel().getSelectedIndex();
@@ -759,7 +760,7 @@ public class TeamWindowController extends GenericController {
             // Check if there is a selected team
             if (selectedTeam != null) {
                 // Call the method to join the team in the database
-                //teamManager.joinTeam(selectedTeam, (Player) user);
+                //TeamFactory.getTeamManager().joinTeam(selectedTeam, (Player) user);
 
                 // Refresh the table with the modified data
                 tbTeam.refresh();
