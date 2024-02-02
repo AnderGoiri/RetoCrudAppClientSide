@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import model.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import org.junit.Test;
@@ -34,6 +35,9 @@ import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 public class EventsViewControllerCrudTest extends ApplicationTest {
 
     private static Event event;
+
+    private ComboBox<String> cbBusqueda, cbJuego;
+
     @FXML
     private TableView tableViewEvents;
 
@@ -95,9 +99,33 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         sleep(500);
     }
 
-    //@Ignore
     @Test
-    public void test3_SearchAllEvent() {
+    public void test3_SearchEventByGame() {
+        tableViewEvents = lookup("#tableViewEvents").queryTableView();
+        clickOn("#btnLimpiar");
+        clickOn("#cbBusqueda");
+        clickOn("Buscar eventos por Juego");
+        clickOn("#cbJuego");
+        press(KeyCode.DOWN);
+        press(KeyCode.ENTER);
+        String selectedGame = cbJuego.getValue();
+        clickOn("#btnBuscar");
+        sleep(1000);
+        List<Event> events = tableViewEvents.getItems();
+        // Filtrar la lista de eventos para incluir solo aquellos con el juego seleccionado
+        List<Event> filteredEvents = events.stream()
+                .filter(e -> e.getGame().getName().equals(selectedGame))
+                .collect(Collectors.toList());
+
+        // Verificar que todos los eventos son del juego seleccionado
+        assertEquals("All Events searched successfully", events.size(), filteredEvents.size());
+        for (Event event : filteredEvents) {
+            assertEquals(selectedGame, event.getGame().getName());
+        }
+    }
+
+    @Test
+    public void test4_SearchAllEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
         clickOn("#btnLimpiar");
@@ -109,12 +137,11 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
     }
 
     @Test
-    public void test4_ModifyEvent() {
+    public void test5_ModifyEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
         Node row = lookup(".table-row-cell").nth(rowCount - 1).query();
         clickOn(row);
-
         Event selectedEvent = (Event) tableViewEvents.getSelectionModel().getSelectedItem();
         int selectedIndex = tableViewEvents.getSelectionModel().getSelectedIndex();
 
@@ -124,19 +151,15 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         doubleClickOn("#tfNombre");
         eraseText(selectedEvent.getName().length());
         write(modifiedEvent.getName());
-
         modifiedEvent.setLocation(selectedEvent.getLocation() + new Random().nextInt(99));
         doubleClickOn("#tfLugar");
         eraseText(selectedEvent.getLocation().length());
         write(modifiedEvent.getLocation());
-
         LocalDate newDate = LocalDate.now().plusDays(1);
         String formattedDate = newDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         clickOn("#dpFecha");
         write(formattedDate);
-
         clickOn("#btnModificar");
-
         // Validate modification by checking if the event details have been updated in the table
         Event updatedEvent = (Event) tableViewEvents.getItems().get(selectedIndex);
         assertEquals(modifiedEvent.getName(), updatedEvent.getName());
@@ -145,17 +168,15 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
 
     //@Ignore
     @Test
-    public void test5_DeleteEvent() {
+    public void test6_DeleteEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
         Node row = lookup(".table-row-cell").nth(rowCount - 1).query();
         Event eventToDelete = (Event) tableViewEvents.getItems().get(rowCount - 1);
         clickOn(row);
         clickOn("#btnEliminar");
-        sleep(500);
         clickOn("Confirmar");
         assertFalse("El evento no se ha eliminado correctamente",
                 tableViewEvents.getItems().contains(eventToDelete));
     }
-
 }
