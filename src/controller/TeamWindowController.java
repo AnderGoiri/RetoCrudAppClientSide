@@ -52,6 +52,11 @@ import model.Player;
 import model.Team;
 import model.User;
 
+/**
+ * FXML Controller class
+ *
+ * @author Jagoba Bartolomé Barroso
+ */
 public class TeamWindowController extends GenericController {
 
     //private Stage stage;
@@ -126,17 +131,24 @@ public class TeamWindowController extends GenericController {
     private Properties configFile = new Properties();
 
     private InputStream input;
-    
+
     private String dateFormatPattern;
 
     ObservableList<Team> teamsData;
 
+    /**
+     * Initializes the team window stage with necessary components, listeners,
+     * and data. Disables/enables buttons and text fields based on the user's
+     * role.
+     *
+     * @param root The root node of the scene.
+     */
     public void initStage(Parent root) {
         try {
             // Window setters
             Scene uwu = new Scene(root);
             //stage = new Stage();
-            
+
             //stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(uwu);
             stage.setTitle("Equipos");
@@ -180,10 +192,10 @@ public class TeamWindowController extends GenericController {
             ObservableList<String> namedQueriesList = FXCollections.observableArrayList(
                     "Todos",
                     "Por nombre",
-                    "Por fecha",
-                    "Por coach",
+                    //"Por fecha",
+                    "Por coach"/*,
                     "Equipos con victorias",
-                    "Mis Equipos",
+                    "Mis Equipos"*/,
                     ""
             );
             // Setting default selected item for search combo
@@ -250,7 +262,7 @@ public class TeamWindowController extends GenericController {
             cleanFormItem.setOnAction(event -> handleCleanRequest(event));
             createTeamItem.setOnAction(event -> handleCreateTeam(event));
             modifyTeamItem.setOnAction(event -> handleModifyTeam(event));
-            
+
             // Add CRUD options to the context menu
             contextMenu.getItems().addAll(cleanFormItem, createTeamItem, modifyTeamItem);
             root.setOnContextMenuRequested(event -> contextMenu.show(root, event.getScreenX(), event.getScreenY()));
@@ -270,11 +282,11 @@ public class TeamWindowController extends GenericController {
                     btnModificar.setDisable(false);
                     btnUnirse.setDisable(false);
                     btnEliminar.setDisable(false);
-                     
+
                     Team selectedTeam = tbTeam.getSelectionModel().getSelectedItem();
                     tfNombre.setText(selectedTeam.getName());
                     tfCoach.setText(selectedTeam.getCoach());
-                    try { 
+                    try {
                         dpFundacion.setValue(selectedTeam.getFoundation().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                     } catch (IOException | ParseException ex) {
                         Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -284,7 +296,7 @@ public class TeamWindowController extends GenericController {
                     btnUnirse.setDisable(true);
                     btnEliminar.setDisable(true);
                 }
-                 handleTextNotEmpty(getUser());
+                handleTextNotEmpty(getUser());
             });
 
             // Creating a team
@@ -292,13 +304,13 @@ public class TeamWindowController extends GenericController {
 
             // Modifying a team
             btnModificar.setOnAction(event -> handleModifyTeam(event));
-            
+
             // Deleting a team
             btnEliminar.setOnAction(event -> handleDeleteTeam(event));
-            
+
             // Joining a team
             btnUnirse.setOnAction(event -> handleJoinTeam(event, getUser()));
-            
+
             // Check if any of the buttons is pressed
             boolean buttonPressed = btnCrear.isPressed() || btnModificar.isPressed() || btnEliminar.isPressed() || btnUnirse.isPressed();
 
@@ -309,20 +321,18 @@ public class TeamWindowController extends GenericController {
             if (buttonPressed && allFieldsEmpty) {
                 throw new NoDataException("No hay datos con los que operar.");
             }
-            
+
             // Closing the window
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
             //TODO Change it to go back to login
             btnSalir.setOnAction(event -> super.handleBtnClose(event));
-            
-            
 
         } catch (NoDataException e) {
             e.printStackTrace();
             LOGGER.severe(e.getMessage());
             lblError.setText("No hay datos.");
             lblError.setVisible(true);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.severe(e.getMessage());
             lblError.setText("Ha ocurrido un error inesperado.");
@@ -330,6 +340,18 @@ public class TeamWindowController extends GenericController {
         }
     }
 
+    /**
+     * Handles the selection of a named query from the search combo box and
+     * performs the corresponding action. Disables/enables buttons and updates
+     * the TableView based on the selected named query.
+     *
+     * @param event The ActionEvent triggering the method call.
+     * @param user The User for whom the named query is performed.
+     * @throws BusinessLogicException If a business logic error occurs during
+     * the process.
+     * @throws WrongCriteriaException If the criteria for a named query are not
+     * met.
+     */
     public void handleComboBoxSelection(ActionEvent event, User user) throws BusinessLogicException, WrongCriteriaException {
         String selectedNamedQuery = (String) cmbBusqueda.getValue();
         if (selectedNamedQuery != null) {
@@ -373,7 +395,7 @@ public class TeamWindowController extends GenericController {
                     });
                     handleEmptyTable();
                     break;
-                case "Por fecha":
+                /*case "Por fecha":
                     btnBuscar.setDisable(false);
                     btnBuscar.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
@@ -407,7 +429,7 @@ public class TeamWindowController extends GenericController {
                     });
                     handleEmptyTable();
                     break;
-
+                 */
                 case "Por coach":
                     btnBuscar.setDisable(false);
                     btnBuscar.setOnAction(new EventHandler<ActionEvent>() {
@@ -429,7 +451,7 @@ public class TeamWindowController extends GenericController {
                     });
                     handleEmptyTable();
                     break;
-                case "Equipos con victorias":
+                /*case "Equipos con victorias":
                     btnBuscar.setDisable(false);
                     if (btnBuscar.isPressed()) {
                         teamsData.clear();
@@ -458,7 +480,7 @@ public class TeamWindowController extends GenericController {
                         }
                     });
                     handleEmptyTable();
-                    break;
+                    break;*/
                 case "":
                     teamsData.clear();
                     btnBuscar.setDisable(true);
@@ -468,6 +490,12 @@ public class TeamWindowController extends GenericController {
         }
     }
 
+    /**
+     * Handles the action of clearing input fields and resetting values in the
+     * form.
+     *
+     * @param event The ActionEvent triggering the method call.
+     */
     public void handleCleanRequest(ActionEvent event) {
         try {
             tfNombre.clear();
@@ -481,6 +509,14 @@ public class TeamWindowController extends GenericController {
         }
     }
 
+    /**
+     * Handles the logic for enabling/disabling a button based on text input and
+     * user type.
+     *
+     * @param user The User object for whom the validation is performed.
+     * @throws MaxCharException If the length of the Name or Coach field exceeds
+     * the allowed limit.
+     */
     public void handleTextNotEmpty(User user) {
         try {
             if (!tfNombre.getText().isEmpty() && !tfCoach.getText().isEmpty() && dpFundacion.getValue() != null) {
@@ -502,6 +538,17 @@ public class TeamWindowController extends GenericController {
 
     }
 
+    /**
+     * Handles the action of creating a new team based on user input. Clears the
+     * existing table, validates input fields, creates a new team, sends the
+     * team information to the server, and updates the TableView.
+     *
+     * @param event The ActionEvent triggering the method call.
+     * @throws TextFormatException If the Name or Coach field does not match the
+     * required format.
+     * @throws Exception If an error occurs during the process of creating the
+     * team.
+     */
     private void handleCreateTeam(ActionEvent event) {
         try {
             // Clearing the table and creating a Team
@@ -537,11 +584,11 @@ public class TeamWindowController extends GenericController {
             teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
             tbTeam.setItems(teamsData);
             tbTeam.refresh();
-            
+
             // Changing label
             Label SelectPlaceholder = new Label("Selecciona un tipo de búsqueda para mostrar datos.");
             tbTeam.setPlaceholder(SelectPlaceholder);
-            
+
             lblError.setVisible(false);
         } catch (TextFormatException e) {
             LOGGER.warning(e.getMessage());
@@ -555,6 +602,11 @@ public class TeamWindowController extends GenericController {
         }
     }
 
+    /**
+     * Handles the scenario when the TableView is empty by setting a placeholder
+     * label. If the TableView contains no items, it sets a label indicating
+     * that there is no data matching the selected criteria as a placeholder.
+     */
     private void handleEmptyTable() {
         try {
             // Check if the TableView is empty
@@ -563,12 +615,25 @@ public class TeamWindowController extends GenericController {
                 Label selectPlaceholder = new Label("No data matching the selected criteria.");
                 tbTeam.setPlaceholder(selectPlaceholder);
             }
-            
+
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
         }
     }
 
+    /**
+     * Handles the action of modifying a team based on user input.
+     *
+     * @param event The ActionEvent triggering the method call.
+     * @throws TeamAlreadyExistsException If the modified team information
+     * matches an existing team.
+     * @throws CoachFormatException If the Coach field does not match the
+     * required format.
+     * @throws NameFormatException If the Name field does not match the required
+     * format.
+     * @throws Exception If an error occurs during the process of modifying the
+     * team.
+     */
     private void handleModifyTeam(ActionEvent event) {
         try {
             lblError.setVisible(false);
@@ -639,6 +704,13 @@ public class TeamWindowController extends GenericController {
         }
     }
 
+    /**
+     * Handles the action of deleting a team.
+     *
+     * @param event The ActionEvent triggering the method call.
+     * @throws Exception If an error occurs during the process of deleting the
+     * team.
+     */
     private void handleDeleteTeam(ActionEvent event) {
         try {
             lblError.setVisible(false);
@@ -670,6 +742,14 @@ public class TeamWindowController extends GenericController {
         }
     }
 
+    /**
+     * Handles the action of joining a team by a user.
+     *
+     * @param event The ActionEvent triggering the method call.
+     * @param user The User attempting to join the team.
+     * @throws Exception If an error occurs during the process of joining the
+     * team.
+     */
     private void handleJoinTeam(ActionEvent event, User user) {
         try {
             lblError.setVisible(false);
@@ -685,6 +765,7 @@ public class TeamWindowController extends GenericController {
                 tbTeam.refresh();
 
                 LOGGER.info("Team joined.");
+                lblError.setText("Te has unido al equipo.");
             } else {
                 LOGGER.warning("No team selected.");
                 lblError.setText("No team selected");

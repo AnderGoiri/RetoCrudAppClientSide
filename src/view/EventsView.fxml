@@ -96,7 +96,7 @@
                     <graphic>
                         <ImageView fx:id="imgLimpiar" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../../../../Downloads/Icono%20limpiar.png" />
+                                <Image url="@../../resources/Icono%20limpiar.png" />
                             </image>
                         </ImageView>
                     </graphic>

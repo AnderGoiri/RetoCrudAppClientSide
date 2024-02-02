@@ -36,9 +36,7 @@ public class TeamRestClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = 
-            ResourceBundle.getBundle("config.parameters")
-                          .getString("RESTful.baseURI");
+    private static final String BASE_URI = ResourceBundle.getBundle("config.parameters").getString("RESTful.baseURI");
 
     public TeamRestClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();

@@ -28,7 +28,8 @@ import model.Player;
 import model.User;
 
 /**
- *
+ * Start class that instanciates the app directly in the Team View
+ * 
  * @author Jagoba Bartolomé Barroso
  */
 public class TeamStart extends javafx.application.Application{    

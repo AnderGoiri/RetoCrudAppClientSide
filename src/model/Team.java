@@ -20,7 +20,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Entity JPA class for Team data. This class contains the properties for the
+ * teams managed in the app.
+ * 
  * @author Jagoba Bartolomé Barroso
  */
 @XmlRootElement(name="team")
