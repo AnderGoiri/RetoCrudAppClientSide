@@ -7,6 +7,7 @@ package controller;
 
 import static controller.GenericController.LOGGER;
 import exceptions.NumericFormatException;
+import static factory.GameFactory.getGameManager;
 import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.Collection;
@@ -95,11 +96,10 @@ public class EventsViewController extends GenericController {
      */
     public void initStage(Parent root) {
         try {
-            getScene().setRoot(root);
+            
+            Scene scene = new Scene(root);
             //stage = new Stage();
 
-            //Set stage properties
-            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.setTitle("eSportsHub - EVENTOS");
             stage.setResizable(false);
@@ -127,7 +127,7 @@ public class EventsViewController extends GenericController {
                 }
             });
 
-            games = gameManager.getAllGames();
+            games = getGameManager().getAllGames();
             ObservableList<String> gameNames = FXCollections.observableArrayList(
                     games.stream()
                             .map(Game::getName)
@@ -259,7 +259,7 @@ public class EventsViewController extends GenericController {
             stage.show();
 
         } catch (Exception e) {
-            //  e.printStackTrace();
+            e.printStackTrace();
             LOGGER.severe(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();

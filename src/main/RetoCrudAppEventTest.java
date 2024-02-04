@@ -43,20 +43,17 @@ public class RetoCrudAppEventTest extends javafx.application.Application {
         try {
             //Create Bussines Logic Controller to be passed to UI controllers
             EventManager eventLogicController = new EventManagerImplementation();
-            GameManager gameLogicController = new GameManagerImplementation();
-            TeamManager teamLogicController = new TeamManagerImplementation();
+     
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
             EventsViewController controller = loader.getController();
             controller.setEventManager(eventLogicController);
-            controller.setGameManager(gameLogicController);
-            controller.setTeamManager(teamLogicController);
+          
             User appUser = new User();
             appUser.setUser_type("organizer");
+            controller.setUser(appUser);
             controller.setStage(primaryStage);
-            Scene scene = new Scene(root, 1366, 768);
-
-            controller.setScene(scene);
+       
             controller.initStage(root);
 
         } catch (IOException ex) {

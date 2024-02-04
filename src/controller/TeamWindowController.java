@@ -147,11 +147,11 @@ public class TeamWindowController extends GenericController {
     public void initStage(Parent root) {
         try {
             // Window setters
-            Scene uwu = new Scene(root);
+            Scene scene = new Scene(root);
             //stage = new Stage();
 
             //stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(uwu);
+            stage.setScene(scene);
             stage.setTitle("Equipos");
             //stage.setResizable(false);
 
