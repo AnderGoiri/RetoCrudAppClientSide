@@ -36,7 +36,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-import main.RetoCrudAppClient;
+import main.EventStart;
 import model.Game;
 import model.PVPType;
 import static org.junit.Assert.assertEquals;
