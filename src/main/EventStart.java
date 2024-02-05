@@ -9,11 +9,10 @@ import businessLogic.EventManager;
 import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
-import businessLogic.TeamManager;
-import businessLogic.TeamManagerImplementation;
 import controller.EventsViewController;
-import controller.GameWindowController;
-import controller.TeamWindowController;
+import factory.EventFactory;
+import factory.GameFactory;
+import factory.TeamFactory;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +22,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.Admin;
 import model.Player;
 import model.User;
 
@@ -45,21 +43,15 @@ public class EventStart extends javafx.application.Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-
             //Create Bussines Logic Controller to be passed to UI controllers
-            EventManager eventLogicController = new EventManagerImplementation();
-            //GameManager gameLogicController = new GameManagerImplementation();
-            //TeamManager teamLogicController = new TeamManagerImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
             EventsViewController controller = loader.getController();
-            controller.setEventManager(eventLogicController);
-            
-            GameManager gameLogicController = new GameManagerImplementation();
-            controller.setGameManager(gameLogicController);
-//controller.setGameManager(gameLogicController);
-            //controller.setTeamManager(eventLogicController);
+            controller.setEventManager(EventFactory.getEventManager());
+            controller.setGameManager(GameFactory.getGameManager());
+            controller.setTeamManager(TeamFactory.getTeamManager());
             controller.setStage(primaryStage);
+
             User user = new Player();
             user.setUser_type("organizer");
             Scene scene = new Scene(root, 1366, 768);
