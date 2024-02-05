@@ -52,7 +52,7 @@ public class GameStart extends javafx.application.Application{
             GameWindowController controller = loader.getController();
             controller.setGameManager(bussinessLogicController);
             User u = new User();
-            u.setUser_type("player");
+            u.setUser_type("admin");
             
             
             controller.setStage(primaryStage);               
