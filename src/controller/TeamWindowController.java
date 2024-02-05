@@ -9,6 +9,7 @@ import exceptions.TeamAlreadyExistsException;
 import exceptions.TextFormatException;
 import exceptions.WrongCriteriaException;
 import extra.DatePickerCellTeam;
+import factory.TeamFactory;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -54,7 +55,7 @@ import model.User;
 
 public class TeamWindowController extends GenericController {
 
-    private Stage stage;
+    // Stage stage;
     private final static Logger LOGGER = Logger.getLogger(TeamWindowController.class.getName());
 
     @FXML
@@ -136,9 +137,9 @@ public class TeamWindowController extends GenericController {
             // Window setters
             getScene().setRoot(root);
             //stage = new Stage();
-            
+           //Scene scene = new Scene(root);
             //stage.initModality(Modality.APPLICATION_MODAL);
-            //stage.setScene(scene);
+            
             stage.setTitle("Equipos");
             //stage.setResizable(false);
 
@@ -173,7 +174,7 @@ public class TeamWindowController extends GenericController {
             dateFormatPattern = configFile.getProperty("dateFormatPattern");
             tbcolFundacion.setCellFactory(DatePickerCellTeam.forTableColumn(dateFormatPattern));
             // Setting all info from the server into the TableView
-            teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
+            teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findAllTeams());
             tbTeam.setItems(teamsData);
 
             // All combo options
@@ -195,7 +196,7 @@ public class TeamWindowController extends GenericController {
             tbTeam.setPlaceholder(SelectPlaceholder);
 
             // Show the view
-            stage.show();
+            //stage.show();
 
             // Check if there is no data in Team table
             if (tbTeam.getItems().isEmpty()) {
@@ -316,12 +317,14 @@ public class TeamWindowController extends GenericController {
             btnSalir.setOnAction(event -> super.handleBtnClose(event));
             
             
-
+            stage.setScene(scene);
+            stage.show();
         } catch (NoDataException e) {
             LOGGER.severe(e.getMessage());
             lblError.setText("No hay datos.");
             lblError.setVisible(true);
         }catch (Exception e) {
+            e.printStackTrace();
             LOGGER.severe(e.getMessage());
             lblError.setText("Ha ocurrido un error inesperado.");
             lblError.setVisible(true);
@@ -340,7 +343,7 @@ public class TeamWindowController extends GenericController {
                         public void handle(ActionEvent event) {
                             try {
                                 teamsData.clear();
-                                teamsData = FXCollections.observableArrayList(teamManager.findAllTeams());
+                                teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findAllTeams());
                                 tbTeam.setItems(teamsData);
                             } catch (BusinessLogicException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);

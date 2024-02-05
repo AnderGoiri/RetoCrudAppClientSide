@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package test;
 
 import static java.lang.Math.random;
 import java.nio.charset.Charset;
@@ -38,6 +38,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import main.RetoCrudAppEventTest;
 import model.Game;
 import model.PVPType;
 import static org.junit.Assert.assertEquals;

@@ -255,11 +255,9 @@ public class GenericController {
             TeamWindowController controller = loader.getController();
 
             controller.setTeamManager(teamLogicController);
-            controller.setStage(getStage());
-            controller.setScene(getScene());
-            User user = new Player();
-            //user.setId(Long.valueOf(3));
-            setUser(user);
+            //controller.setStage(getStage());
+            //controller.setScene(getScene());
+            
             controller.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(GenericController.class.getName()).log(Level.SEVERE, null, ex);

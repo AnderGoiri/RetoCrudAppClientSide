@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package test;
 
 import static java.lang.Math.random;
 import java.nio.charset.Charset;
@@ -36,6 +36,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import main.GameStart;
 import model.Game;
 import model.PVPType;
 import static org.junit.Assert.assertEquals;
@@ -141,7 +142,7 @@ public class TestGameWindowControllerValidations extends ApplicationTest {
         tbGames = lookup("#tbGames").query();
         Integer gameCount = tbGames.getItems().size();
         clickOn("#btnAddRow");
-        
+
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 10;
@@ -160,21 +161,21 @@ public class TestGameWindowControllerValidations extends ApplicationTest {
         write(generatedName);
         press(KeyCode.ENTER);
         release(KeyCode.ENTER);
-        
+
         //create other game and add same name
         clickOn("#btnAddRow");
-        
-        tbColName = lookup("#tbcolName").nth(gameCount+1).query();
-        
+
+        tbColName = lookup("#tbcolName").nth(gameCount + 1).query();
+
         doubleClickOn(tbColName);
         eraseText(10);
         write(generatedName);
         press(KeyCode.ENTER);
         release(KeyCode.ENTER);
-        
+
         Label lblError = (Label) lookup("#lblError").query();
-        
+
         verifyThat("#lblError", isVisible());
-        assertEquals("El nombre de este juego ya está registrado", lblError.getText());     
+        assertEquals("El nombre de este juego ya está registrado", lblError.getText());
     }
 }

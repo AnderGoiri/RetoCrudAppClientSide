@@ -85,7 +85,7 @@ public class EventsViewController extends GenericController {
 
             //Set stage properties
             //stage.initModality(Modality.APPLICATION_MODAL);
-            //stage.setScene(scene);
+            
             stage.setTitle("EVENTOS");
             //stage.setResizable(false);
 
@@ -188,7 +188,9 @@ public class EventsViewController extends GenericController {
                     btnEliminar.setDisable(true);
                 }
             });
-            //stage.show();
+            
+            stage.setScene(scene);
+            stage.show();
         } catch (Exception e) {
             //  e.printStackTrace();
             LOGGER.severe(e.getMessage());
