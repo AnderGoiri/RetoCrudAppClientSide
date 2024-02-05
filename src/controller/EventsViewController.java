@@ -71,8 +71,7 @@ public class EventsViewController extends GenericController {
     private String dateFormatPattern;
 
     private Collection<Game> games;
-    
-    
+
     /**
      * Initializes the controller class.
      *
@@ -188,7 +187,7 @@ public class EventsViewController extends GenericController {
                     btnEliminar.setDisable(true);
                 }
             });
-            //stage.show();
+            stage.show();
         } catch (Exception e) {
             //  e.printStackTrace();
             LOGGER.severe(e.getMessage());

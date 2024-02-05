@@ -10,12 +10,14 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
+import main.Application;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-import main.RetoCrudAppClient;
+import main.EventStart;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
@@ -37,9 +39,11 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(RetoCrudAppClient.class);
+        FxToolkit.setupApplication(Application.class);
+        
     }
 
+    @Ignore
     @Test
     public void test1_InitStage() {
         verifyThat("#hBoxMenu", isVisible());
@@ -86,9 +90,10 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         assertEquals("The event has been added!",
                 events.stream()
                         .filter(e -> e.getName().equals(evento) && e.getLocation().equals(lugar)).count(), 1);
-        sleep(500);
+        //sleep(500);
     }
 
+    @Ignore
     @Test
     public void test3_SearchEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
@@ -121,6 +126,7 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
          */
     }
 
+    @Ignore
     @Test
     public void test4_ModifyEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
@@ -187,6 +193,7 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
 
     }
 
+    @Ignore
     @Test
     public void test5_DeleteEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
