@@ -80,12 +80,10 @@ public class EventsViewController extends GenericController {
     public void initStage(Parent root) {
         try {
             getScene().setRoot(root);
-            //stage = new Stage();
 
             //Set stage properties
             //stage.initModality(Modality.APPLICATION_MODAL);
-            //stage.setScene(scene);
-            stage.setTitle("EVENTOS");
+            stage.setTitle("eSportsHub - EVENTOS");
             //stage.setResizable(false);
 
             //Set properties on showing
@@ -189,7 +187,7 @@ public class EventsViewController extends GenericController {
             });
             stage.show();
         } catch (Exception e) {
-            //  e.printStackTrace();
+            // e.printStackTrace();
             LOGGER.severe(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
@@ -365,5 +363,4 @@ public class EventsViewController extends GenericController {
             LOGGER.severe("Error al buscar eventos: " + ex.getMessage());
         }
     }
-
 }

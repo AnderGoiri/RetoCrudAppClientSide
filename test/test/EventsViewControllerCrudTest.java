@@ -37,7 +37,9 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        // Register the primary stage of the JavaFX application.
         FxToolkit.registerPrimaryStage();
+        // Setup and launch the JavaFX application.
         FxToolkit.setupApplication(Application.class);
     }
 
