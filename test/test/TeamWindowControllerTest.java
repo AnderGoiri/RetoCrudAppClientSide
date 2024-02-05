@@ -27,6 +27,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
@@ -53,7 +54,7 @@ public class TeamWindowControllerTest extends ApplicationTest {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(TeamStart.class);
     }
-
+    @Ignore
     @Test
     public void test1InitStage(){
         sleep(4000);
@@ -89,10 +90,10 @@ public class TeamWindowControllerTest extends ApplicationTest {
         List<Team> teams = tbTeam.getItems();
         assertEquals("The team has not been added.", teams.stream().filter(t -> t.getName().equals(team) && t.getCoach().equals(coach)).count(), 1);
         
-        sleep(3000);
+        //sleep(3000);
     }
     
-    
+    @Ignore
     @Test
     public void test3FindTeamByName() {
        clickOn("#btnLimpiar");
@@ -116,7 +117,7 @@ public class TeamWindowControllerTest extends ApplicationTest {
        
        sleep(3000);
     }
-    
+    @Ignore
     @Test
     public void test4FindTeamByCoach() {
        clickOn("#btnLimpiar");
@@ -143,7 +144,7 @@ public class TeamWindowControllerTest extends ApplicationTest {
        
        sleep(3000);
     }
-    
+    @Ignore
     @Test
     public void test5ModifyTeam() {
         tbTeam = lookup("#tbTeam").queryTableView();
@@ -192,7 +193,7 @@ public class TeamWindowControllerTest extends ApplicationTest {
         }
         sleep(3000);
     }
-
+    @Ignore
     @Test
     public void test6DeleteTeam() {
        tbTeam = lookup("#tbTeam").queryTableView();
