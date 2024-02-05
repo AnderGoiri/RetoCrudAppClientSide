@@ -82,7 +82,7 @@ public class GenericController {
     public static void setTbGames(TableView<Game> tbGames) {
         GenericController.tbGames = tbGames;
     }
-    
+
     public User getUser() {
         return user;
     }
@@ -194,10 +194,10 @@ public class GenericController {
             JasperReport report;
             if (getUser().getUser_type().equals("admin")) {
                 report = JasperCompileManager.compileReport(getClass()
-                            .getResourceAsStream("/reports/reportGames.jrxml"));
+                        .getResourceAsStream("/reports/reportGames.jrxml"));
             } else {
                 report = JasperCompileManager.compileReport(getClass()
-                            .getResourceAsStream("/reports/reportGames.jrxml"));
+                        .getResourceAsStream("/reports/reportGames.jrxml"));
             }
             //Get the games
             JRBeanCollectionDataSource dataItems
@@ -210,7 +210,7 @@ public class GenericController {
             JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
             jasperViewer.setVisible(true);
         } catch (JRException ex) {
-            showErrorAlert("An error ocurred during the report printing: "+ ex.getMessage());
+            showErrorAlert("An error ocurred during the report printing: " + ex.getMessage());
         }
     }
 
@@ -333,9 +333,33 @@ public class GenericController {
     public void handleBtnClose(ActionEvent event) {
         try {
             LOGGER.info("Salir button clicked.");
-            Optional.ofNullable(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST))
-                    .ifPresent(this::handleCloseRequest);
+            // Create a confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Cerrar sesión");
+            alert.setHeaderText("¿Desea cerrar su sesión actual?");
 
+            // Add confirmation and cancel buttons to the dialog
+            ButtonType confirmButton = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(confirmButton, cancelButton);
+
+            // Show the dialog and wait for user response
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == confirmButton) {
+
+                // Load the LoginFXML.fxml file
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+                Parent root = loader.load();
+
+                // Get the controller of the login window
+                LogInController controller = loader.getController();
+
+                // Set the primary stage (main window) to display the login window
+                controller.setStage(stage);
+                controller.initStage(root);
+            } else {
+                LOGGER.info("Window closure canceled by user.");
+            }
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error handling Salir button click", ex);
         }
