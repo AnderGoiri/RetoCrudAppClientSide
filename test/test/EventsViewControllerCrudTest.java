@@ -15,7 +15,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-import main.EventStart;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -40,12 +39,15 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
     public static void setUpClass() throws Exception {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(Application.class);
-        
     }
 
-    @Ignore
     @Test
     public void test1_InitStage() {
+        clickOn("#txtEmail");
+        write("organizer");
+        clickOn("#pwdPassword");
+        write("Abcd*1234");
+        clickOn("#loginButton");
         verifyThat("#hBoxMenu", isVisible());
         verifyThat("#tfNombre", hasText(""));
         verifyThat("#tfLugar", hasText(""));
