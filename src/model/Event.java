@@ -284,7 +284,7 @@ public class Event implements Serializable {
         }
         // Convert the passed object to Event to compare the IDs
         Event other = (Event) object;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.name, other.name);
     }
 
     @Override

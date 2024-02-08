@@ -6,6 +6,9 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
+import exceptions.BusinessLogicException;
+import exceptions.EventAlreadyExistsException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.Collection;
@@ -16,7 +19,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -28,13 +30,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import model.Event;
 import model.Game;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Properties;
-import model.User;
+import javafx.scene.control.ButtonBar;
 
 /**
  * FXML Controller class
@@ -64,7 +65,7 @@ public class EventsViewController extends GenericController {
 
     private ObservableList<Event> eventsData;
 
-    private Properties configFile = new Properties();
+    private final Properties configFile = new Properties();
 
     private InputStream input;
 
@@ -82,9 +83,7 @@ public class EventsViewController extends GenericController {
             getScene().setRoot(root);
 
             //Set stage properties
-            //stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("eSportsHub - EVENTOS");
-            //stage.setResizable(false);
 
             //Set properties on showing
             btnUnirse.setDisable(true);
@@ -167,8 +166,8 @@ public class EventsViewController extends GenericController {
             tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
 
             tableViewEvents.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
+                Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
+                if (selectedEvent != null) {
                     tfNombre.setText(selectedEvent.getName());
                     tfLugar.setText(selectedEvent.getLocation());
                     dpFecha.setValue(selectedEvent.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -186,8 +185,7 @@ public class EventsViewController extends GenericController {
                 }
             });
             stage.show();
-        } catch (Exception e) {
-            // e.printStackTrace();
+        } catch (BusinessLogicException | IOException e) {
             LOGGER.severe(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
@@ -212,7 +210,7 @@ public class EventsViewController extends GenericController {
             eventsData.clear();
             eventsData.addAll(eventManager.findAllEvents());
             tableViewEvents.refresh();
-        } catch (Exception ex) {
+        } catch (BusinessLogicException ex) {
             LOGGER.log(Level.SEVERE, "Error cleaning the form", ex);
         }
     }
@@ -260,8 +258,20 @@ public class EventsViewController extends GenericController {
             tableViewEvents.setItems(eventsData);
             tableViewEvents.refresh();
 
-            lbError.setVisible(false);
-        } catch (Exception e) {
+            // Check if newEvent already exists in eventsData
+            if (!eventsData.contains(newEvent)) {
+                // Create the event in the database
+                eventManager.createEvent(newEvent);
+                eventsData.clear();
+                eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                tableViewEvents.setItems(eventsData);
+                tableViewEvents.refresh();
+                lbError.setVisible(false);
+            } else {
+                // Handle case where newEvent already exists in eventsData
+                throw new EventAlreadyExistsException();
+            }
+        } catch (BusinessLogicException | EventAlreadyExistsException | NumberFormatException e) {
             LOGGER.severe(e.getMessage());
             lbError.setText("Ha ocurrido un error al crear un evento");
             lbError.setVisible(true);
@@ -315,16 +325,28 @@ public class EventsViewController extends GenericController {
             Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
 
             if (selectedEvent != null) {
-                // Call the method to delete the event in the database
-                eventManager.deleteEvent(selectedEvent);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Eliminar Evento");
+                alert.setHeaderText("¿Estas seguro de que quieres borrar este evento?");
+                // Add confirmation and cancel buttons to the dialog
+                ButtonType confirmButton = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
+                ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+                alert.getButtonTypes().setAll(confirmButton, cancelButton);
+                // Show the dialog and wait for user response
+                Optional<ButtonType> result = alert.showAndWait();
 
-                // Deleting the event from the TableView list
-                int selectedIndex = tableViewEvents.getSelectionModel().getSelectedIndex();
-                eventsData.remove(selectedIndex);
-
-                // Refresh the table with the modified data
-                tableViewEvents.refresh();
-
+                if (result.isPresent() && result.get() == confirmButton) {
+                    // Call the method to delete the event in the database
+                    eventManager.deleteEvent(selectedEvent);
+                    // Deleting the event from the TableView list
+                    int selectedIndex = tableViewEvents.getSelectionModel().getSelectedIndex();
+                    eventsData.remove(selectedIndex);
+                    // Refresh the table with the modified data
+                    tableViewEvents.refresh();
+                    LOGGER.info("Event deleted by user confirmation.");
+                } else {
+                    LOGGER.info("Event deletion canceled by user.");
+                }
                 LOGGER.info("Event deleted");
             }
         } catch (Exception e) {
@@ -337,7 +359,6 @@ public class EventsViewController extends GenericController {
     private void handleSearchRequest(ActionEvent event) {
         try {
             String selectedCriteria = cbBusqueda.getValue();
-
             Collection<Event> filteredEvents = null;
             switch (selectedCriteria) {
                 case "Buscar todos los eventos":
@@ -352,9 +373,7 @@ public class EventsViewController extends GenericController {
                 default:
                     break;
             }
-
             if (filteredEvents != null) {
-                // Limpiar la tabla y agregar los eventos filtrados
                 eventsData.clear();
                 eventsData.addAll(filteredEvents);
                 tableViewEvents.refresh();
