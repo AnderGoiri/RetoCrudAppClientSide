@@ -5,9 +5,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.stream.Collectors;
 import model.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import main.Application;
@@ -31,6 +33,10 @@ import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EventsViewControllerCrudTest extends ApplicationTest {
+
+    private static Event event;
+
+    private ComboBox<String> cbBusqueda, cbJuego;
 
     @FXML
     private TableView tableViewEvents;
@@ -94,118 +100,85 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         assertEquals("The event has been added!",
                 events.stream()
                         .filter(e -> e.getName().equals(evento) && e.getLocation().equals(lugar)).count(), 1);
-        //sleep(500);
+        event = events.stream()
+                .filter(e -> e.getName().equals(evento) && e.getLocation().equals(lugar)).collect(Collectors.toList()).get(0);
     }
 
-    @Ignore
     @Test
-    public void test3_SearchEvent() {
+    public void test3_SearchEventByGame() {
+        tableViewEvents = lookup("#tableViewEvents").queryTableView();
+        cbJuego = lookup("#cbJuego").query();
+        clickOn("#btnLimpiar");
+        clickOn("#cbBusqueda");
+        clickOn("Buscar eventos por Juego");
+        clickOn("#cbJuego");
+        press(KeyCode.DOWN);
+        press(KeyCode.ENTER);
+        String selectedGame = cbJuego.getSelectionModel().getSelectedItem();
+        clickOn("#btnBuscar");
+        List<Event> events = tableViewEvents.getItems();
+        // Filtrar la lista de eventos para incluir solo aquellos con el juego seleccionado
+        List<Event> filteredEvents = events.stream()
+                .filter(e -> e.getGame().getName().equals(selectedGame))
+                .collect(Collectors.toList());
+        // Verificar que todos los eventos son del juego seleccionado
+        assertEquals("All Events searched successfully", events.size(), filteredEvents.size());
+        for (Event event : filteredEvents) {
+            assertEquals(selectedGame, event.getGame().getName());
+        }
+    }
+
+    @Test
+    public void test4_SearchAllEvent() {
+        clickOn("#btnLimpiar");
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
-        clickOn("#btnLimpiar");
         clickOn("#cbBusqueda");
         clickOn("Buscar todos los eventos");
         clickOn("#btnBuscar");
         assertEquals("All Events searched succedfully",
                 rowCount, tableViewEvents.getItems().size());
-        /*
-        Node row = lookup(".table-row-cell").nth(0).query();
-        clickOn(row);
-        Event selectedEvent = (Event) tableViewEvents.getSelectionModel()
-                .getSelectedItem();
-        clickOn("#btnLimpiar");
-        clickOn("#cbBusqueda");
-        clickOn("Buscar eventos por ONG");
-        clickOn("#tfONG");
-        String selectedONG = selectedEvent.getOng();
-        write(String.valueOf(selectedONG));
-        clickOn("#btnBuscar");
-        rowCount = tableViewEvents.getItems().size();
-        List<Event> events = tableViewEvents.getItems();
-        assertEquals("The search was successful",
-                rowCount,
-                events.stream()
-                        .filter(event -> event.getOng().equals(selectedEvent.getOng()))
-                        .count());
-         */
     }
 
-    @Ignore
     @Test
-    public void test4_ModifyEvent() {
+    public void test5_ModifyEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
-
         Node row = lookup(".table-row-cell").nth(rowCount - 1).query();
         clickOn(row);
+        Event selectedEvent = (Event) tableViewEvents.getSelectionModel().getSelectedItem();
+        int selectedIndex = tableViewEvents.getSelectionModel().getSelectedIndex();
 
-        String newEventName = "New Event Name";
+        Event modifiedEvent = new Event();
+
+        modifiedEvent.setName(selectedEvent.getName() + new Random().nextInt(99));
         doubleClickOn("#tfNombre");
-        eraseText(1);
-        write(newEventName);
-
-        String newLocation = "New Location";
+        eraseText(selectedEvent.getName().length());
+        write(modifiedEvent.getName());
+        modifiedEvent.setLocation(selectedEvent.getLocation() + new Random().nextInt(99));
         doubleClickOn("#tfLugar");
-        eraseText(1);
-        write(newLocation);
-
-        doubleClickOn("#dpFecha");
-        eraseText(1);
-        write(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
-        String newOng = "New ONG";
-        doubleClickOn("#tfONG");
-        eraseText(1);
-        write(newOng);
-
-        int newPrize = 1000;
-        doubleClickOn("#tfPremio");
-        eraseText(1);
-        write(String.valueOf(newPrize));
-
-        double newDonation = 0.5;
-        doubleClickOn("#tfDonacion");
-        eraseText(1);
-        write(String.format(Locale.US, "%.2f", newDonation));
-
-        int newCapacity = 50;
-        doubleClickOn("#tfAforo");
-        eraseText(1);
-        write(String.valueOf(newCapacity));
-
+        eraseText(selectedEvent.getLocation().length());
+        write(modifiedEvent.getLocation());
+        LocalDate newDate = LocalDate.now().plusDays(1);
+        String formattedDate = newDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        clickOn("#dpFecha");
+        write(formattedDate);
         clickOn("#btnModificar");
-
-        List<Event> events = tableViewEvents.getItems();
-        Event modifiedEvent = events.get(rowCount - 1);
-        assertEquals("El nombre del evento se ha modificado correctamente",
-                newEventName, modifiedEvent.getName());
-
-        assertEquals("El lugar del evento no se ha modificado correctamente",
-                newLocation, modifiedEvent.getLocation());
-
-        assertEquals("La ONG del evento no se ha modificado correctamente",
-                newOng, modifiedEvent.getOng());
-
-        assertEquals("El premio del evento no se ha modificado correctamente",
-                newPrize, String.valueOf(modifiedEvent.getPrize()));
-
-        assertEquals("La donación del evento no se ha modificado correctamente",
-                newDonation, modifiedEvent.getDonation(), 0.01);
-
-        assertEquals("El aforo del evento no se ha modificado correctamente",
-                newCapacity, String.valueOf(modifiedEvent.getParticipantNum()));
-
+        // Validate modification by checking if the event details have been updated in the table
+        Event updatedEvent = (Event) tableViewEvents.getItems().get(selectedIndex);
+        assertEquals(modifiedEvent.getName(), updatedEvent.getName());
+        assertEquals(modifiedEvent.getLocation(), updatedEvent.getLocation());
     }
 
-    @Ignore
     @Test
-    public void test5_DeleteEvent() {
+    public void test6_DeleteEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
         int rowCount = tableViewEvents.getItems().size();
         Node row = lookup(".table-row-cell").nth(rowCount - 1).query();
         Event eventToDelete = (Event) tableViewEvents.getItems().get(rowCount - 1);
         clickOn(row);
         clickOn("#btnEliminar");
+        clickOn("Confirmar");
         assertFalse("El evento no se ha eliminado correctamente",
                 tableViewEvents.getItems().contains(eventToDelete));
     }
