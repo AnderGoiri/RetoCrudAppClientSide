@@ -6,6 +6,7 @@
 package businessLogic;
 
 import exceptions.BusinessLogicException;
+import exceptions.ReadException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,14 +20,18 @@ import rest.GameRestClient;
 import rest.UserRestClient;
 
 /**
- * The {@code GameManagerImplementation} class is an implementation of the {@code GameManager} interface
- * that provides business logic for managing games using a RESTful service.
- * 
- * <p>It utilizes a web client to communicate with the RESTful service and perform CRUD operations on games.</p>
- * 
- * 
- * <p><strong>Author:</strong> Andoni Sanz</p>
- * 
+ * The {@code GameManagerImplementation} class is an implementation of the
+ * {@code GameManager} interface that provides business logic for managing games
+ * using a RESTful service.
+ *
+ * <p>
+ * It utilizes a web client to communicate with the RESTful service and perform
+ * CRUD operations on games.</p>
+ *
+ *
+ * <p>
+ * <strong>Author:</strong> Andoni Sanz</p>
+ *
  * @see GameManager
  * @see Game
  */
@@ -46,7 +51,7 @@ public class GameManagerImplementation implements GameManager {
     }
 
     @Override
-    public Collection<Game> getAllGames() throws BusinessLogicException {
+    public Collection<Game> getAllGames() throws ReadException {
         List<Game> games = null;
         try {
             LOGGER.info("GameManager: Finding all gamesfrom REST service (XML).");
@@ -57,7 +62,7 @@ public class GameManagerImplementation implements GameManager {
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception finding all games{0}",
                     ex.getMessage());
-            throw new BusinessLogicException("Error finding all games\n" + ex.getMessage());
+            throw new ReadException("Error finding all games\n" + ex.getMessage());
         }
         return games;
     }
@@ -174,7 +179,7 @@ public class GameManagerImplementation implements GameManager {
             LOGGER.info("GameManager: Create Game gamesfrom REST service (XML).");
             //Ask webClient for all gamesdata.
             webClient.createGame_XML(obj, Game.class);
-        }catch(Exception ex){
+        } catch (Exception ex) {
 
             LOGGER.log(Level.SEVERE,
                     "GameManager: Exception Creating game}",

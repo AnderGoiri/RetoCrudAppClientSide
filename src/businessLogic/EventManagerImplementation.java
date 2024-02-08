@@ -6,10 +6,16 @@
 package businessLogic;
 
 import exceptions.BusinessLogicException;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.ReadException;
+import exceptions.UpdateException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.GenericType;
 import model.Event;
 import rest.EventRestClient;
@@ -23,25 +29,25 @@ import rest.EventRestClient;
 public class EventManagerImplementation implements EventManager {
 
     private EventRestClient webclient;
-    private static final Logger LOGGER = Logger.getLogger("EventManagerImplementation");
+    private static final Logger LOGGER = Logger.getLogger(EventManagerImplementation.class.getName());
 
     public EventManagerImplementation() {
         webclient = new EventRestClient();
     }
 
     @Override
-    public void createEvent(Event newEvent) throws BusinessLogicException {
+    public void createEvent(Event newEvent) throws CreateException {
         try {
             LOGGER.info("EventManager: Creating Event.");
             webclient.create_XML(newEvent);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "EventManager: exception creating event{0}", e.getMessage());
-            throw new BusinessLogicException("Error creating team\n" + e.getMessage());
+            throw new CreateException("Error creating event\n" + e.getMessage());
         }
     }
 
     @Override
-    public Collection<Event> findAllEvents() throws BusinessLogicException {
+    public Collection<Event> findAllEvents() throws ReadException {
         List<Event> events = null;
         try {
             LOGGER.info("EventManager: finding all events.");
@@ -49,13 +55,13 @@ public class EventManagerImplementation implements EventManager {
             });
         } catch (Exception ex) {
             LOGGER.severe("Error finding all events: " + ex.getMessage());
-            throw new BusinessLogicException("Error finding all events by Organizer" + ex.getMessage());
+            throw new ReadException("Error finding all events by Organizer" + ex.getMessage());
         }
         return events;
     }
 
     @Override
-    public Collection<Event> findEventsByOrganizer() throws BusinessLogicException {
+    public Collection<Event> findEventsByOrganizer() throws ReadException {
         List<Event> events = null;
         try {
             LOGGER.info("EventManager: finding all events by Organizer");
@@ -63,13 +69,13 @@ public class EventManagerImplementation implements EventManager {
             //      .findEventsByOrganizer_XML(new GenericType<List<Event>>() {
             //    });
         } catch (Exception ex) {
-            throw new BusinessLogicException("Error finding all events by Organizer" + ex.getMessage());
+            throw new ReadException("Error finding all events by Organizer" + ex.getMessage());
         }
         return events;
     }
 
     @Override
-    public Collection<Event> findEventsByGame(String gameName) throws BusinessLogicException {
+    public Collection<Event> findEventsByGame(String gameName) throws ReadException {
         List<Event> events = null;
         try {
             LOGGER.info("EventManager: finding events by game.");
@@ -77,23 +83,23 @@ public class EventManagerImplementation implements EventManager {
             }, gameName);
         } catch (Exception ex) {
             LOGGER.severe("Error finding events by game: " + ex.getMessage());
-            throw new BusinessLogicException("Error finding events by game: " + ex.getMessage());
+            throw new ReadException("Error finding events by game: " + ex.getMessage());
         }
         return events;
     }
 
     @Override
-    public Collection<Event> findEventsWonByPlayer() throws BusinessLogicException {
+    public Collection<Event> findEventsWonByPlayer() throws ReadException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<Event> findEventsWonByTeam() throws BusinessLogicException {
+    public Collection<Event> findEventsWonByTeam() throws ReadException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<Event> findEventsByONG(String ongName) throws BusinessLogicException {
+    public Collection<Event> findEventsByONG(String ongName) throws ReadException {
         List<Event> events = null;
         try {
             LOGGER.info("EventManager: finding events by ONG.");
@@ -101,41 +107,41 @@ public class EventManagerImplementation implements EventManager {
             }, ongName);
         } catch (Exception ex) {
             LOGGER.severe("Error finding events by ONG: " + ex.getMessage());
-            throw new BusinessLogicException("Error finding events by ONG: " + ex.getMessage());
+            throw new ReadException("Error finding events by ONG: " + ex.getMessage());
         }
         return events;
     }
 
     @Override
-    public void deletePlayerEventByEventId() throws BusinessLogicException {
+    public void deletePlayerEventByEventId() throws DeleteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteTeamEventByEventId() throws BusinessLogicException {
+    public void deleteTeamEventByEventId() throws DeleteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void modifyEvent(Event selectedEvent) throws BusinessLogicException {
+    public void modifyEvent(Event selectedEvent) throws UpdateException {
         try {
             LOGGER.info("EventManager: Modifying Event.");
             webclient.edit_XML(selectedEvent, String.valueOf(selectedEvent.getId()));
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "EventManager: exception modifying event{0}", e.getMessage());
-            throw new BusinessLogicException("Error modifying event\n" + e.getMessage());
+            throw new UpdateException("Error modifying event\n" + e.getMessage());
         }
     }
 
     @Override
-    public void deleteEvent(Event selectedEvent) throws BusinessLogicException {
+    public void deleteEvent(Event selectedEvent) throws DeleteException {
         try {
             LOGGER.info("EventManager: Deleting Event.");
             webclient.remove(String.valueOf(selectedEvent.getId()));
-        } catch (Exception e) {
+        } catch (ClientErrorException e) {
             LOGGER.log(Level.SEVERE, "EventManager: exception deleting event{0}", e.getMessage());
-            throw new BusinessLogicException("Error deleting event\n" + e.getMessage());
-        }
+            throw new DeleteException("Error deleting event\n" + e.getMessage());
+        } 
     }
 
 }

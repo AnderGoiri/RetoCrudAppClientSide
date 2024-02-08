@@ -7,7 +7,9 @@ package controller;
 
 import static controller.GenericController.LOGGER;
 import exceptions.BusinessLogicException;
+import exceptions.CreateException;
 import exceptions.EventAlreadyExistsException;
+import exceptions.ReadException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZoneId;
@@ -35,6 +37,7 @@ import model.Game;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.logging.Logger;
 import javafx.scene.control.ButtonBar;
 import model.User;
 
@@ -137,7 +140,6 @@ public class EventsViewController extends GenericController {
             columnDonacion.setCellValueFactory(new PropertyValueFactory<>("donation"));
             columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
 
-            //columnFecha.setCellFactory(DatePickerCellEvent.forTableColumn(dateFormatPattern));
             eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
             tableViewEvents.setItems(eventsData);
 
@@ -186,10 +188,12 @@ public class EventsViewController extends GenericController {
                 }
             });
             stage.show();
-        } catch (BusinessLogicException | IOException e) {
+        } catch (IOException e) {
             LOGGER.severe(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
+        } catch (ReadException ex) {
+            Logger.getLogger(EventsViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -210,8 +214,10 @@ public class EventsViewController extends GenericController {
             eventsData.clear();
             eventsData.addAll(eventManager.findAllEvents());
             tableViewEvents.refresh();
-        } catch (BusinessLogicException ex) {
-            LOGGER.log(Level.SEVERE, "Error cleaning the form", ex);
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, "Can not retrieve all the events.", ex.getMessage());
+            lbError.setText("No se han podido cargar los eventos.");
+            lbError.setVisible(true);
         }
     }
 
@@ -269,11 +275,20 @@ public class EventsViewController extends GenericController {
                 tableViewEvents.refresh();
                 lbError.setVisible(false);
             } else {
+                lbError.setText("Este evento ya existe.");
                 // Handle case where newEvent already exists in eventsData
                 throw new EventAlreadyExistsException();
             }
-        } catch (BusinessLogicException | EventAlreadyExistsException | NumberFormatException e) {
-            LOGGER.severe(e.getMessage());
+        } catch (NumberFormatException nfe) {
+            LOGGER.log(Level.SEVERE, "Number format is not correct.", nfe.getMessage());
+            lbError.setText("El formato de los campos numéricos no es correcto");
+            lbError.setVisible(true);
+        } catch (EventAlreadyExistsException eae) {
+            LOGGER.log(Level.SEVERE, "Event already exists.", eae.getMessage());
+            lbError.setText("Ha ocurrido un error al crear un evento");
+            lbError.setVisible(true);
+        } catch (CreateException | ReadException ce) {
+            LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ce.getMessage());
             lbError.setText("Ha ocurrido un error al crear un evento");
             lbError.setVisible(true);
         }
@@ -311,12 +326,13 @@ public class EventsViewController extends GenericController {
                     tableViewEvents.refresh();
                     handleCleanRequest(null);
                 } else {
+                    lbError.setText("Este evento ya existe.");
                     // Handle case where newEvent already exists in eventsData
                     throw new EventAlreadyExistsException();
                 }
             } else {
                 LOGGER.warning("No Event selected");
-                lbError.setText("No Event selected");
+                lbError.setText("Ningún evento seleccionado.");
                 lbError.setVisible(true);
             }
         } catch (Exception e) {

@@ -4,6 +4,7 @@ import exceptions.BusinessLogicException;
 import exceptions.EmptyGameAlreadyAddedException;
 import exceptions.MaxCharException;
 import exceptions.NameAlreadyExistsException;
+import exceptions.ReadException;
 import exceptions.WrongFormatException;
 import extra.DatePickerCellGame;
 import factory.GameFactory;
@@ -228,6 +229,8 @@ public class GameWindowController extends GenericController {
                             LOGGER.log(Level.WARNING, "NameAlreadyExistsException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("El nombre de este juego ya está registrado");
+                        } catch (ReadException ex) {
+                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
             );
@@ -283,6 +286,8 @@ public class GameWindowController extends GenericController {
                             LOGGER.log(Level.WARNING, "WrongFormatException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("En el género solo se perimiten escribir letras");
+                        } catch (ReadException ex) {
+                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
             );
@@ -339,6 +344,8 @@ public class GameWindowController extends GenericController {
                             LOGGER.log(Level.WARNING, "WrongFormatException: ", ex.getMessage());
                             lblError.setVisible(true);
                             lblError.setText("En la plataforma solo se perimite escribir letras y números");
+                        } catch (ReadException ex) {
+                            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
             );
@@ -379,6 +386,8 @@ public class GameWindowController extends GenericController {
                     LOGGER.log(Level.WARNING, "Exception: ", ex.getMessage());
                     lblError.setVisible(true);
                     lblError.setText("Ocurrió algún error en la capa de lógica");
+                } catch (ReadException ex) {
+                    Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
 
@@ -516,6 +525,8 @@ public class GameWindowController extends GenericController {
             LOGGER.log(Level.WARNING, "BusinessLogicException: ", ex.getMessage());
             lblError.setVisible(true);
             lblError.setText("Ocurrió algún error en la capa de lógica");
+        } catch (ReadException ex) {
+            Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -535,6 +546,8 @@ public class GameWindowController extends GenericController {
                 tbGames.refresh();
                 tbGames.setItems(gamesData);
             } catch (BusinessLogicException ex) {
+                Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ReadException ex) {
                 Logger.getLogger(GameWindowController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
