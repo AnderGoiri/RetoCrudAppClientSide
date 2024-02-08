@@ -282,9 +282,11 @@ public class Event implements Serializable {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        // Convert the passed object to Event to compare the IDs
+        // Convert the passed object to Event to compare name, location and date
         Event other = (Event) object;
-        return Objects.equals(this.name, other.name);
+        return Objects.equals(this.name, other.name)
+                && Objects.equals(this.location, other.location)
+                && Objects.equals(this.date, other.date);
     }
 
     @Override

@@ -193,7 +193,7 @@ public class EventsViewController extends GenericController {
         }
     }
 
-    public void handleCleanRequest(ActionEvent event) {
+    private void handleCleanRequest(ActionEvent event) {
         try {
             LOGGER.info("Limpiar button clicked.");
             tfNombre.clear();
@@ -258,11 +258,6 @@ public class EventsViewController extends GenericController {
                     .equals(cbJuego.getValue())))
                     .collect(Collectors.toList())
                     .get(0));
-            eventManager.createEvent(newEvent);
-            eventsData.clear();
-            eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
-            tableViewEvents.setItems(eventsData);
-            tableViewEvents.refresh();
 
             // Check if newEvent already exists in eventsData
             if (!eventsData.contains(newEvent)) {
@@ -307,12 +302,18 @@ public class EventsViewController extends GenericController {
                         .collect(Collectors.toList())
                         .get(0));
 
-                eventManager.modifyEvent(selectedEvent);
-                LOGGER.info("Event modified");
-                eventsData.clear();
-                eventsData.addAll(eventManager.findAllEvents());
-                tableViewEvents.refresh();
-                handleCleanRequest(null);
+                // Check if newEvent already exists in eventsData
+                if (!eventsData.contains(selectedEvent)) {
+                    eventManager.modifyEvent(selectedEvent);
+                    LOGGER.info("Event modified");
+                    eventsData.clear();
+                    eventsData.addAll(eventManager.findAllEvents());
+                    tableViewEvents.refresh();
+                    handleCleanRequest(null);
+                } else {
+                    // Handle case where newEvent already exists in eventsData
+                    throw new EventAlreadyExistsException();
+                }
             } else {
                 LOGGER.warning("No Event selected");
                 lbError.setText("No Event selected");
