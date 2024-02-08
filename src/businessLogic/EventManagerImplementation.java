@@ -40,7 +40,7 @@ public class EventManagerImplementation implements EventManager {
         try {
             LOGGER.info("EventManager: Creating Event.");
             webclient.create_XML(newEvent);
-        } catch (Exception e) {
+        } catch (WebApplicationException e) {
             LOGGER.log(Level.SEVERE, "EventManager: exception creating event{0}", e.getMessage());
             throw new CreateException("Error creating event\n" + e.getMessage());
         }
