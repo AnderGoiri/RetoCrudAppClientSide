@@ -182,5 +182,4 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         assertFalse("El evento no se ha eliminado correctamente",
                 tableViewEvents.getItems().contains(eventToDelete));
     }
-
 }
