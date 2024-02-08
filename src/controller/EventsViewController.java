@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.Properties;
 import javafx.scene.control.ButtonBar;
+import model.User;
 
 /**
  * FXML Controller class
@@ -156,14 +157,14 @@ public class EventsViewController extends GenericController {
             * oldValue: It is the old value before the change occurred.
             * newValue: It is the new value after the change occurred.
              */
-            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfLugar.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            dpFecha.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            cbJuego.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfONG.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfPremio.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfDonacion.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
-            tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields());
+            tfNombre.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfLugar.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            dpFecha.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            cbJuego.valueProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfONG.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfPremio.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfDonacion.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
+            tfAforo.textProperty().addListener((observable, oldValue, newValue) -> checkFormFields(getUser()));
 
             tableViewEvents.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
                 Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
@@ -206,7 +207,6 @@ public class EventsViewController extends GenericController {
             cbJuego.getSelectionModel().clearSelection();
             cbEquipo.getSelectionModel().clearSelection();
             btnBuscar.setDisable(true);
-
             eventsData.clear();
             eventsData.addAll(eventManager.findAllEvents());
             tableViewEvents.refresh();
@@ -215,16 +215,22 @@ public class EventsViewController extends GenericController {
         }
     }
 
-    private void checkFormFields() {
-        boolean allFieldsFilled = !tfNombre.getText().isEmpty()
-                && !tfLugar.getText().isEmpty()
-                && dpFecha.getValue() != null
-                && cbJuego.getValue() != null
-                && !tfONG.getText().isEmpty()
-                && !tfPremio.getText().isEmpty()
-                && !tfDonacion.getText().isEmpty()
-                && !tfAforo.getText().isEmpty();
-        btnCrear.setDisable(!allFieldsFilled);
+    private void checkFormFields(User appUser) {
+        // Check if all input fields are filled
+        boolean allFieldsFilled = !tfNombre.getText().isEmpty() // Check if the name field is not empty
+                && !tfLugar.getText().isEmpty() // Check if the location field is not empty
+                && dpFecha.getValue() != null // Check if a date is selected
+                && cbJuego.getValue() != null // Check if a game is selected
+                && !tfONG.getText().isEmpty() // Check if the NGO field is not empty
+                && !tfPremio.getText().isEmpty() // Check if the prize field is not empty
+                && !tfDonacion.getText().isEmpty() // Check if the donation field is not empty
+                && !tfAforo.getText().isEmpty(); // Check if the participant number field is not empty
+        // Enable or disable the create button based on the validation result
+        if (appUser.getUser_type().equals("organizer")) {
+            btnCrear.setDisable(!allFieldsFilled);
+        } else {
+            btnCrear.setDisable(true); // Disable the button for non-organizer users
+        }
     }
 
     private void handleCreateEvent(ActionEvent event) {
