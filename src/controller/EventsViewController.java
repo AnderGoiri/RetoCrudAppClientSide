@@ -294,7 +294,7 @@ public class EventsViewController extends GenericController {
             if (tfPremio.getText().matches(patternNaturalPositiveNumber) || tfPremio.getText().matches(patternNaturalPositiveNumberWithDecimal)) {
                 newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
             } else {
-                lbError.setText("El Precio debe ser un número positivo.");
+                lbError.setText("El Premio debe ser un número positivo.");
                 lbError.setVisible(true);
                 throw new NumberFormatException();
             }
