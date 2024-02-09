@@ -37,20 +37,12 @@ import javafx.scene.image.ImageView;
 import model.Event;
 import model.Game;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.MenuItem;
 import model.User;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
 
 /**
  * FXML Controller class
@@ -87,10 +79,9 @@ public class EventsViewController extends GenericController {
     private String dateFormatPattern;
 
     private Collection<Game> games;
-    
+
     private MenuItem imprimirItem;
 
-    
     /**
      * Initializes the controller class.
      *
@@ -226,7 +217,9 @@ public class EventsViewController extends GenericController {
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
         } catch (ReadException ex) {
-            Logger.getLogger(EventsViewController.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ex.getMessage());
+            lbError.setText("Ha ocurrido un error al buscar eventos.");
+            lbError.setVisible(true);
         }
     }
 
@@ -288,18 +281,24 @@ public class EventsViewController extends GenericController {
             if (tfAforo.getText().matches(patternNaturalPositiveNumber)) {
                 newEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
             } else {
+                lbError.setText("El Aforo debe ser un número entero positivo.");
+                lbError.setVisible(true);
                 throw new NumberFormatException();
-            };
+            }
             newEvent.setDate(Date.from(dpFecha.getValue()
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
             if (tfPremio.getText().matches(patternNaturalPositiveNumber)) {
                 newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
             } else {
+                lbError.setText("El Precio debe ser un número entero positivo.");
+                lbError.setVisible(true);
                 throw new NumberFormatException();
             }
             if (tfDonacion.getText().matches(donationFormat)) {
                 newEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
             } else {
+                lbError.setText("La Donación debe ser un número entre el 0 y 1, con dos decimales máximo y con un punto (.) como separador.");
+                lbError.setVisible(true);
                 throw new NumberFormatException();
             }
             /*
@@ -332,8 +331,6 @@ public class EventsViewController extends GenericController {
             }
         } catch (NumberFormatException nfe) {
             LOGGER.log(Level.SEVERE, "Number format is not correct.", nfe.getMessage());
-            lbError.setText("El formato de los campos numéricos no es correcto");
-            lbError.setVisible(true);
         } catch (EventAlreadyExistsException eae) {
             LOGGER.log(Level.SEVERE, "Event already exists.", eae.getMessage());
             lbError.setText("Este evento ya existe.");
