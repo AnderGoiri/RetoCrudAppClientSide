@@ -37,11 +37,20 @@ import javafx.scene.image.ImageView;
 import model.Event;
 import model.Game;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.MenuItem;
 import model.User;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  * FXML Controller class
@@ -78,7 +87,10 @@ public class EventsViewController extends GenericController {
     private String dateFormatPattern;
 
     private Collection<Game> games;
+    
+    private MenuItem imprimirItem;
 
+    
     /**
      * Initializes the controller class.
      *
@@ -148,7 +160,7 @@ public class EventsViewController extends GenericController {
                     //eventsData = FXCollections.observableArrayList(eventManager.findEventsByOrganizer(appUser.getName()));
                     tableViewEvents.setItems(eventsData);
                     break;
-                case "admin":                    //mostrar los eventos de los juegos creados por él
+                case "admin":
                     eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
                     tableViewEvents.setItems(eventsData);
                     break;
@@ -163,9 +175,6 @@ public class EventsViewController extends GenericController {
                     tableViewEvents.setItems(eventsData);
                     break;
             }
-
-            eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
-            tableViewEvents.setItems(eventsData);
 
             // Set handlers
             stage.setOnCloseRequest(event -> super.handleCloseRequest(event));
