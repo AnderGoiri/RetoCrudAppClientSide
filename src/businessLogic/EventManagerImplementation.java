@@ -41,8 +41,8 @@ public class EventManagerImplementation implements EventManager {
             LOGGER.info("EventManager: Creating Event.");
             webclient.create_XML(newEvent);
         } catch (WebApplicationException e) {
-            LOGGER.log(Level.SEVERE, "EventManager: exception creating event{0}", e.getMessage());
-            throw new CreateException("Error creating event\n" + e.getMessage());
+            LOGGER.log(Level.SEVERE, "EventManager: exception creating event: {0}", e.getMessage());
+            throw new CreateException(e.getMessage());
         }
     }
 
@@ -53,9 +53,9 @@ public class EventManagerImplementation implements EventManager {
             LOGGER.info("EventManager: finding all events.");
             events = webclient.findAll_XML(new GenericType<List<Event>>() {
             });
-        } catch (Exception ex) {
-            LOGGER.severe("Error finding all events: " + ex.getMessage());
-            throw new ReadException("Error finding all events by Organizer" + ex.getMessage());
+        } catch (WebApplicationException ex) {
+            LOGGER.log(Level.SEVERE, "Error finding all events: {0}", ex.getMessage());
+            throw new ReadException(ex.getMessage());
         }
         return events;
     }
@@ -68,8 +68,8 @@ public class EventManagerImplementation implements EventManager {
             //events = webclient
             //      .findEventsByOrganizer_XML(new GenericType<List<Event>>() {
             //    });
-        } catch (Exception ex) {
-            throw new ReadException("Error finding all events by Organizer" + ex.getMessage());
+        } catch (WebApplicationException ex) {
+            throw new ReadException(ex.getMessage());
         }
         return events;
     }
@@ -81,9 +81,9 @@ public class EventManagerImplementation implements EventManager {
             LOGGER.info("EventManager: finding events by game.");
             events = webclient.findEventsByGame_XML(new GenericType<List<Event>>() {
             }, gameName);
-        } catch (Exception ex) {
-            LOGGER.severe("Error finding events by game: " + ex.getMessage());
-            throw new ReadException("Error finding events by game: " + ex.getMessage());
+        } catch (WebApplicationException ex) {
+            LOGGER.log(Level.SEVERE, "Error finding events by game: {0}", ex.getMessage());
+            throw new ReadException(ex.getMessage());
         }
         return events;
     }
@@ -105,9 +105,9 @@ public class EventManagerImplementation implements EventManager {
             LOGGER.info("EventManager: finding events by ONG.");
             events = webclient.findEventsByONG_XML(new GenericType<List<Event>>() {
             }, ongName);
-        } catch (Exception ex) {
-            LOGGER.severe("Error finding events by ONG: " + ex.getMessage());
-            throw new ReadException("Error finding events by ONG: " + ex.getMessage());
+        } catch (WebApplicationException ex) {
+            LOGGER.log(Level.SEVERE, "Error finding events by ONG: {0}", ex.getMessage());
+            throw new ReadException(ex.getMessage());
         }
         return events;
     }
@@ -127,9 +127,9 @@ public class EventManagerImplementation implements EventManager {
         try {
             LOGGER.info("EventManager: Modifying Event.");
             webclient.edit_XML(selectedEvent, String.valueOf(selectedEvent.getId()));
-        } catch (Exception e) {
+        } catch (WebApplicationException e) {
             LOGGER.log(Level.SEVERE, "EventManager: exception modifying event{0}", e.getMessage());
-            throw new UpdateException("Error modifying event\n" + e.getMessage());
+            throw new UpdateException(e.getMessage());
         }
     }
 
@@ -138,10 +138,10 @@ public class EventManagerImplementation implements EventManager {
         try {
             LOGGER.info("EventManager: Deleting Event.");
             webclient.remove(String.valueOf(selectedEvent.getId()));
-        } catch (ClientErrorException e) {
+        } catch (WebApplicationException e) {
             LOGGER.log(Level.SEVERE, "EventManager: exception deleting event{0}", e.getMessage());
-            throw new DeleteException("Error deleting event\n" + e.getMessage());
-        } 
+            throw new DeleteException(e.getMessage());
+        }
     }
 
 }

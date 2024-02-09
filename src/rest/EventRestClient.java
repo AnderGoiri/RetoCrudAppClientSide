@@ -69,11 +69,15 @@ public class EventRestClient {
     }
 
     public void edit_XML(Object requestEntity, String id) throws WebApplicationException {
-        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), Event.class);
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id}))
+                .request(javax.ws.rs.core.MediaType.APPLICATION_XML)
+                .put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), Event.class);
     }
 
     public void edit_JSON(Object requestEntity, String id) throws WebApplicationException {
-        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), Event.class);
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id}))
+                .request(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+                .put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON), Event.class);
     }
 
     public <T> T find_XML(Class<T> responseType, String id) throws WebApplicationException {
@@ -101,11 +105,13 @@ public class EventRestClient {
     }
 
     public void create_XML(Object requestEntity) throws WebApplicationException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),Event.class);
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML)
+                .post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),Event.class);
     }
 
     public void create_JSON(Object requestEntity) throws WebApplicationException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON),Event.class);
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+                .post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON),Event.class);
     }
 
     public <T> T findEventsByOrganizer_XML(GenericType<T> responseType, String organizerName) throws WebApplicationException {
@@ -161,5 +167,4 @@ public class EventRestClient {
     public void close() {
         client.close();
     }
-
 }

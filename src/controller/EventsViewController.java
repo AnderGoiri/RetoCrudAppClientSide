@@ -71,6 +71,7 @@ public class EventsViewController extends GenericController {
     private TableColumn<?, ?> columnNombre, columnJuego, columnLugar, columnFecha, columnAforo, columnONG, columnPremio, columnDonacion, columnGanador;
 
     private ObservableList<Event> eventsData;
+    private ObservableList<Event> eventsDataOld;
 
     private final Properties configFile = new Properties();
 
@@ -81,6 +82,12 @@ public class EventsViewController extends GenericController {
     private Collection<Game> games;
 
     private MenuItem imprimirItem;
+
+    // Regular expression to validate that the value is a whole positive number
+    private final String patternNaturalPositiveNumber = "\\d+";
+    private final String patternNaturalPositiveNumberWithDecimal = "\\d+\\.\\d+";
+    // Regular expression to validate that the value is a number between 0 and 1, with two decimal places maximum
+    private final String donationFormat = "^(0(?:\\.\\d{1,2})?|1(?:\\.0{1,2})?)$";
 
     /**
      * Initializes the controller class.
@@ -225,6 +232,7 @@ public class EventsViewController extends GenericController {
 
     private void handleCleanRequest(ActionEvent event) {
         try {
+            lbError.setVisible(false);
             LOGGER.info("Limpiar button clicked.");
             tfNombre.clear();
             tfLugar.clear();
@@ -242,7 +250,7 @@ public class EventsViewController extends GenericController {
             tableViewEvents.refresh();
         } catch (ReadException ex) {
             LOGGER.log(Level.SEVERE, "Can not retrieve all the events.", ex.getMessage());
-            lbError.setText("No se han podido cargar los eventos.");
+            lbError.setText("No se han podido cargar los eventos: " + ex.getMessage());
             lbError.setVisible(true);
         }
     }
@@ -267,11 +275,7 @@ public class EventsViewController extends GenericController {
 
     private void handleCreateEvent(ActionEvent event) {
         try {
-            // Regular expression to validate that the value is a whole positive number
-            String patternNaturalPositiveNumber = "\\d+";
-            // Regular expression to validate that the value is a number between 0 and 1, with two decimal places maximum
-            String donationFormat = "^(0(?:\\.\\d{1,2})?|1(?:\\.0{1,2})?)$";
-
+            lbError.setVisible(false);
             Event newEvent = new Event();
 
             // Create the event with the info from the table
@@ -287,10 +291,10 @@ public class EventsViewController extends GenericController {
             }
             newEvent.setDate(Date.from(dpFecha.getValue()
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            if (tfPremio.getText().matches(patternNaturalPositiveNumber)) {
+            if (tfPremio.getText().matches(patternNaturalPositiveNumber) || tfPremio.getText().matches(patternNaturalPositiveNumberWithDecimal)) {
                 newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
             } else {
-                lbError.setText("El Precio debe ser un número entero positivo.");
+                lbError.setText("El Precio debe ser un número positivo.");
                 lbError.setVisible(true);
                 throw new NumberFormatException();
             }
@@ -324,7 +328,7 @@ public class EventsViewController extends GenericController {
                 tableViewEvents.refresh();
                 lbError.setVisible(false);
             } else {
-                lbError.setText("Este evento ya existe.");
+                lbError.setText("Este evento ya existe. Un evento no puede tener el mismo nombre, lugar y fecha que otro.");
                 lbError.setVisible(true);
                 // Handle case where newEvent already exists in eventsData
                 throw new EventAlreadyExistsException();
@@ -333,11 +337,9 @@ public class EventsViewController extends GenericController {
             LOGGER.log(Level.SEVERE, "Number format is not correct.", nfe.getMessage());
         } catch (EventAlreadyExistsException eae) {
             LOGGER.log(Level.SEVERE, "Event already exists.", eae.getMessage());
-            lbError.setText("Este evento ya existe.");
-            lbError.setVisible(true);
         } catch (CreateException | ReadException ce) {
             LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ce.getMessage());
-            lbError.setText("Ha ocurrido un error al crear un evento");
+            lbError.setText("Ha ocurrido un error al crear un evento: " + ce.getMessage());
             lbError.setVisible(true);
         }
     }
@@ -345,7 +347,6 @@ public class EventsViewController extends GenericController {
     private void handleModifyEvent(ActionEvent event) {
         try {
             lbError.setVisible(false);
-
             // Get the selected Event in the table
             Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
 
@@ -354,17 +355,35 @@ public class EventsViewController extends GenericController {
                 selectedEvent.setName(tfNombre.getText());
                 selectedEvent.setLocation(tfLugar.getText());
                 selectedEvent.setOng(tfONG.getText());
-                selectedEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
+                if (tfAforo.getText().matches(patternNaturalPositiveNumber)) {
+                    selectedEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
+                } else {
+                    lbError.setText("El Aforo debe ser un número entero positivo.");
+                    lbError.setVisible(true);
+                    throw new NumberFormatException();
+                }
                 selectedEvent.setDate(Date.from(dpFecha.getValue()
                         .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-                selectedEvent.setPrize(Float.parseFloat(tfPremio.getText()));
-                selectedEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
+                if (tfPremio.getText().matches(patternNaturalPositiveNumberWithDecimal)) {
+                    selectedEvent.setPrize(Float.parseFloat(tfPremio.getText()));
+                } else {
+                    lbError.setText("El Precio debe ser un número entero positivo.");
+                    lbError.setVisible(true);
+                    throw new NumberFormatException();
+                }
+                if (tfDonacion.getText().matches(donationFormat)) {
+                    selectedEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
+                } else {
+                    lbError.setText("La Donación debe ser un número entre el 0 y 1, con dos decimales máximo y con un punto (.) como separador.");
+                    lbError.setVisible(true);
+                    throw new NumberFormatException();
+                }
                 selectedEvent.setGame(games.stream()
                         .filter((g -> g.getName()
                         .equals(cbJuego.getValue())))
                         .collect(Collectors.toList())
                         .get(0));
-
+                /*
                 // Check if newEvent already exists in eventsData
                 if (!eventsData.contains(selectedEvent)) {
                     eventManager.modifyEvent(selectedEvent);
@@ -374,10 +393,21 @@ public class EventsViewController extends GenericController {
                     tableViewEvents.refresh();
                     handleCleanRequest(null);
                 } else {
-                    lbError.setText("Este evento ya existe.");
+                    lbError.setText("Este evento ya existe. Un evento no puede tener el mismo nombre, lugar y fecha que otro.");
                     // Handle case where newEvent already exists in eventsData
+                    eventsData.clear();
+                    eventsData.addAll(eventManager.findAllEvents());
+                    tableViewEvents.refresh();
+                    handleCleanRequest(null);
                     throw new EventAlreadyExistsException();
                 }
+                 */
+                eventManager.modifyEvent(selectedEvent);
+                LOGGER.info("Event modified");
+                eventsData.clear();
+                eventsData.addAll(eventManager.findAllEvents());
+                tableViewEvents.refresh();
+                handleCleanRequest(null);
             } else {
                 LOGGER.warning("No Event selected");
                 lbError.setText("Ningún evento seleccionado.");
@@ -385,15 +415,16 @@ public class EventsViewController extends GenericController {
             }
         } catch (NumberFormatException nfe) {
             LOGGER.log(Level.SEVERE, "Number format is not correct.", nfe.getMessage());
-            lbError.setText("El formato de los campos numéricos no es correcto");
+            lbError.setText("El formato de los campos numéricos no es correcto.");
             lbError.setVisible(true);
-        } catch (EventAlreadyExistsException eae) {
+            /*} catch (EventAlreadyExistsException eae) {
             LOGGER.log(Level.SEVERE, "Event already exists.", eae.getMessage());
             lbError.setText("Este evento ya existe.");
             lbError.setVisible(true);
+             */
         } catch (UpdateException | ReadException ce) {
             LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ce.getMessage());
-            lbError.setText("Ha ocurrido un error al crear un evento");
+            lbError.setText("Ha ocurrido un error al modificar un evento: " + ce.getMessage());
             lbError.setVisible(true);
         }
     }
@@ -430,7 +461,7 @@ public class EventsViewController extends GenericController {
             }
         } catch (DeleteException de) {
             LOGGER.log(Level.SEVERE, "Exception deleting the event: {0}", de.getMessage());
-            lbError.setText("Ha ocurrido un error al borrar el evento.");
+            lbError.setText("Ha ocurrido un error al borrar un evento: " + de.getMessage());
             lbError.setVisible(true);
         }
     }
@@ -460,7 +491,7 @@ public class EventsViewController extends GenericController {
             }
         } catch (ReadException re) {
             LOGGER.log(Level.SEVERE, "Exception deleting the event: {0}", re.getMessage());
-            lbError.setText("Ha ocurrido un error al buscar eventos.");
+            lbError.setText("Ha ocurrido un error al buscar eventos: " + re.getMessage());
             lbError.setVisible(true);
         }
     }

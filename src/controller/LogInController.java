@@ -219,13 +219,13 @@ public class LogInController {
             controller.setScene(scene);
             controller.initStage(root);
         } catch (EmailFormatException | PasswordFormatException ex) {
-            LOGGER.severe("Exception during login: " + ex.getMessage());
+            LOGGER.log(Level.SEVERE, "Exception during login: {0}", ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (CredentialsException ex) {
-            LOGGER.severe("Credentials Exception: " + ex.getMessage());
+            LOGGER.log(Level.SEVERE, "Credentials Exception: {0}", ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (Exception ex) {
-            LOGGER.severe("Exception during login: " + ex.getMessage());
+            LOGGER.log(Level.SEVERE, "Exception during login: {0}", ex.getMessage());
             showError("Error: " + ex.getMessage());
         }
     }
