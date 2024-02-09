@@ -7,12 +7,15 @@ package controller;
 
 import static controller.GenericController.LOGGER;
 import exceptions.CreateException;
+import exceptions.DeleteException;
 import exceptions.EventAlreadyExistsException;
 import exceptions.ReadException;
+import exceptions.UpdateException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
@@ -139,6 +142,28 @@ public class EventsViewController extends GenericController {
             columnDonacion.setCellValueFactory(new PropertyValueFactory<>("donation"));
             columnGanador.setCellValueFactory(new PropertyValueFactory<>("ganador"));
 
+            switch (getUser().getUser_type()) {
+                case "organizer":
+                    eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                    //eventsData = FXCollections.observableArrayList(eventManager.findEventsByOrganizer(appUser.getName()));
+                    tableViewEvents.setItems(eventsData);
+                    break;
+                case "admin":                    //mostrar los eventos de los juegos creados por él
+                    eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                    tableViewEvents.setItems(eventsData);
+                    break;
+                case "player":
+                    eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                    // Sort eventsData by date in descending order
+                    eventsData.sort(Comparator.comparing(Event::getDate).reversed());
+                    tableViewEvents.setItems(eventsData);
+                    break;
+                default:
+                    eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                    tableViewEvents.setItems(eventsData);
+                    break;
+            }
+
             eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
             tableViewEvents.setItems(eventsData);
 
@@ -174,7 +199,7 @@ public class EventsViewController extends GenericController {
                     tfLugar.setText(selectedEvent.getLocation());
                     dpFecha.setValue(selectedEvent.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                     cbJuego.setValue(selectedEvent.getGame().getName());
-                    tfONG.setText(selectedEvent.getName());
+                    tfONG.setText(selectedEvent.getOng());
                     tfPremio.setText(String.valueOf(selectedEvent.getPrize()));
                     tfDonacion.setText(String.valueOf(selectedEvent.getDonation()));
                     tfAforo.setText(String.valueOf(selectedEvent.getParticipantNum()));
@@ -240,17 +265,34 @@ public class EventsViewController extends GenericController {
 
     private void handleCreateEvent(ActionEvent event) {
         try {
+            // Regular expression to validate that the value is a whole positive number
+            String patternNaturalPositiveNumber = "\\d+";
+            // Regular expression to validate that the value is a number between 0 and 1, with two decimal places maximum
+            String donationFormat = "^(0(?:\\.\\d{1,2})?|1(?:\\.0{1,2})?)$";
+
             Event newEvent = new Event();
 
             // Create the event with the info from the table
             newEvent.setName(tfNombre.getText());
             newEvent.setLocation(tfLugar.getText());
             newEvent.setOng(tfONG.getText());
-            newEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
+            if (tfAforo.getText().matches(patternNaturalPositiveNumber)) {
+                newEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
+            } else {
+                throw new NumberFormatException();
+            };
             newEvent.setDate(Date.from(dpFecha.getValue()
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
-            newEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
+            if (tfPremio.getText().matches(patternNaturalPositiveNumber)) {
+                newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
+            } else {
+                throw new NumberFormatException();
+            }
+            if (tfDonacion.getText().matches(donationFormat)) {
+                newEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
+            } else {
+                throw new NumberFormatException();
+            }
             /*
             To establish a Game for the event, we take the game collection declared in this controller.
             Then create a stream filetered by the value of the Game ComboBox.
@@ -335,8 +377,16 @@ public class EventsViewController extends GenericController {
                 lbError.setText("Ningún evento seleccionado.");
                 lbError.setVisible(true);
             }
-        } catch (Exception e) {
-            LOGGER.severe(e.getMessage());
+        } catch (NumberFormatException nfe) {
+            LOGGER.log(Level.SEVERE, "Number format is not correct.", nfe.getMessage());
+            lbError.setText("El formato de los campos numéricos no es correcto");
+            lbError.setVisible(true);
+        } catch (EventAlreadyExistsException eae) {
+            LOGGER.log(Level.SEVERE, "Event already exists.", eae.getMessage());
+            lbError.setText("Este evento ya existe.");
+            lbError.setVisible(true);
+        } catch (UpdateException | ReadException ce) {
+            LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ce.getMessage());
             lbError.setText("Ha ocurrido un error al crear un evento");
             lbError.setVisible(true);
         }
@@ -372,15 +422,16 @@ public class EventsViewController extends GenericController {
                 }
                 LOGGER.info("Event deleted");
             }
-        } catch (Exception e) {
-            LOGGER.severe("Error deleting the team: " + e.getMessage());
-            lbError.setText("An error occured while deleting the event");
+        } catch (DeleteException de) {
+            LOGGER.log(Level.SEVERE, "Exception deleting the event: {0}", de.getMessage());
+            lbError.setText("Ha ocurrido un error al borrar el evento.");
             lbError.setVisible(true);
         }
     }
 
     private void handleSearchRequest(ActionEvent event) {
         try {
+            lbError.setVisible(false);
             String selectedCriteria = cbBusqueda.getValue();
             Collection<Event> filteredEvents = null;
             switch (selectedCriteria) {
@@ -401,8 +452,10 @@ public class EventsViewController extends GenericController {
                 eventsData.addAll(filteredEvents);
                 tableViewEvents.refresh();
             }
-        } catch (Exception ex) {
-            LOGGER.severe("Error al buscar eventos: " + ex.getMessage());
+        } catch (ReadException re) {
+            LOGGER.log(Level.SEVERE, "Exception deleting the event: {0}", re.getMessage());
+            lbError.setText("Ha ocurrido un error al buscar eventos.");
+            lbError.setVisible(true);
         }
     }
 }
