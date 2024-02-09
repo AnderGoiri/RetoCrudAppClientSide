@@ -6,7 +6,6 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
-import exceptions.BusinessLogicException;
 import exceptions.CreateException;
 import exceptions.EventAlreadyExistsException;
 import exceptions.ReadException;
@@ -276,6 +275,7 @@ public class EventsViewController extends GenericController {
                 lbError.setVisible(false);
             } else {
                 lbError.setText("Este evento ya existe.");
+                lbError.setVisible(true);
                 // Handle case where newEvent already exists in eventsData
                 throw new EventAlreadyExistsException();
             }
@@ -285,7 +285,7 @@ public class EventsViewController extends GenericController {
             lbError.setVisible(true);
         } catch (EventAlreadyExistsException eae) {
             LOGGER.log(Level.SEVERE, "Event already exists.", eae.getMessage());
-            lbError.setText("Ha ocurrido un error al crear un evento");
+            lbError.setText("Este evento ya existe.");
             lbError.setVisible(true);
         } catch (CreateException | ReadException ce) {
             LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ce.getMessage());
