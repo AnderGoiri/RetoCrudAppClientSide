@@ -1,4 +1,4 @@
-package test;
+package controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,11 +12,11 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
+import main.Application;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-import main.RetoCrudAppEventTest;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -43,12 +43,19 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        // Register the primary stage of the JavaFX application.
         FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(RetoCrudAppEventTest.class);
+        // Setup and launch the JavaFX application.
+        FxToolkit.setupApplication(Application.class);
     }
 
     @Test
     public void test1_InitStage() {
+        clickOn("#txtEmail");
+        write("organizer");
+        clickOn("#pwdPassword");
+        write("Abcd*1234");
+        clickOn("#loginButton");
         verifyThat("#hBoxMenu", isVisible());
         verifyThat("#tfNombre", hasText(""));
         verifyThat("#tfLugar", hasText(""));
@@ -60,7 +67,6 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         verifyThat("#tableViewEvents", isVisible());
     }
 
-    //@Ignore
     @Test
     public void test2_CreateEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();
@@ -96,7 +102,6 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
                         .filter(e -> e.getName().equals(evento) && e.getLocation().equals(lugar)).count(), 1);
         event = events.stream()
                 .filter(e -> e.getName().equals(evento) && e.getLocation().equals(lugar)).collect(Collectors.toList()).get(0);
-        sleep(500);
     }
 
     @Test
@@ -116,13 +121,11 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         List<Event> filteredEvents = events.stream()
                 .filter(e -> e.getGame().getName().equals(selectedGame))
                 .collect(Collectors.toList());
-
         // Verificar que todos los eventos son del juego seleccionado
         assertEquals("All Events searched successfully", events.size(), filteredEvents.size());
         for (Event event : filteredEvents) {
             assertEquals(selectedGame, event.getGame().getName());
         }
-
     }
 
     @Test
@@ -167,7 +170,6 @@ public class EventsViewControllerCrudTest extends ApplicationTest {
         assertEquals(modifiedEvent.getLocation(), updatedEvent.getLocation());
     }
 
-    //@Ignore
     @Test
     public void test6_DeleteEvent() {
         tableViewEvents = lookup("#tableViewEvents").queryTableView();

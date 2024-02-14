@@ -82,7 +82,7 @@ public class GenericController {
     public static void setTbGames(TableView<Game> tbGames) {
         GenericController.tbGames = tbGames;
     }
-    
+
     public User getUser() {
         return user;
     }
@@ -192,10 +192,10 @@ public class GenericController {
             JasperReport report;
             if (getUser().getUser_type().equals("admin")) {
                 report = JasperCompileManager.compileReport(getClass()
-                            .getResourceAsStream("/reports/reportGames.jrxml"));
+                        .getResourceAsStream("/reports/reportGames.jrxml"));
             } else {
                 report = JasperCompileManager.compileReport(getClass()
-                            .getResourceAsStream("/reports/reportGames.jrxml"));
+                        .getResourceAsStream("/reports/reportGames.jrxml"));
             }
             //Get the games
             JRBeanCollectionDataSource dataItems
@@ -208,7 +208,7 @@ public class GenericController {
             JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
             jasperViewer.setVisible(true);
         } catch (JRException ex) {
-            showErrorAlert("An error ocurred during the report printing: "+ ex.getMessage());
+            showErrorAlert("An error ocurred during the report printing: " + ex.getMessage());
         }
     }
 
@@ -342,7 +342,6 @@ public class GenericController {
             ButtonType confirmButton = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
             ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(confirmButton, cancelButton);
-
 
             // Show the dialog and wait for user response
             Optional<ButtonType> result = alert.showAndWait();

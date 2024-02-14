@@ -13,10 +13,8 @@ import businessLogic.GameManagerImplementation;
  * @author Andoni Sanz
  */
 public class GameFactory {
-        
+
     public static GameManager getGameManager() {
-        //return the Implementation of Signable interface
         return new GameManagerImplementation();
     }
 }
-

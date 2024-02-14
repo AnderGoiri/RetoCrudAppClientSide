@@ -1,5 +1,6 @@
 package security;
 
+import exceptions.EncryptionException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -35,38 +36,42 @@ public class Encrypt {
      * @param password The password to be encrypted.
      * @return The encrypted password in Base64 encoding format, or null if
      * encryption fails.
+     * @throws EncryptionException If an error occurs during encryption.
      */
-    public String encrypt(String password) {
+    public String encrypt(String password) throws EncryptionException {
         String encryptedPassword = null;
         try {
             // Add Bouncy Castle provider
             Security.addProvider(new BouncyCastleProvider());
 
             byte[] publicKeyBytes;
-            try {
-                InputStream fis = getClass().getClassLoader().getResourceAsStream("security/publicKey.der");
-                publicKeyBytes = new byte[fis.available()];
-                fis.read(publicKeyBytes);
-            } catch (Exception e) {
-                throw e;
+            try (InputStream fis = getClass().getClassLoader().getResourceAsStream("security/publicKey.der")) {
+                if (fis != null) {
+                    publicKeyBytes = new byte[fis.available()];
+                    fis.read(publicKeyBytes);
+                } else {
+                    throw new EncryptionException("Public key file not found");
+                }
+            } catch (IOException e) {
+                throw new EncryptionException(e.getMessage());
             }
+
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
-            // Configura el algoritmo ECIES
+            // Configure the ECIES algorithm
             Cipher cipher = Cipher.getInstance("ECIES");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
-            // Convierte la contraseña a bytes y encripta
+            // Convert the password to bytes and encrypt
             byte[] encryptedBytes = cipher.doFinal(password.getBytes());
 
-            // Codifica los bytes encriptados a Base64
+            // Encode the encrypted bytes to Base64
             encryptedPassword = Base64.getEncoder().encodeToString(encryptedBytes);
-        } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             LOGGER.log(Level.SEVERE, "Error occurred while encrypting password", e);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error occurred while encrypting password", e);
+            throw new EncryptionException(e.getMessage());
         }
         return encryptedPassword;
     }

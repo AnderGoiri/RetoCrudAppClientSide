@@ -9,22 +9,22 @@ package exceptions;
  *
  * @author Ander Goirigolzarri Iturburu
  */
-public class EventAlreadyExistsException extends Exception {
+public class DeleteException extends Exception {
 
     /**
-     * Creates a new instance of <code>EventAlreadyExists</code> without detail
+     * Creates a new instance of <code>DeleteException</code> without detail
      * message.
      */
-    public EventAlreadyExistsException() {
+    public DeleteException() {
     }
 
     /**
-     * Constructs an instance of <code>EventAlreadyExists</code> with the
-     * specified detail message.
+     * Constructs an instance of <code>DeleteException</code> with the specified
+     * detail message.
      *
      * @param msg the detail message.
      */
-    public EventAlreadyExistsException(String msg) {
+    public DeleteException(String msg) {
         super(msg);
     }
 }

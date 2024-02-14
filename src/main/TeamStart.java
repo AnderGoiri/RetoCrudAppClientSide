@@ -29,33 +29,33 @@ import model.User;
 
 /**
  * Start class that instanciates the app directly in the Team View
- * 
+ *
  * @author Jagoba Bartolomé Barroso
  */
-public class TeamStart extends javafx.application.Application{    
+public class TeamStart extends javafx.application.Application {
+
     /**
      * This method is called when the JavaFX application is launched. It is used
      * to initialize the primary stage (the main window) and set up the user
      * interface of the application.
      *
      * @param primaryStage The primary stage for this application, where the
-     * application scene can be set. The first stage represents the Log In Window of the
-     * application.
+     * application scene can be set. The first stage represents the Log In
+     * Window of the application.
      */
     @Override
-    public void start(Stage primaryStage) {    
+    public void start(Stage primaryStage) {
         try {
+            TeamManager bussinessLogicController = new TeamManagerImplementation();
 
-            TeamManager bussinessLogicController= new TeamManagerImplementation();
-        
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TeamView.fxml"));
             Parent root = loader.load();
             TeamWindowController controller = loader.getController();
             controller.setTeamManager(bussinessLogicController);
-            User u = new User(); 
+            User u = new User();
             u.setUser_type("player");
             controller.setUser(u);
-            controller.setStage(primaryStage);       
+            controller.setStage(primaryStage);
             controller.initStage(root);
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex.getMessage());

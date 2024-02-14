@@ -9,22 +9,22 @@ package exceptions;
  *
  * @author Ander Goirigolzarri Iturburu
  */
-public class EventAlreadyExistsException extends Exception {
+public class UpdateException extends Exception {
 
     /**
-     * Creates a new instance of <code>EventAlreadyExists</code> without detail
+     * Creates a new instance of <code>UpdateException</code> without detail
      * message.
      */
-    public EventAlreadyExistsException() {
+    public UpdateException() {
     }
 
     /**
-     * Constructs an instance of <code>EventAlreadyExists</code> with the
-     * specified detail message.
+     * Constructs an instance of <code>UpdateException</code> with the specified
+     * detail message.
      *
      * @param msg the detail message.
      */
-    public EventAlreadyExistsException(String msg) {
+    public UpdateException(String msg) {
         super(msg);
     }
 }

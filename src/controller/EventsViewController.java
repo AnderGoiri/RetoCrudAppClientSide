@@ -6,7 +6,12 @@
 package controller;
 
 import static controller.GenericController.LOGGER;
-import exceptions.NumericFormatException;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.EventAlreadyExistsException;
+import exceptions.ReadException;
+import exceptions.UpdateException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.Collection;
@@ -18,7 +23,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -30,22 +34,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import model.Event;
 import model.Game;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.logging.Logger;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.MenuItem;
 import model.User;
 
 /**
- * FXML Controller class for managing events.
- *
- * This controller handles various actions related to events, such as creating,
- * modifying, deleting, and searching for events.
+ * FXML Controller class
  *
  * @author Ander Goirigolzarri Iturburu
  */
@@ -71,8 +71,9 @@ public class EventsViewController extends GenericController {
     private TableColumn<?, ?> columnNombre, columnJuego, columnLugar, columnFecha, columnAforo, columnONG, columnPremio, columnDonacion, columnGanador;
 
     private ObservableList<Event> eventsData;
+    private ObservableList<Event> eventsDataOld;
 
-    private Properties configFile = new Properties();
+    private final Properties configFile = new Properties();
 
     private InputStream input;
 
@@ -80,29 +81,25 @@ public class EventsViewController extends GenericController {
 
     private Collection<Game> games;
 
-    private MenuItem createItem;
-    private MenuItem readItem;
-    private MenuItem updateItem;
-    private MenuItem deleteItem;
-    private MenuItem teamsItem;
-    private MenuItem gamesItem;
+    private MenuItem imprimirItem;
+
+    // Regular expression to validate that the value is a whole positive number
+    private final String patternNaturalPositiveNumber = "\\d+";
+    private final String patternNaturalPositiveNumberWithDecimal = "\\d+\\.\\d+";
+    // Regular expression to validate that the value is a number between 0 and 1, with two decimal places maximum
+    private final String donationFormat = "^(0(?:\\.\\d{1,2})?|1(?:\\.0{1,2})?)$";
 
     /**
      * Initializes the controller class.
      *
      * @param root
-     * @param appUser
      */
     public void initStage(Parent root) {
         try {
             getScene().setRoot(root);
-            //stage = new Stage();
 
             //Set stage properties
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
             stage.setTitle("eSportsHub - EVENTOS");
-            stage.setResizable(false);
 
             //Set properties on showing
             btnUnirse.setDisable(true);
@@ -161,7 +158,7 @@ public class EventsViewController extends GenericController {
                     //eventsData = FXCollections.observableArrayList(eventManager.findEventsByOrganizer(appUser.getName()));
                     tableViewEvents.setItems(eventsData);
                     break;
-                case "admin":                    //mostrar los eventos de los juegos creados por él
+                case "admin":
                     eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
                     tableViewEvents.setItems(eventsData);
                     break;
@@ -213,67 +210,29 @@ public class EventsViewController extends GenericController {
                     tfPremio.setText(String.valueOf(selectedEvent.getPrize()));
                     tfDonacion.setText(String.valueOf(selectedEvent.getDonation()));
                     tfAforo.setText(String.valueOf(selectedEvent.getParticipantNum()));
-                    if (getUser().getUser_type().equals("player")) {
-                        btnUnirse.setDisable(false);
-                    }
-                    if (getUser().getUser_type().equals("organizer")) {
-                        btnModificar.setDisable(false);
-                        btnEliminar.setDisable(false);
-                    }
+
+                    btnModificar.setDisable(false);
+                    btnEliminar.setDisable(false);
                 } else {
                     btnModificar.setDisable(true);
                     btnEliminar.setDisable(true);
                 }
             });
-
-            /*
-            // Create a context menu
-            ContextMenu contextMenu = new ContextMenu();
-
-            // CRUD options
-            createItem = new MenuItem("    Crear Evento");
-            updateItem = new MenuItem("    Modificar Evento");
-            deleteItem = new MenuItem("    Eliminar Evento");
-            teamsItem = new MenuItem("    Ir a Equipos");
-            gamesItem = new MenuItem("    Ir a Juegos");
-
-            // Separator
-            SeparatorMenuItem separator = new SeparatorMenuItem();
-
-            // Add actions to CRUD options
-            createItem.setOnAction(event -> handleCreateEvent(event));
-            updateItem.setOnAction(event -> handleModifyEvent(event));
-            deleteItem.setOnAction(event -> handleDeleteEvent(event));
-
-            // Add Navigation
-            teamsItem.setOnAction(e -> System.out.println("Teams action"));
-            gamesItem.setOnAction(e -> System.out.println("Games action"));
-
-            // Add CRUD options to the context menu
-            contextMenu.getItems().addAll(createItem, readItem, deleteItem, separator, teamsItem, gamesItem);
-
-            // Attach the context menu to the root pane
-            root.setOnContextMenuRequested(event
-                    -> contextMenu.show(root, event.getScreenX(), event.getScreenY()));
-             */
             stage.show();
-
-        } catch (Exception e) {
-            //  e.printStackTrace();
+        } catch (IOException e) {
             LOGGER.severe(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "No se ha podido abrir la ventana:" + e.getMessage(), ButtonType.OK);
             alert.showAndWait();
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ex.getMessage());
+            lbError.setText("Ha ocurrido un error al buscar eventos.");
+            lbError.setVisible(true);
         }
     }
 
-    /**
-     * Handles the action when the "Limpiar" button is clicked to clear the form
-     * fields.
-     *
-     * @param event The action event.
-     */
-    public void handleCleanRequest(ActionEvent event) {
+    private void handleCleanRequest(ActionEvent event) {
         try {
+            lbError.setVisible(false);
             LOGGER.info("Limpiar button clicked.");
             tfNombre.clear();
             tfLugar.clear();
@@ -286,21 +245,16 @@ public class EventsViewController extends GenericController {
             cbJuego.getSelectionModel().clearSelection();
             cbEquipo.getSelectionModel().clearSelection();
             btnBuscar.setDisable(true);
-
             eventsData.clear();
             eventsData.addAll(eventManager.findAllEvents());
             tableViewEvents.refresh();
-        } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error cleaning the form", ex);
+        } catch (ReadException ex) {
+            LOGGER.log(Level.SEVERE, "Can not retrieve all the events.", ex.getMessage());
+            lbError.setText("No se han podido cargar los eventos: " + ex.getMessage());
+            lbError.setVisible(true);
         }
     }
 
-    /**
-     * Checks if all input fields are filled and enables or disables the create
-     * button based on the validation result.
-     *
-     * @param appUser The currently logged-in user.
-     */
     private void checkFormFields(User appUser) {
         // Check if all input fields are filled
         boolean allFieldsFilled = !tfNombre.getText().isEmpty() // Check if the name field is not empty
@@ -317,26 +271,11 @@ public class EventsViewController extends GenericController {
         } else {
             btnCrear.setDisable(true); // Disable the button for non-organizer users
         }
-        /*
-        // Enable or disable the corresponding context menu items based on the validation result
-        createItem.setDisable(!btnCrear.isDisabled());
-        updateItem.setDisable(!btnModificar.isDisabled());
-        deleteItem.setDisable(!btnEliminar.isDisabled());
-         */
     }
 
-    /**
-     * Handles the action when the "Crear" button is clicked to create a new
-     * event.
-     *
-     * @param event The action event.
-     */
     private void handleCreateEvent(ActionEvent event) {
         try {
-            // Regular expression to validate that the value is a whole positive number
-            String patternNaturalPositiveNumber = "\\d+";
-            // Regular expression to validate that the value is a number between 0 and 1, with two decimal places maximum
-            String donationFormat = "^(0(?:\\.\\d{1,2})?|1(?:\\.0{1,2})?)$";
+            lbError.setVisible(false);
             Event newEvent = new Event();
 
             // Create the event with the info from the table
@@ -346,22 +285,26 @@ public class EventsViewController extends GenericController {
             if (tfAforo.getText().matches(patternNaturalPositiveNumber)) {
                 newEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
             } else {
-                throw new NumericFormatException();
+                lbError.setText("El Aforo debe ser un número entero positivo.");
+                lbError.setVisible(true);
+                throw new NumberFormatException();
             }
             newEvent.setDate(Date.from(dpFecha.getValue()
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            if (tfPremio.getText().matches(patternNaturalPositiveNumber)) {
+            if (tfPremio.getText().matches(patternNaturalPositiveNumber) || tfPremio.getText().matches(patternNaturalPositiveNumberWithDecimal)) {
                 newEvent.setPrize(Float.parseFloat(tfPremio.getText()));
             } else {
-                throw new NumericFormatException();
+                lbError.setText("El Premio debe ser un número positivo.");
+                lbError.setVisible(true);
+                throw new NumberFormatException();
             }
-            // Check if the Donation value matches the regular expression
             if (tfDonacion.getText().matches(donationFormat)) {
                 newEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
             } else {
-                throw new NumericFormatException();
+                lbError.setText("La Donación debe ser un número entre el 0 y 1, con dos decimales máximo y con un punto (.) como separador.");
+                lbError.setVisible(true);
+                throw new NumberFormatException();
             }
-            newEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
             /*
             To establish a Game for the event, we take the game collection declared in this controller.
             Then create a stream filetered by the value of the Game ComboBox.
@@ -375,30 +318,35 @@ public class EventsViewController extends GenericController {
                     .collect(Collectors.toList())
                     .get(0));
 
-            eventManager.createEvent(newEvent);
-            eventsData.clear();
-            eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
-            tableViewEvents.setItems(eventsData);
-            tableViewEvents.refresh();
-
-            lbError.setVisible(false);
-        } catch (Exception e) {
-            LOGGER.severe(e.getMessage());
-            lbError.setText("Ha ocurrido un error al crear un evento");
+            // Check if newEvent already exists in eventsData
+            if (!eventsData.contains(newEvent)) {
+                // Create the event in the database
+                eventManager.createEvent(newEvent);
+                eventsData.clear();
+                eventsData = FXCollections.observableArrayList(eventManager.findAllEvents());
+                tableViewEvents.setItems(eventsData);
+                tableViewEvents.refresh();
+                lbError.setVisible(false);
+            } else {
+                lbError.setText("Este evento ya existe. Un evento no puede tener el mismo nombre, lugar y fecha que otro.");
+                lbError.setVisible(true);
+                // Handle case where newEvent already exists in eventsData
+                throw new EventAlreadyExistsException();
+            }
+        } catch (NumberFormatException nfe) {
+            LOGGER.log(Level.SEVERE, "Number format is not correct.", nfe.getMessage());
+        } catch (EventAlreadyExistsException eae) {
+            LOGGER.log(Level.SEVERE, "Event already exists.", eae.getMessage());
+        } catch (CreateException | ReadException ce) {
+            LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ce.getMessage());
+            lbError.setText("Ha ocurrido un error al crear un evento: " + ce.getMessage());
             lbError.setVisible(true);
         }
     }
 
-    /**
-     * Handles the action when the "Modificar" button is clicked to modify an
-     * existing event.
-     *
-     * @param event The action event.
-     */
     private void handleModifyEvent(ActionEvent event) {
         try {
             lbError.setVisible(false);
-
             // Get the selected Event in the table
             Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
 
@@ -407,17 +355,53 @@ public class EventsViewController extends GenericController {
                 selectedEvent.setName(tfNombre.getText());
                 selectedEvent.setLocation(tfLugar.getText());
                 selectedEvent.setOng(tfONG.getText());
-                selectedEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
+                if (tfAforo.getText().matches(patternNaturalPositiveNumber)) {
+                    selectedEvent.setParticipantNum(Integer.parseInt(tfAforo.getText()));
+                } else {
+                    lbError.setText("El Aforo debe ser un número entero positivo.");
+                    lbError.setVisible(true);
+                    throw new NumberFormatException();
+                }
                 selectedEvent.setDate(Date.from(dpFecha.getValue()
                         .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-                selectedEvent.setPrize(Float.parseFloat(tfPremio.getText()));
-                selectedEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
+                if (tfPremio.getText().matches(patternNaturalPositiveNumberWithDecimal)) {
+                    selectedEvent.setPrize(Float.parseFloat(tfPremio.getText()));
+                } else {
+                    lbError.setText("El Precio debe ser un número entero positivo.");
+                    lbError.setVisible(true);
+                    throw new NumberFormatException();
+                }
+                if (tfDonacion.getText().matches(donationFormat)) {
+                    selectedEvent.setDonation(Float.parseFloat(tfDonacion.getText()));
+                } else {
+                    lbError.setText("La Donación debe ser un número entre el 0 y 1, con dos decimales máximo y con un punto (.) como separador.");
+                    lbError.setVisible(true);
+                    throw new NumberFormatException();
+                }
                 selectedEvent.setGame(games.stream()
                         .filter((g -> g.getName()
                         .equals(cbJuego.getValue())))
                         .collect(Collectors.toList())
                         .get(0));
-
+                /*
+                // Check if newEvent already exists in eventsData
+                if (!eventsData.contains(selectedEvent)) {
+                    eventManager.modifyEvent(selectedEvent);
+                    LOGGER.info("Event modified");
+                    eventsData.clear();
+                    eventsData.addAll(eventManager.findAllEvents());
+                    tableViewEvents.refresh();
+                    handleCleanRequest(null);
+                } else {
+                    lbError.setText("Este evento ya existe. Un evento no puede tener el mismo nombre, lugar y fecha que otro.");
+                    // Handle case where newEvent already exists in eventsData
+                    eventsData.clear();
+                    eventsData.addAll(eventManager.findAllEvents());
+                    tableViewEvents.refresh();
+                    handleCleanRequest(null);
+                    throw new EventAlreadyExistsException();
+                }
+                 */
                 eventManager.modifyEvent(selectedEvent);
                 LOGGER.info("Event modified");
                 eventsData.clear();
@@ -426,26 +410,30 @@ public class EventsViewController extends GenericController {
                 handleCleanRequest(null);
             } else {
                 LOGGER.warning("No Event selected");
-                lbError.setText("No Event selected");
+                lbError.setText("Ningún evento seleccionado.");
                 lbError.setVisible(true);
             }
-        } catch (Exception e) {
-            LOGGER.severe(e.getMessage());
-            lbError.setText("Ha ocurrido un error al crear un evento");
+        } catch (NumberFormatException nfe) {
+            LOGGER.log(Level.SEVERE, "Number format is not correct.", nfe.getMessage());
+            lbError.setText("El formato de los campos numéricos no es correcto.");
+            lbError.setVisible(true);
+            /*} catch (EventAlreadyExistsException eae) {
+            LOGGER.log(Level.SEVERE, "Event already exists.", eae.getMessage());
+            lbError.setText("Este evento ya existe.");
+            lbError.setVisible(true);
+             */
+        } catch (UpdateException | ReadException ce) {
+            LOGGER.log(Level.SEVERE, "Exception creating the event: {0}", ce.getMessage());
+            lbError.setText("Ha ocurrido un error al modificar un evento: " + ce.getMessage());
             lbError.setVisible(true);
         }
     }
 
-    /**
-     * Handles the action when the "Eliminar" button is clicked to delete an
-     * existing event.
-     *
-     * @param event The action event.
-     */
     private void handleDeleteEvent(ActionEvent event) {
         try {
             lbError.setVisible(false);
             Event selectedEvent = tableViewEvents.getSelectionModel().getSelectedItem();
+
             if (selectedEvent != null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Eliminar Evento");
@@ -456,6 +444,7 @@ public class EventsViewController extends GenericController {
                 alert.getButtonTypes().setAll(confirmButton, cancelButton);
                 // Show the dialog and wait for user response
                 Optional<ButtonType> result = alert.showAndWait();
+
                 if (result.isPresent() && result.get() == confirmButton) {
                     // Call the method to delete the event in the database
                     eventManager.deleteEvent(selectedEvent);
@@ -470,23 +459,17 @@ public class EventsViewController extends GenericController {
                 }
                 LOGGER.info("Event deleted");
             }
-        } catch (Exception e) {
-            LOGGER.severe("Error deleting the team: " + e.getMessage());
-            lbError.setText("An error occured while deleting the event");
+        } catch (DeleteException de) {
+            LOGGER.log(Level.SEVERE, "Exception deleting the event: {0}", de.getMessage());
+            lbError.setText("Ha ocurrido un error al borrar un evento: " + de.getMessage());
             lbError.setVisible(true);
         }
     }
 
-    /**
-     * Handles the action when the "Buscar" button is clicked to search for
-     * events based on specified criteria.
-     *
-     * @param event The action event.
-     */
     private void handleSearchRequest(ActionEvent event) {
         try {
+            lbError.setVisible(false);
             String selectedCriteria = cbBusqueda.getValue();
-
             Collection<Event> filteredEvents = null;
             switch (selectedCriteria) {
                 case "Buscar todos los eventos":
@@ -501,15 +484,15 @@ public class EventsViewController extends GenericController {
                 default:
                     break;
             }
-
             if (filteredEvents != null) {
                 eventsData.clear();
                 eventsData.addAll(filteredEvents);
                 tableViewEvents.refresh();
             }
-        } catch (Exception ex) {
-            LOGGER.severe("Error al buscar eventos: " + ex.getMessage());
+        } catch (ReadException re) {
+            LOGGER.log(Level.SEVERE, "Exception deleting the event: {0}", re.getMessage());
+            lbError.setText("Ha ocurrido un error al buscar eventos: " + re.getMessage());
+            lbError.setVisible(true);
         }
     }
-
 }

@@ -1,10 +1,6 @@
 package controller;
 
 import exceptions.BusinessLogicException;
-import businessLogic.ESportsFactory;
-import businessLogic.ESportsManager;
-import businessLogic.EventManager;
-import businessLogic.EventManagerImplementation;
 import businessLogic.GameManager;
 import businessLogic.GameManagerImplementation;
 import businessLogic.TeamManager;
@@ -16,6 +12,7 @@ import factory.GameFactory;
 import factory.EventFactory;
 import factory.Signable;
 import factory.SignableFactory;
+import factory.TeamFactory;
 import javafx.scene.shape.Rectangle;
 import java.io.IOException;
 import java.util.Optional;
@@ -38,7 +35,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -88,7 +84,6 @@ public class LogInController {
             initializeRectangleAnim(); // This creates the animation for the login windown
             LOGGER.info("Initializing stage...");
             scene = new Scene(root, 1366, 768);
-            //stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.setTitle("eSportsHub - Iniciar sesión"); //Establish window title
             stage.setResizable(false); //Window is not resizable
@@ -174,8 +169,7 @@ public class LogInController {
                     && !(email.equals("admin") && password.equals("Abcd*1234"))
                     && !(email.equals("player") && password.equals("Abcd*1234"))) {
                 /*
-                Validate the format of the email, it must have a text before 
-                an '@' and a text before and after '.'. 
+                Validate the format of the email, it must have a text before an '@' and a text before and after '.'. 
                 Pattern that must be respected.
                  */
                 String regexEmail = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
@@ -185,8 +179,7 @@ public class LogInController {
                     throw new EmailFormatException("El formato de las credenciales no es correcto");
                 }
                 /*
-                Validate the format of the password, it must be 8 characters 
-                long at minimum and contain a capital letter and a number.
+                Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number.
                 Pattern that must be respected.
                  */
                 String regexPassword = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
@@ -201,8 +194,8 @@ public class LogInController {
                 user.setPassword(new Encrypt()
                         .encrypt(new Hash()
                                 .hashPassword(password)));
-
-                appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
+                // Send the User created to the logic Tier and recieve a full informed User
+                appUser = signable.logIn(user);
             } else if (email.equals("organizer")) {
                 appUser.setUser_type(email);
             } else if (email.equals("admin")) {
@@ -210,50 +203,30 @@ public class LogInController {
             } else if (email.equals("player")) {
                 appUser.setUser_type(email);
             }
-            /*
-            Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number.
-            Pattern that must be respected.
-             */
-            String regexPassword = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
-            Pattern patternPassword = Pattern.compile(regexPassword);
-            if (!patternPassword.matcher(pwdPassword.getText()).matches()) {
-                LOGGER.severe("Wrong password format");
-                throw new PasswordFormatException("El formato de las credenciales no es correcto");
-            }
-            // Add the provided data to the User
-            User user = new User();
-            user.setEmail(email);
-            user.setPassword(new Encrypt()
-                    .encrypt(new Hash()
-                            .hashPassword(password)));
-
-            appUser = signable.logIn(user);// Send the User created to the logic Tier and recieve a full informed User
-
             //Create Bussines Logic Controller to be passed to UI controllers
-            GameManager gameLogicController = new GameManagerImplementation();
-            TeamManager teamLogicController = new TeamManagerImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EventsView.fxml"));
             Parent root = loader.load();
+            /*
+            EventsViewController is used as it is the main window of the 
+            application for every type of user.
+             */
             EventsViewController controller = loader.getController();
 
             controller.setUser(appUser);
             controller.setEventManager(EventFactory.getEventManager());
-            controller.setGameManager(gameLogicController);
-            controller.setTeamManager(teamLogicController);
-            //Stage applicationStage = new Stage();
+            controller.setGameManager(GameFactory.getGameManager());
+            controller.setTeamManager(TeamFactory.getTeamManager());
             controller.setStage(stage);
             controller.setScene(scene);
             controller.initStage(root);
-            //stage.close();
-
         } catch (EmailFormatException | PasswordFormatException ex) {
-            LOGGER.severe("Exception during login: " + ex.getMessage());
+            LOGGER.log(Level.SEVERE, "Exception during login: {0}", ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (CredentialsException ex) {
-            LOGGER.severe("Credentials Exception: " + ex.getMessage());
+            LOGGER.log(Level.SEVERE, "Credentials Exception: {0}", ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (Exception ex) {
-            LOGGER.severe("Exception during login: " + ex.getMessage());
+            LOGGER.log(Level.SEVERE, "Exception during login: {0}", ex.getMessage());
             showError("Error: " + ex.getMessage());
             ex.printStackTrace();
         }

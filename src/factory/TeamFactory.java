@@ -13,6 +13,7 @@ import businessLogic.TeamManagerImplementation;
  * @author Jagoba Bartolomé Barroso
  */
 public class TeamFactory {
+
     public static TeamManager getTeamManager() {
         return new TeamManagerImplementation();
     }
