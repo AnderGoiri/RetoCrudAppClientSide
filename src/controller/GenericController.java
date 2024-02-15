@@ -32,13 +32,13 @@ import javafx.stage.WindowEvent;
 import model.Game;
 import model.Player;
 import model.User;
-import net.sf.jasperreports.engine.JRException;
+/*import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.view.JasperViewer;*/
 
 /**
  * This is the base class for UI controllers in this application. It contains
@@ -187,7 +187,7 @@ public class GenericController {
      */
     @FXML
     void handleImprimirAction(ActionEvent event) {
-        try {
+        /*try {
             LOGGER.info("Printing Button On Menu Bar Pressed");
             JasperReport report;
             if (getUser().getUser_type().equals("admin")) {
@@ -209,7 +209,7 @@ public class GenericController {
             jasperViewer.setVisible(true);
         } catch (JRException ex) {
             showErrorAlert("An error ocurred during the report printing: " + ex.getMessage());
-        }
+        }*/
     }
 
     /**

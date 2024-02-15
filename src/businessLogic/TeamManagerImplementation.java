@@ -96,7 +96,7 @@ public class TeamManagerImplementation implements TeamManager {
             teams = webClient.findTeamsByDate_XML(new GenericType<List<Team>>() {
             }, date);
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by date{0}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "TeamManager: Exception finding teams by date{0}", e.getMessage());
             throw new BusinessLogicException("Error finding teams by date\n" + e.getMessage());
         }
         return teams;
