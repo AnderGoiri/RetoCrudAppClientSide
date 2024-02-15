@@ -6,6 +6,10 @@
 package businessLogic;
 
 import exceptions.BusinessLogicException;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.ReadException;
+import exceptions.UpdateException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,7 +45,7 @@ public class TeamManagerImplementation implements TeamManager {
      * retrieving all teams.
      */
     @Override
-    public Collection<Team> findAllTeams() throws BusinessLogicException {
+    public Collection<Team> findAllTeams() throws ReadException {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding all teams.");
@@ -49,7 +53,7 @@ public class TeamManagerImplementation implements TeamManager {
             });
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding all teams{0}", e.getMessage());
-            throw new BusinessLogicException("Finding all teams\n" + e.getMessage());
+            throw new ReadException("Finding all teams\n" + e.getMessage());
         }
         return teams;
     }
@@ -64,7 +68,7 @@ public class TeamManagerImplementation implements TeamManager {
      * retrieving teams by name.
      */
     @Override
-    public List<Team> findTeamsByName(String name) throws BusinessLogicException {
+    public List<Team> findTeamsByName(String name) throws ReadException {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding teams by name.");
@@ -72,7 +76,7 @@ public class TeamManagerImplementation implements TeamManager {
             }, name);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by name{0}", e.getMessage());
-            throw new BusinessLogicException("Error finding teams by name\n" + e.getMessage());
+            throw new ReadException("Error finding teams by name\n" + e.getMessage());
         }
         return teams;
     }
@@ -89,7 +93,7 @@ public class TeamManagerImplementation implements TeamManager {
      * retrieving teams by foundation date.
      */
     @Override
-    public List<Team> findTeamsByDate(String date) throws BusinessLogicException {
+    public List<Team> findTeamsByDate(String date) throws ReadException {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding teams by date.");
@@ -97,7 +101,7 @@ public class TeamManagerImplementation implements TeamManager {
             }, date);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeamManager: Exception finding teams by date{0}", e.getMessage());
-            throw new BusinessLogicException("Error finding teams by date\n" + e.getMessage());
+            throw new ReadException("Error finding teams by date\n" + e.getMessage());
         }
         return teams;
     }
@@ -112,7 +116,7 @@ public class TeamManagerImplementation implements TeamManager {
      * retrieving teams by coach.
      */
     @Override
-    public List<Team> findTeamsByCoach(String coach) throws BusinessLogicException {
+    public List<Team> findTeamsByCoach(String coach) throws ReadException {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding teams by coach.");
@@ -120,7 +124,7 @@ public class TeamManagerImplementation implements TeamManager {
             }, coach);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding teams by coach{0}", e.getMessage());
-            throw new BusinessLogicException("Error finding teams by coach\n" + e.getMessage());
+            throw new ReadException("Error finding teams by coach\n" + e.getMessage());
         }
         return teams;
     }
@@ -140,7 +144,7 @@ public class TeamManagerImplementation implements TeamManager {
      * retrieving the player's teams.
      */
     @Override
-    public List<Team> findMyTeams(Player player) throws BusinessLogicException {
+    public List<Team> findMyTeams(Player player) throws ReadException {
         List<Team> teams = null;
         try {
             LOGGER.info("TeamManager: Finding the player's teams.");
@@ -148,7 +152,7 @@ public class TeamManagerImplementation implements TeamManager {
             }, player.getId());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception finding the player's teams{0}", e.getMessage());
-            throw new BusinessLogicException("Error finding the player's teams\n" + e.getMessage());
+            throw new ReadException("Error finding the player's teams\n" + e.getMessage());
         }
         return teams;
     }
@@ -162,13 +166,13 @@ public class TeamManagerImplementation implements TeamManager {
      * the player joining the team.
      */
     @Override
-    public void joinTeam(Team selectedTeam, Player player) throws BusinessLogicException {
+    public void joinTeam(Team selectedTeam, Player player) throws UpdateException {
         try {
             LOGGER.info("TeamManager: Modifying team.");
             webClient.joinTeam_XML(selectedTeam.getId(), player.getId());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeamManager: Exception joining the team{0}", e.getMessage());
-            throw new BusinessLogicException("Error joining team\n" + e.getMessage());
+            throw new UpdateException("Error joining team\n" + e.getMessage());
         }
     }
 
@@ -180,13 +184,13 @@ public class TeamManagerImplementation implements TeamManager {
      * modifying the team.
      */
     @Override
-    public void modifyTeam(Team selectedTeam) throws BusinessLogicException {
+    public void modifyTeam(Team selectedTeam) throws UpdateException {
         try {
             LOGGER.info("TeamManager: Modifying team.");
             webClient.updateTeam_XML(selectedTeam, Team.class);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception modifying team{0}", e.getMessage());
-            throw new BusinessLogicException("Error modifying team\n" + e.getMessage());
+            throw new UpdateException("Error modifying team\n" + e.getMessage());
         }
     }
 
@@ -198,13 +202,13 @@ public class TeamManagerImplementation implements TeamManager {
      * deleting the team.
      */
     @Override
-    public void deleteTeam(Team selectedTeam) throws BusinessLogicException {
+    public void deleteTeam(Team selectedTeam) throws DeleteException {
         try {
             LOGGER.info("TeamManager: Deleting team.");
             webClient.deleteTeam_XML(selectedTeam);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeanManager: Exception modifying team{0}", e.getMessage());
-            throw new BusinessLogicException("Error modifying team\n" + e.getMessage());
+            throw new DeleteException("Error modifying team\n" + e.getMessage());
         }
     }
 
@@ -216,13 +220,13 @@ public class TeamManagerImplementation implements TeamManager {
      * creating the team.
      */
     @Override
-    public void createTeam(Team newTeam) throws BusinessLogicException {
+    public void createTeam(Team newTeam) throws CreateException {
         try {
             LOGGER.info("TeamManager: Creating team.");
             webClient.createTeam_XML(newTeam, Team.class);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeamManager: Exception creating team{0}", e.getMessage());
-            throw new BusinessLogicException("Error creating team\n" + e.getMessage());
+            throw new CreateException("Error creating team\n" + e.getMessage());
         }
     }
 

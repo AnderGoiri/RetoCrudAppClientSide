@@ -2,11 +2,15 @@ package controller;
 
 import exceptions.BusinessLogicException;
 import exceptions.CoachFormatException;
+import exceptions.CreateException;
+import exceptions.DeleteException;
 import exceptions.MaxCharException;
 import exceptions.NameFormatException;
 import exceptions.NoDataException;
+import exceptions.ReadException;
 import exceptions.TeamAlreadyExistsException;
 import exceptions.TextFormatException;
+import exceptions.UpdateException;
 import exceptions.WrongCriteriaException;
 import extra.DatePickerCellTeam;
 import factory.TeamFactory;
@@ -329,10 +333,13 @@ public class TeamWindowController extends GenericController {
             btnSalir.setOnAction(event -> super.handleBtnClose(event));
 
         } catch (NoDataException e) {
-            e.printStackTrace();
             LOGGER.severe(e.getMessage());
             lblError.setText("No hay datos.");
             lblError.setVisible(true);
+        } catch (ReadException e) {
+            LOGGER.severe(e.getMessage());
+            lblError.setText("Ha ocurrido un error al buscar equipos.");
+            lblError.setVisible(true);           
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.severe(e.getMessage());
@@ -367,9 +374,9 @@ public class TeamWindowController extends GenericController {
                                 teamsData.clear();
                                 teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findAllTeams());
                                 tbTeam.setItems(teamsData);
-                            } catch (BusinessLogicException ex) {
+                            } catch (ReadException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
-                                showErrorAlert("No se ha podido abrir la ventana.");
+                                showErrorAlert("No se han podido cargar los datos.");
                             }
                         }
                     });
@@ -384,9 +391,9 @@ public class TeamWindowController extends GenericController {
                                 teamsData.clear();
                                 teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findTeamsByName(tfNombre.getText()));
                                 tbTeam.setItems(teamsData);
-                            } catch (BusinessLogicException ex) {
+                            } catch (ReadException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
-                                lblError.setText("No se ha rellenado el campo correspondiente o no es correcto.");
+                                lblError.setText("No se han podido cargar los datos.");
                                 lblError.setVisible(true);
                                 teamsData.clear();
                                 Label noTeamPlaceholder = new Label("No existen datos correspondientes a la búsqueda.");
@@ -440,9 +447,9 @@ public class TeamWindowController extends GenericController {
                                 teamsData.clear();
                                 teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findTeamsByCoach(tfCoach.getText()));
                                 tbTeam.setItems(teamsData);
-                            } catch (BusinessLogicException ex) {
+                            } catch (ReadException ex) {
                                 Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
-                                lblError.setText("No se ha rellenado el campo correspondiente o no es correcto.");
+                                lblError.setText("No se ha rellenado el campo correspondiente o no existe.");
                                 lblError.setVisible(true);
                                 teamsData.clear();
                                 Label noTeamPlaceholder = new Label("No existen datos correspondientes a la búsqueda.");
@@ -595,6 +602,11 @@ public class TeamWindowController extends GenericController {
             LOGGER.warning(e.getMessage());
             lblError.setText("Formato de texto incorrecto.");
             lblError.setVisible(true);
+        } catch (CreateException e) {
+            LOGGER.severe(e.getMessage());
+            // Handle other exceptions if needed
+            lblError.setText("No se ha podido crear el equipo.");
+            lblError.setVisible(true);
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             // Handle other exceptions if needed
@@ -698,9 +710,13 @@ public class TeamWindowController extends GenericController {
             LOGGER.severe("Error modifying the team: " + e.getMessage());
             lblError.setText(e.getMessage());
             lblError.setVisible(true);
-        } catch (Exception e) {
+        } catch (UpdateException e) {
             LOGGER.severe("Error modifying the team: " + e.getMessage());
             lblError.setText("An error occurred while modifying the team.");
+            lblError.setVisible(true);
+        } catch (Exception e) {
+            LOGGER.severe("Error modifying the team: " + e.getMessage());
+            lblError.setText("An unexpected error occurred.");
             lblError.setVisible(true);
         }
     }
@@ -736,9 +752,13 @@ public class TeamWindowController extends GenericController {
                 lblError.setText("No team selected");
                 lblError.setVisible(true);
             }
-        } catch (Exception e) {
+        } catch (DeleteException e) {
             LOGGER.severe("Error deleting the team: " + e.getMessage());
             lblError.setText("An error occurred while deleting the team.");
+            lblError.setVisible(true);
+        } catch (Exception e) {
+            LOGGER.severe("Error deleting the team: " + e.getMessage());
+            lblError.setText("An unexpected error occurred.");
             lblError.setVisible(true);
         }
     }
@@ -774,7 +794,7 @@ public class TeamWindowController extends GenericController {
             }
         } catch (Exception e) {
             LOGGER.severe("Error joining the team: " + e.getMessage());
-            lblError.setText("An error occurred while joining the team.");
+            lblError.setText("An unexpected error occurred.");
             lblError.setVisible(true);
         }
     }

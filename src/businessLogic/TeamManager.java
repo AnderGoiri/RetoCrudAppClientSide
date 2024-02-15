@@ -6,6 +6,10 @@
 package businessLogic;
 
 import exceptions.BusinessLogicException;
+import exceptions.CreateException;
+import exceptions.DeleteException;
+import exceptions.ReadException;
+import exceptions.UpdateException;
 import java.util.Collection;
 import java.util.List;
 import model.Player;
@@ -19,15 +23,15 @@ import model.User;
  * @author Jagoba Bartolomé Barroso
  */
 public interface TeamManager {
-    public Collection<Team> findAllTeams() throws BusinessLogicException;
-    public List<Team> findTeamsByName(String name) throws BusinessLogicException;
-    public List<Team> findTeamsByDate(String date) throws BusinessLogicException;
-    public List<Team> findTeamsByCoach(String coach) throws BusinessLogicException;
+    public Collection<Team> findAllTeams() throws ReadException;
+    public List<Team> findTeamsByName(String name) throws ReadException;
+    public List<Team> findTeamsByDate(String date) throws ReadException;
+    public List<Team> findTeamsByCoach(String coach) throws ReadException;
     //public List<Team> findTeamsWithWins() throws BusinessLogicException;
-    public List<Team> findMyTeams(Player player) throws BusinessLogicException;
-    public void joinTeam(Team selectedTeam, Player player) throws BusinessLogicException;
-    public void createTeam(Team newTeam) throws BusinessLogicException;
-    public void modifyTeam(Team selectedTeam) throws BusinessLogicException;
-    public void deleteTeam(Team selectedTeam) throws BusinessLogicException;
+    public List<Team> findMyTeams(Player player) throws ReadException;
+    public void joinTeam(Team selectedTeam, Player player) throws UpdateException;
+    public void createTeam(Team newTeam) throws CreateException;
+    public void modifyTeam(Team selectedTeam) throws UpdateException;
+    public void deleteTeam(Team selectedTeam) throws DeleteException;
 
 }
