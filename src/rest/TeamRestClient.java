@@ -121,7 +121,7 @@ public class TeamRestClient {
     }
 
     public void remove(String id) throws WebApplicationException {
-        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete(Team.class);
     }
 
     public <T> T findTeamsWithWins_XML(Class<T> responseType, String team_id) throws WebApplicationException {

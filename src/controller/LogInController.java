@@ -215,7 +215,8 @@ public class LogInController {
      
             controller.setUser(appUser);
             controller.setEventManager(EventFactory.getEventManager());
-      
+            controller.setGameManager(GameFactory.getGameManager());
+            controller.setTeamManager(TeamFactory.getTeamManager());
             controller.setStage(stage);
             controller.setScene(scene);
             controller.initStage(root);

@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Observable;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -35,7 +36,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
@@ -229,7 +233,7 @@ public class TeamWindowController extends GenericController {
 
             //Adding Tooltip to btnBuscar
             btnBuscar.setTooltip(new Tooltip("Buscar equipos."));
-            
+
             //Obtains the layout containing the menu bar from the scene node graph
             /*HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
             //Get the menu bar from the children of the layout got before
@@ -281,7 +285,7 @@ public class TeamWindowController extends GenericController {
 
             //Adding tooltip to btnLimpiar
             btnLimpiar.setTooltip(new Tooltip("Limpiar campos."));
-            
+
             // Set listeners for handlers of empty text
             tfNombre.textProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(getUser()));
             tfCoach.textProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(getUser()));
@@ -298,6 +302,7 @@ public class TeamWindowController extends GenericController {
                     Team selectedTeam = tbTeam.getSelectionModel().getSelectedItem();
                     tfNombre.setText(selectedTeam.getName());
                     tfCoach.setText(selectedTeam.getCoach());
+                    tbTeam.getSelectionModel().clearSelection();
                     try {
                         dpFundacion.setValue(selectedTeam.getFoundation().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                     } catch (IOException | ParseException ex) {
@@ -315,6 +320,13 @@ public class TeamWindowController extends GenericController {
                 }
                 handleTextNotEmpty(getUser());
             });
+            
+            //Cleaning the form if there is no selected row
+            if (tbTeam.getSelectionModel().getSelectedIndex() == -1) {
+                tfNombre.clear();
+                tfCoach.clear();
+                dpFundacion.getEditor().clear();
+            }
 
             // Creating a team
             btnCrear.setOnAction(event -> handleCreateTeam(event));
@@ -351,7 +363,7 @@ public class TeamWindowController extends GenericController {
         } catch (ReadException e) {
             LOGGER.severe(e.getMessage());
             lblError.setText("Ha ocurrido un error al buscar equipos.");
-            lblError.setVisible(true);           
+            lblError.setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.severe(e.getMessage());
@@ -507,7 +519,7 @@ public class TeamWindowController extends GenericController {
                     break;
 
             }
-        } 
+        }
     }
 
     /**
@@ -582,7 +594,7 @@ public class TeamWindowController extends GenericController {
             if (tfNombre.getText().matches(regexName)) {
                 newTeam.setName(tfNombre.getText());
             } else {
-                LOGGER.warning("Format validation incorrect.");
+                LOGGER.warning("Format validation incorrect." + tfNombre.getText());
                 throw new TextFormatException("El campo Nombre debe tener caracteres alfanuméricos y espacios.");
             }
             // Compare the pattern
@@ -701,6 +713,12 @@ public class TeamWindowController extends GenericController {
                     selectedTeam.setFoundation(newDate);
 
                     TeamFactory.getTeamManager().modifyTeam(selectedTeam);
+
+                    //Cleaning the form if there is no selected row
+                    tfNombre.clear();
+                    tfCoach.clear();
+                    dpFundacion.getEditor().clear();
+
                 } else {
                     throw new TeamAlreadyExistsException("El equipo no ha sido modificado.");
                 }
@@ -748,27 +766,41 @@ public class TeamWindowController extends GenericController {
     private void handleDeleteTeam(ActionEvent event) {
         try {
             lblError.setVisible(false);
-            // Get the selected team in the table
-            Team selectedTeam = tbTeam.getSelectionModel().getSelectedItem();
 
-            // Check if there is a selected team
-            if (selectedTeam != null) {
-                // Call the method to delete the team in the database
-                TeamFactory.getTeamManager().deleteTeam(selectedTeam);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Eliminar equipo.");
+            alert.setContentText("Estás seguro de que deseas borrar ese equipo?");
 
-                // Deleting the team from the TableView list
-                int selectedIndex = tbTeam.getSelectionModel().getSelectedIndex();
-                teamsData.remove(selectedIndex);
+            ButtonType confirmButton = new ButtonType("Confirmar", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(confirmButton, cancelButton);
 
-                // Refresh the table with the modified data
-                tbTeam.refresh();
+            Optional<ButtonType> result = alert.showAndWait();
 
-                LOGGER.info("Team deleted.");
-            } else {
-                LOGGER.warning("No team selected.");
-                lblError.setText("No team selected");
-                lblError.setVisible(true);
+            if (result.get() == confirmButton) {
+                // Get the selected team in the table
+                Team selectedTeam = tbTeam.getSelectionModel().getSelectedItem();
+
+                // Check if there is a selected team
+                if (selectedTeam != null) {
+                    // Call the method to delete the team in the database
+                    TeamFactory.getTeamManager().deleteTeam(selectedTeam);
+
+                    // Deleting the team from the TableView list
+                    int selectedIndex = tbTeam.getSelectionModel().getSelectedIndex();
+                    teamsData.remove(selectedIndex);
+
+                    // Refresh the table with the modified data
+                    tbTeam.refresh();
+
+                    LOGGER.info("Team deleted.");
+                } else {
+                    LOGGER.warning("No team selected.");
+                    lblError.setText("No team selected");
+                    lblError.setVisible(true);
+                }
             }
+
         } catch (DeleteException e) {
             LOGGER.severe("Error deleting the team: " + e.getMessage());
             lblError.setText("An error occurred while deleting the team.");
@@ -801,6 +833,10 @@ public class TeamWindowController extends GenericController {
 
                 // Refresh the table with the modified data
                 tbTeam.refresh();
+
+                tfNombre.clear();
+                tfCoach.clear();
+                dpFundacion.getEditor().clear();
 
                 LOGGER.info("Team joined.");
                 lblError.setText("Te has unido al equipo.");
