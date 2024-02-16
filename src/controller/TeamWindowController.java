@@ -46,6 +46,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
@@ -226,6 +227,9 @@ public class TeamWindowController extends GenericController {
             // Set search button as default
             btnBuscar.setDefaultButton(true);
 
+            //Adding Tooltip to btnBuscar
+            btnBuscar.setTooltip(new Tooltip("Buscar equipos."));
+            
             //Obtains the layout containing the menu bar from the scene node graph
             /*HBox hBoxMenu = (HBox) root.getChildrenUnmodifiable().get(0);
             //Get the menu bar from the children of the layout got before
@@ -275,6 +279,9 @@ public class TeamWindowController extends GenericController {
             // Set handler for cleaning button
             btnLimpiar.setOnAction(event -> handleCleanRequest(event));
 
+            //Adding tooltip to btnLimpiar
+            btnLimpiar.setTooltip(new Tooltip("Limpiar campos."));
+            
             // Set listeners for handlers of empty text
             tfNombre.textProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(getUser()));
             tfCoach.textProperty().addListener((observable, oldValue, newValue) -> handleTextNotEmpty(getUser()));
@@ -297,6 +304,11 @@ public class TeamWindowController extends GenericController {
                         Logger.getLogger(TeamWindowController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
+                    //Cleaning the form if there is no selected row
+                    tfNombre.clear();
+                    tfCoach.clear();
+                    dpFundacion.getEditor().clear();
+
                     btnModificar.setDisable(true);
                     btnUnirse.setDisable(true);
                     btnEliminar.setDisable(true);
@@ -495,7 +507,7 @@ public class TeamWindowController extends GenericController {
                     break;
 
             }
-        }
+        } 
     }
 
     /**
@@ -592,6 +604,11 @@ public class TeamWindowController extends GenericController {
             teamsData = FXCollections.observableArrayList(TeamFactory.getTeamManager().findAllTeams());
             tbTeam.setItems(teamsData);
             tbTeam.refresh();
+
+            //Cleaning the form if there is no selected row
+            tfNombre.clear();
+            tfCoach.clear();
+            dpFundacion.getEditor().clear();
 
             // Changing label
             Label SelectPlaceholder = new Label("Selecciona un tipo de búsqueda para mostrar datos.");

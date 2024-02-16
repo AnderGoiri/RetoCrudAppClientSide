@@ -223,7 +223,7 @@ public class TeamManagerImplementation implements TeamManager {
     public void createTeam(Team newTeam) throws CreateException {
         try {
             LOGGER.info("TeamManager: Creating team.");
-            webClient.createTeam_XML(newTeam, Team.class);
+            webClient.create_XML(newTeam);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "TeamManager: Exception creating team{0}", e.getMessage());
             throw new CreateException("Error creating team\n" + e.getMessage());

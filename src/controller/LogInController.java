@@ -210,12 +210,12 @@ public class LogInController {
             EventsViewController is used as it is the main window of the 
             application for every type of user.
              */
+            
             EventsViewController controller = loader.getController();
-
+     
             controller.setUser(appUser);
             controller.setEventManager(EventFactory.getEventManager());
-            controller.setGameManager(GameFactory.getGameManager());
-            controller.setTeamManager(TeamFactory.getTeamManager());
+      
             controller.setStage(stage);
             controller.setScene(scene);
             controller.initStage(root);
